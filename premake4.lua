@@ -13,7 +13,7 @@ solution(name)
     configuration("gmake") buildoptions("-std=c++14 -Wextra -Wpedantic")
     links({"png", "glfw", "GLEW", "GL"})
     links({"vorbis", "ogg", "openal"})
-    links({"jsoncpp"})
+    links({"freetype", "jsoncpp"})
 
     project(name)
         kind("WindowedApp")
