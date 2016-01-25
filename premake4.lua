@@ -1,6 +1,6 @@
 #!lua
 
-local name = "nqsokoban"
+local name = "nqsok"
 solution(name)
     configurations({"debug", "release"})
     location("build/")
