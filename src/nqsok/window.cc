@@ -22,7 +22,7 @@ nq::Window::Window(int width, int height, const std::string& title,
     glewExperimental = GL_TRUE;
     GLenum glew_state {glewInit()};
     if (glew_state != GLEW_OK) {
-        glfwDestroyWindow(handle);
+        glfwTerminate(); // Should destroy all opened windows (hopefully).
         const char* cmessage {(const char*)glewGetErrorString(glew_state)};
         std::string message {"Context error (#"};
         message += std::to_string(glew_state);

@@ -10,6 +10,5 @@ int main(int, char**) {
         window.display();
     }
 
-    // glfwTerminate(); // Library wrapper doesn't handle this yet...
     return 0;
 }
