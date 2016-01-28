@@ -1,5 +1,6 @@
 #include "nqsok/window.hh"
 #include "nqsok/context.hh"
+#include "nqsok/input.hh"
 
 int main(int, char**) {
     nq::Context context {2, 1, false, false};

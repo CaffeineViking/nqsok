@@ -8,10 +8,10 @@
 #include "context.hh"
 
 namespace nq {
-    class Window_error : public std::runtime_error {
+    class Window_error final : public std::runtime_error {
     public: using std::runtime_error::runtime_error; };
 
-    class Window {
+    class Window final {
     public:
         // Constructor creates a window and initializes
         // the context with the provided settings. Parameters
