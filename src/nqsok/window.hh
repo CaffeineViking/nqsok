@@ -36,6 +36,16 @@ namespace nq {
     private:
         // Error handler for window errors.
         static void error(int, const char*);
+
+        // Dangerous to call. Only use these in the
+        // correct context. That is, before glfw is
+        // initialized, before glew is initialized
+        // and after an opengl context is established.
+
+        void report_glfw() const;
+        void report_glew() const;
+        void report_opgl() const;
+
         GLFWwindow* handle;
     };
 }
