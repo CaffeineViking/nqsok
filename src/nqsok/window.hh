@@ -37,6 +37,7 @@ namespace nq {
         // Error handler for window errors.
         static void error(int, const char*);
 
+        // DANGEROUS FUNCTIONS BELOW!!!
         // Dangerous to call. Only use these in the
         // correct context. That is, before glfw is
         // initialized, before glew is initialized
