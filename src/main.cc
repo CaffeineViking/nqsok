@@ -17,10 +17,18 @@ int main(int, char**) {
             window.close();
         }
 
+        if (nq::Input::mouse_pressed(window, GLFW_MOUSE_BUTTON_LEFT)) {
+            auto position = nq::Input::mouse_position(window);
+            std::cout << '(' << position.x
+                      << ", " << position.y
+                      << ')' << std::endl;
+        }
+
         window.display();
     }
 
     // Say goodbye to the user!
+    // (only if everything went ok)
     std::cout << "Have a nice day!"
               << std::endl;
     return 0;
