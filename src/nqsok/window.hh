@@ -26,6 +26,7 @@ namespace nq {
 
         // Check if the window is still open. Library defined.
         bool is_open() const { return !glfwWindowShouldClose(handle); }
+        void close() { glfwSetWindowShouldClose(handle, true); }
 
         void display() {
             // Render elsewhere...
@@ -36,6 +37,7 @@ namespace nq {
     private:
         // Error handler for window errors.
         static void error(int, const char*);
+        friend class Input; // Is part of library...
 
         // DANGEROUS FUNCTIONS BELOW!!!
         // Dangerous to call. Only use these in the

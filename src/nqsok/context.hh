@@ -1,6 +1,7 @@
 #ifndef NQSOK_CONTEXT_HH
 #define NQSOK_CONTEXT_HH
 
+#include <string>
 #include <stdexcept>
 
 namespace nq {

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "nqsok/window.hh"
 #include "nqsok/context.hh"
 #include "nqsok/input.hh"
@@ -11,8 +12,16 @@ int main(int, char**) {
 
     window.current_context();
     while (window.is_open()) {
+        if (nq::Input::key_pressed(window, GLFW_KEY_ESCAPE)
+            || nq::Input::key_pressed(window, GLFW_KEY_Q)) {
+            window.close();
+        }
+
         window.display();
     }
 
+    // Say goodbye to the user!
+    std::cout << "Have a nice day!"
+              << std::endl;
     return 0;
 }
