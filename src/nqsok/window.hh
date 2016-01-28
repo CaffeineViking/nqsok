@@ -21,10 +21,20 @@ namespace nq {
         Window(int, int, const std::string&, const Context&, bool, bool);
         ~Window(); // Released resouces allocated by windowing library.
 
-        // is_open(), check is window is still open.
-        // current(), swaps context to this.
+        // Marks this window as having the current context.
+        void current_context() { glfwMakeContextCurrent(handle); }
+
+        // Check if the window is still open. Library defined.
+        bool is_open() const { return !glfwWindowShouldClose(handle); }
+
+        void display() {
+            // Render elsewhere...
+            glfwSwapBuffers(handle);
+            glfwPollEvents();
+        }
 
     private:
+        // Error handler for window errors.
         static void error(int, const char*);
         GLFWwindow* handle;
     };

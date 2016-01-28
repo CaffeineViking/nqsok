@@ -35,6 +35,9 @@ nq::Window::Window(int width, int height, const std::string& title,
     if (vsync) glfwSwapInterval(1);
 }
 
+// Note that glfwTerminate is not here. That needs to
+// be done elsewere since it closes *all* windows, not
+// only this one. Maybe create a library singleton?
 nq::Window::~Window() { glfwDestroyWindow(handle); }
 
 void nq::Window::error(int code, const char* cmessage) {
