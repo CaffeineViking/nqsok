@@ -10,8 +10,13 @@ namespace nq {
 
     class Input final {
     public:
+        struct Position {
+            double x, y;
+        };
+
         static bool key_pressed(const Window&, int);
         static bool key_released(const Window&, int);
+        static Position mouse_position(const Window&);
     };
 }
 
