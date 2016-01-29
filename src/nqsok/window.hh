@@ -27,6 +27,8 @@ namespace nq {
 
         // Marks this window as having the current context.
         void current_context() { glfwMakeContextCurrent(handle); }
+        bool has_context() const { return (handle == glfwGetCurrentContext()); }
+
         void display() {
             // Render elsewhere...
             glfwSwapBuffers(handle);
