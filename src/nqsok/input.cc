@@ -20,6 +20,11 @@ void nq::Input::hide_cursor(const Window& window) {
                      GLFW_CURSOR_HIDDEN);
 }
 
+void nq::Input::normal_cursor(const Window& window) {
+    glfwSetInputMode(window.handle, GLFW_CURSOR,
+                     GLFW_CURSOR_NORMAL);
+}
+
 nq::Input::Position nq::Input::mouse_position(const Window& window) {
     nq::Input::Position position;
     glfwGetCursorPos(window.handle,

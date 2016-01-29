@@ -9,7 +9,7 @@ namespace nq {
     public: using std::runtime_error::runtime_error; };
 
     class Input final {
-    public:
+    private:
         struct Position {
             double x, y;
         };
@@ -19,11 +19,11 @@ namespace nq {
 
         static void grab_cursor(const Window&);
         static void hide_cursor(const Window&);
+        static void normal_cursor(const Window&);
 
         static Position mouse_position(const Window&);
         static bool mouse_pressed(const Window&, int);
         static bool mouse_released(const Window&, int);
-
     };
 }
 
