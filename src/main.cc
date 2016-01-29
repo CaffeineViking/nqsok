@@ -1,11 +1,10 @@
 #include <iostream>
 #include "nqsok/window.hh"
-#include "nqsok/context.hh"
 #include "nqsok/renderer.hh"
 #include "nqsok/input.hh"
 
 int main(int, char**) {
-    nq::Context context {2, 1, false, false};
+    nq::Window::Context context {2, 1, false, false};
     nq::Window window {1280, 720, "NQ Sokoban", context, false, true};
     // Window above has a size of 1280x720, title of 'NQ Sokoban", has
     // a context initialized to GL 2.1 (not core and not forward compat),

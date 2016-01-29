@@ -11,10 +11,10 @@ namespace nq {
     class Renderer final {
     public:
         struct Settings final {
-            bool depth_test {true};
-            bool stencil_test {true};
+            bool depth_test {false};
+            bool stencil_test {false};
 
-            bool face_culling {true};
+            bool face_culling {false};
             GLenum front_face {GL_CCW};
             GLenum cull_face {GL_BACK};
 
