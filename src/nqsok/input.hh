@@ -13,6 +13,10 @@ namespace nq {
         static bool state(const Window&, const std::string&);
         static double value(const Window&, const std::string&);
 
+        static void grab_cursor(const Window&);
+        static void hide_cursor(const Window&);
+        static void normal_cursor(const Window&);
+
     private:
         struct Position {
             double x, y;
@@ -20,10 +24,6 @@ namespace nq {
 
         static bool key_pressed(const Window&, int);
         static bool key_released(const Window&, int);
-
-        static void grab_cursor(const Window&);
-        static void hide_cursor(const Window&);
-        static void normal_cursor(const Window&);
 
         static Position mouse_position(const Window&);
         static bool mouse_pressed(const Window&, int);
