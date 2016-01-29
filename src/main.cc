@@ -1,6 +1,7 @@
 #include <iostream>
 #include "nqsok/window.hh"
 #include "nqsok/context.hh"
+#include "nqsok/renderer.hh"
 #include "nqsok/input.hh"
 
 int main(int, char**) {
@@ -11,6 +12,10 @@ int main(int, char**) {
     // will not open in fullscreen mode and will use vertical sync (60 Hz).
 
     window.current_context();
+    nq::Renderer::Settings settings;
+    settings.clear_color = {0x30, 0x30, 0x30};
+    nq::Renderer renderer {window, settings};
+
     while (window.is_open()) {
         if (nq::Input::state(window, "close")) window.close();
         if (nq::Input::state(window, "press")) {
@@ -18,6 +23,7 @@ int main(int, char**) {
                       << nq::Input::value(window, "yaxis") << ')' << std::endl;
         }
 
+        renderer.clear();
         window.display();
     }
 
