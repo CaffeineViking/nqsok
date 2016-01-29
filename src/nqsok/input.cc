@@ -1,5 +1,26 @@
 #include "input.hh"
 
+bool nq::Input::state(const Window& window,
+                      const std::string& id) {
+    if (id == "close") {
+        if (key_pressed(window, GLFW_KEY_ESCAPE)
+            || key_pressed(window, GLFW_KEY_Q)) return true;
+        return false;
+    } else if (id == "press") {
+        if (mouse_pressed(window, GLFW_MOUSE_BUTTON_LEFT)) return true;
+        return false;
+    } else { return false; }
+}
+
+double nq::Input::value(const Window& window,
+                        const std::string& id) {
+    if (id == "xaxis") {
+        return mouse_position(window).x;
+    } else if (id == "yaxis") {
+        return mouse_position(window).y;
+    } else { return 42.0; }
+}
+
 bool nq::Input::key_pressed(const Window& window, int key) {
     if (glfwGetKey(window.handle, key) == GLFW_PRESS) return true;
     else return false;

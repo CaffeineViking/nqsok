@@ -9,6 +9,10 @@ namespace nq {
     public: using std::runtime_error::runtime_error; };
 
     class Input final {
+    public:
+        static bool state(const Window&, const std::string&);
+        static double value(const Window&, const std::string&);
+
     private:
         struct Position {
             double x, y;

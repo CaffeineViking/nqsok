@@ -12,17 +12,11 @@ int main(int, char**) {
 
     window.current_context();
     while (window.is_open()) {
-        // if (nq::Input::key_pressed(window, GLFW_KEY_ESCAPE)
-        //     || nq::Input::key_pressed(window, GLFW_KEY_Q)) {
-        //     window.close();
-        // }
-
-        // if (nq::Input::mouse_pressed(window, GLFW_MOUSE_BUTTON_LEFT)) {
-        //     auto position = nq::Input::mouse_position(window);
-        //     std::cout << '(' << position.x
-        //               << ", " << position.y
-        //               << ')' << std::endl;
-        // }
+        if (nq::Input::state(window, "close")) window.close();
+        if (nq::Input::state(window, "press")) {
+            std::cout << '(' << nq::Input::value(window, "xaxis") << ", "
+                      << nq::Input::value(window, "yaxis") << ')' << std::endl;
+        }
 
         window.display();
     }
