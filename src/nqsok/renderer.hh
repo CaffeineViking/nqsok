@@ -31,6 +31,9 @@ namespace nq {
         void clear(); // Clears all relevant buffers.
 
     private:
+        // Maybe more reports later?
+        void report_settings() const;
+
         Window& window;
         Settings settings;
     };

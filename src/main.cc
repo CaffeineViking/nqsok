@@ -13,6 +13,9 @@ int main(int, char**) {
     window.current_context();
     nq::Renderer::Settings settings;
     settings.clear_color = {0x30, 0x30, 0x30};
+    settings.depth_test = true;
+    settings.face_culling = true;
+    settings.stencil_test = true;
     nq::Renderer renderer {window, settings};
 
     while (window.is_open()) {
@@ -28,7 +31,7 @@ int main(int, char**) {
 
     // Say goodbye to the user!
     // (only if everything went ok)
-    std::cout << "Have a nice day!"
+    std::cout << "\nHave a nice day!"
               << std::endl;
     return 0;
 }
