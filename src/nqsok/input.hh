@@ -18,7 +18,7 @@ namespace nq {
         static void normal_cursor(const Window&);
 
     private:
-        struct Position {
+        struct Position final {
             double x, y;
         };
 

@@ -10,7 +10,7 @@ namespace nq {
 
     class Renderer final {
     public:
-        struct Settings {
+        struct Settings final {
             bool depth_test {true};
             bool stencil_test {true};
 

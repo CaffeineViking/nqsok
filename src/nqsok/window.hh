@@ -5,7 +5,6 @@
 #include <stdexcept>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "context.hh"
 
 namespace nq {
     class Window_error final : public std::runtime_error {
@@ -13,6 +12,13 @@ namespace nq {
 
     class Window final {
     public:
+        struct Context final {
+            int major_version {2};
+            int minor_version {1};
+            bool core_profile {false};
+            bool forward_compatible {false};
+        };
+
         // Constructor creates a window and initializes
         // the context with the provided settings. Parameters
         // that must be provided are 'width' and 'height' of the
@@ -39,6 +45,7 @@ namespace nq {
         // Error handler for window errors.
         static void error(int, const char*);
         friend class Input; // Is part of library...
+        friend class Renderer; // Handles context...
 
         // DANGEROUS FUNCTIONS BELOW!!!
         // Dangerous to call. Only use these in the

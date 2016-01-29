@@ -2,7 +2,7 @@
 #include <iostream>
 
 nq::Window::Window(int width, int height, const std::string& title,
-                   const nq::Context& context, bool fullscreen = false, bool vsync = true) {
+                   const Context& context, bool fullscreen = false, bool vsync = true) {
     std::cout << "Window (creating)..." << std::endl;
     report_glfw(); // Gives library information, for debugging.
     glfwSetErrorCallback(error); // Will throw exception...
@@ -28,10 +28,7 @@ nq::Window::Window(int width, int height, const std::string& title,
     if (glew_state != GLEW_OK) {
         glfwTerminate(); // Should destroy all opened windows (hopefully).
         const char* cmessage {(const char*)glewGetErrorString(glew_state)};
-        std::string message {"Context error (#"};
-        message += std::to_string(glew_state);
-        message += ") "; message += cmessage;
-        throw Context_error{message};
+        error(glew_state, cmessage);
     }
 
     report_opgl(); // Contains a lot of useful information for debugging.
