@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include "window.hh"
+#include "color.hh"
 
 namespace nq {
     class Renderer_error final : public std::runtime_error {
@@ -18,11 +19,9 @@ namespace nq {
             GLenum front_face {GL_CCW};
             GLenum cull_face {GL_BACK};
 
-            struct {
-                char red   {0x00},
-                     green {0x00},
-                     blue  {0x00};
-            } clear_color;
+            Color<char> clear_color {0x00,
+                                     0x00,
+                                     0x00};
         };
 
         Renderer(Window&, const Settings&);
