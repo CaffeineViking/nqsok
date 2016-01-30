@@ -15,9 +15,9 @@ bool nq::Input::state(const Window& window,
 double nq::Input::value(const Window& window,
                         const std::string& id) {
     if (id == "xaxis") {
-        return mouse_position(window).x;
+        return mouse_position_x(window);
     } else if (id == "yaxis") {
-        return mouse_position(window).y;
+        return mouse_position_y(window);
     } else { return 42.0; }
 }
 
@@ -46,11 +46,18 @@ void nq::Input::normal_cursor(const Window& window) {
                      GLFW_CURSOR_NORMAL);
 }
 
-nq::Input::Position nq::Input::mouse_position(const Window& window) {
-    nq::Input::Position position;
+double nq::Input::mouse_position_x(const Window& window) {
+    double value;
     glfwGetCursorPos(window.handle,
-                     &position.x, &position.y);
-    return position;
+                     &value, nullptr);
+    return value;
+}
+
+double nq::Input::mouse_position_y(const Window& window) {
+    double value;
+    glfwGetCursorPos(window.handle,
+                     nullptr, &value);
+    return value;
 }
 
 bool nq::Input::mouse_pressed(const Window& window, int button) {

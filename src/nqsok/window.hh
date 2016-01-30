@@ -44,7 +44,7 @@ namespace nq {
             ++frames; // Frames rendered.
             double current {glfwGetTime()};
             if ((current - elapsed) >= 1.0) {
-                mtitle = title + " @ " + std::to_string(frames) + " fps";
+                mtitle = title + " @ " + std::to_string(frames) + " FPS";
                 glfwSetWindowTitle(handle, mtitle.c_str());
                 elapsed = current;
                 frames = 0;

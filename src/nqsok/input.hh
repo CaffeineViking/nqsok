@@ -18,14 +18,11 @@ namespace nq {
         static void normal_cursor(const Window&);
 
     private:
-        struct Position final {
-            double x, y;
-        };
-
         static bool key_pressed(const Window&, int);
         static bool key_released(const Window&, int);
 
-        static Position mouse_position(const Window&);
+        static double mouse_position_x(const Window&);
+        static double mouse_position_y(const Window&);
         static bool mouse_pressed(const Window&, int);
         static bool mouse_released(const Window&, int);
     };
