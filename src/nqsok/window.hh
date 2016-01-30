@@ -39,6 +39,16 @@ namespace nq {
             // Render elsewhere...
             glfwSwapBuffers(handle);
             glfwPollEvents();
+
+            // Used to print FPS count.
+            ++frames; // Frames rendered.
+            double current {glfwGetTime()};
+            if ((current - elapsed) >= 1.0) {
+                mtitle = title + " @ " + std::to_string(frames) + " fps";
+                glfwSetWindowTitle(handle, mtitle.c_str());
+                elapsed = current;
+                frames = 0;
+            }
         }
 
     private:
@@ -53,10 +63,15 @@ namespace nq {
         // initialized, before glew is initialized
         // and after an opengl context is established.
 
-        void report_glfw() const;
-        void report_glew() const;
-        void report_opgl() const;
-        GLFWwindow* handle;
+        void report_glfw() const; // Reports GLFW version and compilers flags.
+        void report_glew() const; // Reports GLEW version. Needs to have glewInit.
+        void report_opgl() const; // Reports GL version, renderer, vendor etc...
+
+        std::string title; // Original title given by user. Modified below.
+        std::string mtitle; // Modified title, giving extra information.
+        unsigned frames {0}; // Number of frames rendered since last probe.
+        double elapsed {0.0}; // Number of seconds since last fps probe.
+        GLFWwindow* handle; // Window handle for interfacing with library.
     };
 }
 

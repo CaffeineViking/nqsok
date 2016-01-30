@@ -12,10 +12,10 @@ int main(int, char**) {
 
     window.current_context();
     nq::Renderer::Settings settings;
-    settings.clear_color = {0x30, 0x30, 0x30};
     settings.depth_test = true;
     settings.face_culling = true;
     settings.stencil_test = true;
+    settings.clear_color = {0x30, 0x30, 0x30};
     nq::Renderer renderer {window, settings};
 
     while (window.is_open()) {

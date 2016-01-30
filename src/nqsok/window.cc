@@ -2,7 +2,7 @@
 #include <iostream>
 
 nq::Window::Window(int width, int height, const std::string& title,
-                   const Context& context, bool fullscreen = false, bool vsync = true) {
+                   const Context& context, bool fullscreen = false, bool vsync = true) : title {title} {
     std::cout << "\nWindow (creating)..." << std::endl;
     report_glfw(); // Gives library information, for debugging.
     glfwSetErrorCallback(error); // Will throw exception...
