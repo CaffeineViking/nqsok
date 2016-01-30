@@ -36,6 +36,7 @@ nq::Window::Window(int width, int height, const std::string& title,
     // Might not be honoured according to the GLFW documentation.
     // This is dependent on the GPU vendor driver it seems...
     if (vsync) glfwSwapInterval(1);
+    else glfwSwapInterval(0);
     std::cout << "...done (Window)" << std::endl;
 }
 
