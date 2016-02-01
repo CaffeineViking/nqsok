@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include "window.hh"
+#include "shader.hh"
 #include "color.hh"
 
 namespace nq {
@@ -27,7 +28,7 @@ namespace nq {
         Renderer(Window&, const Settings&);
         ~Renderer(); // Releases GPU resources.
 
-        void clear(); // Clears all relevant buffers.
+        void clear(); // Clears all relevant display buffers.
 
     private:
         // Maybe more reports later?
