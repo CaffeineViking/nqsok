@@ -7,26 +7,12 @@
 nq::Shader::Shader(const std::string& vertex_shader_path,
                    const std::string& fragment_shader_path) {
     std::cout << "\nShader (compiling and linking)..." << std::endl;
+
     GLuint vertex_shader {load_shader(vertex_shader_path, GL_VERTEX_SHADER)};
     GLuint fragment_shader {load_shader(fragment_shader_path, GL_FRAGMENT_SHADER)};
+    GLuint shader_program {load_program(vertex_shader, fragment_shader)};
+    handle = shader_program; // Oooops. This is important (forgot...)
 
-    GLuint shader_program {glCreateProgram()};
-    glAttachShader(shader_program, vertex_shader);
-    glAttachShader(shader_program, fragment_shader);
-    glLinkProgram(shader_program);
-
-    GLint shader_state {GL_TRUE};
-    glGetProgramiv(shader_program, GL_LINK_STATUS, &shader_state);
-    if (shader_state == GL_FALSE) {
-        GLint log_size {42};
-        glGetProgramiv(shader_program, GL_INFO_LOG_LENGTH, &log_size);
-        char* log {new char[log_size]};
-        glGetProgramInfoLog(shader_program, log_size, nullptr, log);
-        std::string shader_error {"Shader error (#3) "}; shader_error += log; delete log;
-        throw Shader_error{shader_error};
-    }
-
-    handle = shader_program;
     std::cout << "Linking successful, deleting shaders" << std::endl;
     glDeleteShader(fragment_shader);
     glDeleteShader(vertex_shader);
@@ -78,4 +64,24 @@ GLuint nq::Shader::load_shader(const std::string& shader_path, GLenum type) {
 
     std::cout << "done" << std::endl;
     return shader;
+}
+
+GLuint nq::Shader::load_program(GLuint vertex_shader, GLuint fragment_shader) {
+    GLuint shader_program {glCreateProgram()};
+    glAttachShader(shader_program, vertex_shader);
+    glAttachShader(shader_program, fragment_shader);
+    glLinkProgram(shader_program);
+
+    GLint shader_state {GL_TRUE};
+    glGetProgramiv(shader_program, GL_LINK_STATUS, &shader_state);
+    if (shader_state == GL_FALSE) {
+        GLint log_size {42};
+        glGetProgramiv(shader_program, GL_INFO_LOG_LENGTH, &log_size);
+        char* log {new char[log_size]};
+        glGetProgramInfoLog(shader_program, log_size, nullptr, log);
+        std::string shader_error {"Shader error (#3) "}; shader_error += log; delete log;
+        throw Shader_error{shader_error};
+    }
+
+    return shader_program;
 }
