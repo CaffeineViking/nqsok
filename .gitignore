@@ -30,7 +30,4 @@
 # Ignore Directories
 bin/
 build/
-share/
-
-# Ignore ctags file
 tags
