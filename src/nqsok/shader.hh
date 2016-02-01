@@ -11,7 +11,7 @@ namespace nq {
     class Shader_error final : public std::runtime_error {
     public: using std::runtime_error::runtime_error; };
 
-    class Shader {
+    class Shader final {
     public:
         ~Shader();
         Shader(const std::string&,

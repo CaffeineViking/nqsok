@@ -20,7 +20,6 @@ int main(int, char**) {
 
     // nq::Shader shader {"share/shaders/phong.vert",
     //                    "share/shaders/phong.frag"};
-    // shader.use(); // Set this as the current shader.
 
     // nq::Vertex_buffer coord_buffer {coordinates, "coordinates", 2};
     // nq::Vertex_buffer vertex_buffer {vertices, "position", 3};

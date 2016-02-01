@@ -12,6 +12,7 @@ nq::Shader::Shader(const std::string& vertex_shader_path,
     GLuint fragment_shader {load_shader(fragment_shader_path, GL_FRAGMENT_SHADER)};
     GLuint shader_program {load_program(vertex_shader, fragment_shader)};
     handle = shader_program; // Oooops. This is important (forgot...)
+    glUseProgram(handle); // User needs to be aware of this.
 
     std::cout << "Linking successful, deleting shaders" << std::endl;
     glDeleteShader(fragment_shader);
