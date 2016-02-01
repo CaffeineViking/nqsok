@@ -18,23 +18,21 @@ int main(int, char**) {
     settings.clear_color = {0x30, 0x30, 0x30};
     nq::Renderer renderer {window, settings};
 
-    nq::Shader shader {"share/shaders/phong.vert",
-                       "share/shaders/phong.frag"};
-    shader.use(); // Set this as the current shader.
+    // nq::Shader shader {"share/shaders/phong.vert",
+    //                    "share/shaders/phong.frag"};
+    // shader.use(); // Set this as the current shader.
 
-    float vertices[] = {
-        +0.0, +1.0, +0.0,
-        -1.0, -1.0, +0.0,
-        +1.0, -1.0, +0.0,
-    };
+    // nq::Vertex_buffer coord_buffer {coordinates, "coordinates", 2};
+    // nq::Vertex_buffer vertex_buffer {vertices, "position", 3};
+    // nq::Vertex_buffer normal_buffer {normals, "normal", 3};
+    // nq::Element_buffer index_buffer {indices, 3};
 
-    // Provide nq::Mesh?
-    GLuint vertex_buffer {42};
-    glGenBuffers(1, &vertex_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(shader.attribute_location("position"), 3, GL_FLOAT, false, 0, nullptr);
-    glEnableVertexAttribArray(shader.attribute_location("position"));
+    // nq::Mesh mesh {index_buffer,
+    //                coord_buffer,
+    //                vertex_buffer,
+    //                normal_buffer};
+    // later... renderer.draw(mesh) (later maybe model? Shader + Mesh + Texture)
+    // or.... mesh.draw(renderer) or model.draw(renderer) hmmm.... (maybe both idk)
 
     while (window.is_open()) {
         if (nq::Input::state(window, "close")) window.close();
@@ -44,7 +42,6 @@ int main(int, char**) {
         }
 
         renderer.clear();
-        glDrawArrays(GL_TRIANGLES, 0, 3);
         window.display();
     }
 
