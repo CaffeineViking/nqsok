@@ -17,13 +17,14 @@ namespace nq {
         Shader(const std::string&,
                const std::string&);
 
-        void use() { glUseProgram(handle); }
         void uniform(const std::string&, float);
         void uniform_vector(const std::string&, const glm::vec4&);
         void uniform_matrix(const std::string&, const glm::mat4&);
         GLint attribute_location(const std::string&) const;
+        void use() const { glUseProgram(handle); }
 
     private:
+        friend class Mesh;
         friend class Renderer;
         GLuint load_shader(const std::string&, GLenum);
         GLuint load_program(GLuint, GLuint);

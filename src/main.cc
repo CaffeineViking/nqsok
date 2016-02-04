@@ -1,8 +1,15 @@
+#include <vector>
 #include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "nqsok/window.hh"
 #include "nqsok/renderer.hh"
 #include "nqsok/input.hh"
 #include "nqsok/shader.hh"
+#include "nqsok/mesh.hh"
+#include "nqsok/buffer.hh"
 
 int main(int, char**) {
     nq::Window::Context context {2, 1, false, false};
@@ -18,20 +25,30 @@ int main(int, char**) {
     settings.clear_color = {0x30, 0x30, 0x30};
     nq::Renderer renderer {window, settings};
 
-    // nq::Shader shader {"share/shaders/phong.vert",
-    //                    "share/shaders/phong.frag"};
+    nq::Shader shader {"share/shaders/phong.vert",
+                       "share/shaders/phong.frag"};
 
-    // nq::Vertex_buffer coord_buffer {coordinates, "coordinates", 2};
-    // nq::Vertex_buffer vertex_buffer {vertices, "position", 3};
-    // nq::Vertex_buffer normal_buffer {normals, "normal", 3};
-    // nq::Element_buffer index_buffer {indices, 3};
+    // GLuint index_buffer;
+    // glGenBuffers(1, &index_buffer);
+    std::vector<GLuint> indices = {0, 1, 2};
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
+    // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    // nq::Mesh mesh {index_buffer,
-    //                coord_buffer,
-    //                vertex_buffer,
-    //                normal_buffer};
-    // later... renderer.draw(mesh) (later maybe model? Shader + Mesh + Texture)
-    // or.... mesh.draw(renderer) or model.draw(renderer) hmmm.... (maybe both idk)
+    // GLuint vertex_buffer;
+    // glGenBuffers(1, &vertex_buffer);
+    std::vector<GLfloat> vertices = {0.0, 1.0,  0.0,
+                                    -1.0, -1.0, 0.0,
+                                    +1.0, -1.0, 0.0};
+    // glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    // glVertexAttribPointer(shader.attribute_location("position"), 3, GL_FLOAT, false, 0, nullptr);
+    // glEnableVertexAttribArray(shader.attribute_location("position"));
+
+    nq::Buffer<GLuint> index_buffer {GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW};
+    nq::Buffer<GLfloat> vertex_buffer {GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW};
+    nq::Mesh::Attribute position_attribute {vertex_buffer, "position"};
+    nq::Mesh triangle_mesh {index_buffer, {position_attribute}};
+    triangle_mesh.enable(shader);
 
     while (window.is_open()) {
         if (nq::Input::state(window, "close")) window.close();
@@ -41,6 +58,10 @@ int main(int, char**) {
         }
 
         renderer.clear();
+        glm::mat4 model{1.0};
+        model = glm::scale(model, glm::vec3{0.5});
+        shader.uniform_matrix("model", model);
+        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
         window.display();
     }
 
