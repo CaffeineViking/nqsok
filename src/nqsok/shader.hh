@@ -18,7 +18,7 @@ namespace nq {
                const std::string&);
 
         void uniform(const std::string&, float);
-        void uniform_vector(const std::string&, const glm::vec4&);
+        void uniform_vector(const std::string&, const glm::vec3&);
         void uniform_matrix(const std::string&, const glm::mat4&);
         GLint attribute_location(const std::string&) const;
         void use() const { glUseProgram(handle); }

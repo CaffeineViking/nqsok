@@ -27,7 +27,7 @@ void nq::Shader::uniform(const std::string& name, float value) {
     glUniform1f(location, value);
 }
 
-void nq::Shader::uniform_vector(const std::string& name, const glm::vec4& value) {
+void nq::Shader::uniform_vector(const std::string& name, const glm::vec3& value) {
     GLint location {glGetUniformLocation(handle, name.c_str())};
     glUniform4fv(location, 1, glm::value_ptr(value));
 }

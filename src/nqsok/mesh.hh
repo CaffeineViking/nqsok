@@ -24,7 +24,7 @@ namespace nq {
         };
 
         ~Mesh() = default;
-        Mesh(const Buffer<GLuint>& index_buffer,
+        Mesh(Buffer<GLuint>& index_buffer,
              std::initializer_list<Attribute> attribs)
              : index_buffer {index_buffer},
                vertex_attributes{attribs.begin(), attribs.end()} {};
@@ -32,7 +32,7 @@ namespace nq {
         void enable(const Shader&) const;
 
     private:
-        const Buffer<GLuint>& index_buffer;
+        Buffer<GLuint>& index_buffer;
         std::vector<Attribute> vertex_attributes;
     };
 }
