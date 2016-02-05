@@ -8,6 +8,7 @@ nq::Window::Window(int width, int height, const std::string& title,
     glfwSetErrorCallback(error); // Will throw exception...
     glfwInit(); // Handled by error callback.
 
+    glfwWindowHint(GLFW_SAMPLES, 8); // 8xMSAA, enable in renderer.
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE); // Why wouldn't you?!
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, context.major_version);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, context.minor_version);

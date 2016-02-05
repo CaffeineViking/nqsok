@@ -7,6 +7,7 @@ nq::Renderer::Renderer(Window& window, const Settings& settings)
     if (!window.has_context()) window.current_context();
     if (settings.depth_test) glEnable(GL_DEPTH_TEST);
     if (settings.stencil_test) glEnable(GL_STENCIL_TEST);
+    if (settings.multisampling) glEnable(GL_MULTISAMPLE);
     if (settings.face_culling) {
         glEnable(GL_CULL_FACE);
         glFrontFace(settings.front_face);
@@ -34,6 +35,7 @@ void nq::Renderer::clear() {
 void nq::Renderer::report_settings() const {
     if (settings.depth_test) std::cout << "Depth test enabled" << std::endl;
     if (settings.stencil_test) std::cout << "Stencil test enabled" << std::endl;
+    if (settings.multisampling) std::cout << "Multisampling enabled" << std::endl;
     if (settings.face_culling) {
         std::cout << "Face culling enabled" << std::endl;
         if (settings.front_face == GL_CW) std::cout << "Front face is clockwise" << std::endl;

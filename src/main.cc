@@ -22,6 +22,7 @@ int main(int, char**) {
     nq::Renderer::Settings settings;
     settings.depth_test = true;
     settings.face_culling = true;
+    settings.multisampling = true;
     settings.clear_color = {0x30, 0x30, 0x30};
     nq::Renderer renderer {window, settings};
 
@@ -107,18 +108,19 @@ int main(int, char**) {
         }
 
         renderer.clear();
-        glm::mat4 model {1.0};
-        model = glm::translate(model, glm::vec3{0.0, 0.0, -3.0});
-        model = glm::rotate(model, std::sin((float)glfwGetTime()) * glm::pi<float>(), glm::vec3{0.0, 1.0, 0.0});
-        model = glm::rotate(model, std::cos((float)glfwGetTime()) * glm::pi<float>(), glm::vec3{1.0, 0.0, 0.0});
-        phong_shader.uniform_matrix("model", model);
 
         glm::mat4 view {1.0};
         phong_shader.uniform_matrix("view", view);
         glm::mat4 projection {glm::perspective(glm::half_pi<double>(), 16.0 / 9.0, 0.1, 10.0)};
         phong_shader.uniform_matrix("projection", projection);
 
+        glm::mat4 model {1.0};
+        model = glm::translate(model, glm::vec3{0.0, 0.0, -3.0});
+        model = glm::rotate(model, std::sin((float)glfwGetTime()) * glm::pi<float>(), glm::vec3{0.0, 1.0, 0.0});
+        model = glm::rotate(model, std::cos((float)glfwGetTime()) * glm::pi<float>(), glm::vec3{1.0, 0.0, 0.0});
+        phong_shader.uniform_matrix("model", model);
         glDrawElements(GL_TRIANGLES, cube_mesh.size(), GL_UNSIGNED_INT, nullptr);
+
         window.display();
     }
 
