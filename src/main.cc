@@ -10,6 +10,7 @@
 #include "nqsok/shader.hh"
 #include "nqsok/buffer.hh"
 #include "nqsok/mesh.hh"
+#include "nqsok/texture.hh"
 
 int main(int, char**) {
     nq::Window::Context context {2, 1, false, false};
@@ -100,22 +101,15 @@ int main(int, char**) {
                                        mapping_attribute}};
     cube_mesh.enable(phong_shader);
 
-    GLfloat bwtile[] = {
+    std::vector<GLfloat> checkers = {
         1.0, 1.0, 1.0,
         0.0, 0.0, 0.0,
         0.0, 0.0, 0.0,
         1.0, 1.0, 1.0
     };
 
-    GLuint bwtile_texture {42};
-    glGenTextures(1, &bwtile_texture);
-    glBindTexture(GL_TEXTURE_2D, bwtile_texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0,
-                 GL_RGB, GL_FLOAT, bwtile);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glActiveTexture(GL_TEXTURE0);
-    phong_shader.uniformi("bwtile", GL_TEXTURE0);
+    nq::Texture checkers_texture {checkers, 2, 2, {}};
+    checkers_texture.active(phong_shader, GL_TEXTURE0, "checkers");
 
     while (window.is_open()) {
         if (nq::Input::state(window, "close")) window.close();
@@ -141,7 +135,6 @@ int main(int, char**) {
         window.display();
     }
 
-    glDeleteTextures(1, &bwtile_texture);
     // Say goodbye to the user!
     // (only if everything went ok)
     std::cout << "\nHave a nice day!"

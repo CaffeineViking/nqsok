@@ -1,17 +1,27 @@
 #ifndef NQSOK_TEXTURE_HH
 #define NQSOK_TEXTURE_HH
 
+#include <vector>
+#include <string>
+#include <GL/glew.h>
+#include "shader.hh"
+
 namespace nq {
-    template<typename T>
     class Texture final {
     public:
-        Texture(std::vector<T>&, GLsizei, GLsizei);
-        void active(GLenum); // What texture unit?
-    private: GLuint handle;
-    };
+        struct Parameters {
+            GLenum minifying_filter {GL_NEAREST};
+            GLenum magnifying_filter {GL_NEAREST};
+        };
 
-    Texture::Texture(std::vector<T>& data, GLsizei width, GLsizei height) {
-    }
+        ~Texture() { glDeleteTextures(1, &handle); }
+        Texture(std::vector<GLfloat>&, GLsizei, GLsizei, const Parameters&);
+        void active(Shader&, GLenum, const std::string&); // What texture unit and name?
+
+    private:
+        GLsizei width, height;
+        GLuint handle;
+    };
 }
 
 #endif

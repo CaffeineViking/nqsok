@@ -1,12 +1,12 @@
 #version 120
 
-uniform sampler2D bwtile;
+uniform sampler2D checkers;
 
 varying vec3 vnormal;
 varying vec2 vmapping;
 
 void main() {
-    vec3 texture_color = texture2D(bwtile, vmapping).rgb;
+    vec3 texture_color = texture2D(checkers, vmapping).rgb;
     vec3 ambient_color = texture_color;
     vec3 ambient = 0.2 * ambient_color;
 
