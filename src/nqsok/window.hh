@@ -31,25 +31,18 @@ namespace nq {
         bool is_open() const { return !glfwWindowShouldClose(handle); }
         void close() { glfwSetWindowShouldClose(handle, true); }
 
+        // No functions to change the context settings
+        // are available. User needs to build a new window.
         // Marks this window as having the current context.
         void current_context() { glfwMakeContextCurrent(handle); }
         bool has_context() const { return (handle == glfwGetCurrentContext()); }
 
-        void display() {
-            // Render elsewhere...
-            glfwSwapBuffers(handle);
-            glfwPollEvents();
-
-            // Used to print FPS count.
-            ++frames; // Frames rendered.
-            double current {glfwGetTime()};
-            if ((current - elapsed) >= 1.0) {
-                mtitle = title + " @ " + std::to_string(frames) + " FPS";
-                glfwSetWindowTitle(handle, mtitle.c_str());
-                elapsed = current;
-                frames = 0;
-            }
-        }
+        // Utility functions that every windowing
+        // system should have available (hopefully).
+        int width() const; int height() const; // GLFW reports these wrong...
+        void toggle_fullscreen();
+        void resize(int, int);
+        void display();
 
     private:
         // Error handler for window errors.
@@ -67,6 +60,8 @@ namespace nq {
         void report_glew() const; // Reports GLEW version. Needs to have glewInit.
         void report_opgl() const; // Reports GL version, renderer, vendor etc...
 
+        int cached_width, cached_height; // Fix for GLFW bug, really weird.
+        bool cached_fullscreen; // Same here, for some bloody reason GLFW...
         std::string title; // Original title given by user. Modified below.
         std::string mtitle; // Modified title, giving extra information.
         unsigned frames {0}; // Number of frames rendered since last probe.
