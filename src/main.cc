@@ -31,15 +31,15 @@ int main(int, char**) {
                              "share/shaders/phong.frag"};
 
     std::vector<GLfloat> vertices = {
-        -1.0, +1.0, +1.0,
-        -1.0, -1.0, +1.0,
-        +1.0, -1.0, +1.0,
-        +1.0, +1.0, +1.0,
+        -0.5, +0.5, +0.5,
+        -0.5, -0.5, +0.5,
+        +0.5, -0.5, +0.5,
+        +0.5, +0.5, +0.5,
 
-        -1.0, +1.0, -1.0,
-        -1.0, -1.0, -1.0,
-        +1.0, -1.0, -1.0,
-        +1.0, +1.0, -1.0
+        -0.5, +0.5, -0.5,
+        -0.5, -0.5, -0.5,
+        +0.5, -0.5, -0.5,
+        +0.5, +0.5, -0.5
     };
 
     nq::Buffer<GLfloat> vertex_buffer {vertices, GL_STATIC_DRAW};
@@ -62,13 +62,13 @@ int main(int, char**) {
 
     std::vector<GLfloat> mappings = {
         +0.0, +0.0,
-        +0.0, +1.0,
-        +1.0, +1.0,
-        +1.0, +0.0,
+        +0.0, +10.0,
+        +10.0, +10.0,
+        +10.0, +0.0,
 
-        +1.0, +0.0,
-        +1.0, +1.0,
-        +0.0, +1.0,
+        +10.0, +0.0,
+        +10.0, +10.0,
+        +0.0, +10.0,
         +0.0, +0.0
     };
 
@@ -108,8 +108,8 @@ int main(int, char**) {
         1.0, 1.0, 1.0
     };
 
-    nq::Texture checkers_texture {checkers, 2, 2, {}};
-    checkers_texture.active(phong_shader, GL_TEXTURE0, "checkers");
+    // nq::Texture checkers_texture {checkers, 2, 2, {GL_LINEAR, GL_LINEAR}};
+    // checkers_texture.active(phong_shader, GL_TEXTURE0, "checkers");
 
     while (window.is_open()) {
         if (nq::Input::state(window, "close")) window.close();
@@ -126,7 +126,7 @@ int main(int, char**) {
         phong_shader.uniform_matrix("projection", projection);
 
         glm::mat4 model {1.0};
-        model = glm::translate(model, glm::vec3{0.0, 0.0, -3.0});
+        model = glm::translate(model, glm::vec3{0.0, 0.0, -1.5});
         model = glm::rotate(model, std::sin((float)glfwGetTime()) * glm::pi<float>(), glm::vec3{0.0, 1.0, 0.0});
         model = glm::rotate(model, std::cos((float)glfwGetTime()) * glm::pi<float>(), glm::vec3{1.0, 0.0, 0.0});
         phong_shader.uniform_matrix("model", model);
