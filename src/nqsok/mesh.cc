@@ -7,10 +7,12 @@ nq::Mesh::Mesh(Buffer<GLuint>& index_buffer,
                : index_buffer {index_buffer},
                  vertex_attributes {attribs.begin(), attribs.end()} {
     std::cout << "\nMesh (binding attributes)..." << std::endl;
+    std::cout << "Total of " << index_buffer.size() << " vertices encountered, "
+              << "assuming triangles, " << index_buffer.size() / 3 << " polygons" << std::endl;
     for (const Attribute& attribute : vertex_attributes) {
         std::cout << "Buffer with handle id " << attribute.buffer.handle
                   << " bound to '" << attribute.name << "', with "
-                  << attribute.components << " GLfloat components." << std::endl;
+                  << attribute.components << " GLfloat components" << std::endl;
     }
 
     std::cout << "...done (Mesh)" << std::endl;
