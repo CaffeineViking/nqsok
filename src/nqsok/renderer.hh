@@ -12,6 +12,12 @@ namespace nq {
 
     class Renderer final {
     public:
+        // As can be seen below, these
+        // are not fully platform/API independent.
+        // This can be solved maybe by making the
+        // Renderer class abstract, only with a few
+        // basic functions that then call on concrete
+        // classes, like DirectX or OpenGL to be implemented.
         struct Settings final {
             bool depth_test {false};
             bool stencil_test {false};
@@ -20,7 +26,6 @@ namespace nq {
             bool face_culling {false};
             GLenum front_face {GL_CCW};
             GLenum cull_face {GL_BACK};
-
             Color<char> clear_color {0x00,
                                      0x00,
                                      0x00};
@@ -30,9 +35,12 @@ namespace nq {
         ~Renderer(); // Releases GPU resources.
 
         void clear(); // Clears all relevant display buffers.
+        // Renderer should handle most draw() functions here.
 
     private:
         // Maybe more reports later?
+        // Possible number of triangles draw
+        // every second or something like that?
         void report_settings() const;
 
         Window& window;

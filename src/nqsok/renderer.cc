@@ -8,6 +8,7 @@ nq::Renderer::Renderer(Window& window, const Settings& settings)
     if (settings.depth_test) glEnable(GL_DEPTH_TEST);
     if (settings.stencil_test) glEnable(GL_STENCIL_TEST);
     if (settings.multisampling) glEnable(GL_MULTISAMPLE);
+    else glDisable(GL_MULTISAMPLE) // This one is usually enabled.
     if (settings.face_culling) {
         glEnable(GL_CULL_FACE);
         glFrontFace(settings.front_face);
