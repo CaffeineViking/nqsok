@@ -15,9 +15,9 @@ nq::Renderer::Renderer(Window& window, const Settings& settings)
         glCullFace(settings.cull_face);
     }
 
-    glClearColor(settings.clear_color.red   / static_cast<float>(0xFF),
-                 settings.clear_color.green / static_cast<float>(0xFF),
-                 settings.clear_color.blue  / static_cast<float>(0xFF), 1.0f);
+    glClearColor(settings.clear_color.red   / static_cast<GLchar>(0xFF),
+                 settings.clear_color.green / static_cast<GLchar>(0xFF),
+                 settings.clear_color.blue  / static_cast<GLchar>(0xFF), 1.0f);
 
 
     report_settings(); // Provide possibly useful information.

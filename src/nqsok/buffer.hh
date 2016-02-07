@@ -6,11 +6,37 @@
 
 namespace nq {
     template<typename T>
-    class Buffer final {
+    class Buffer final {};
+
+    template<>
+    class Buffer<GLfloat> final {
     public:
-        ~Buffer(); // Deallocate memory on GPU.
-        Buffer(GLenum, const std::vector<T>&, GLenum);
+        ~Buffer() { glDeleteBuffers(1, &handle); } // Deallocate memory on GPU.
         std::size_t size() const { return elements; }
+        Buffer(const std::vector<GLfloat>& data, GLenum usage) {
+            elements = data.size();
+            glGenBuffers(1, &handle);
+            glBindBuffer(GL_ARRAY_BUFFER, handle);
+            glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(GLfloat), data.data(), usage);
+        }
+
+    private:
+        friend class Mesh;
+        std::size_t elements;
+        GLuint handle;
+    };
+
+    template<>
+    class Buffer<GLuint> final {
+    public:
+        ~Buffer() { glDeleteBuffers(1, &handle); } // Deallocate memory on GPU.
+        std::size_t size() const { return elements; }
+        Buffer(const std::vector<GLuint>& data, GLenum usage) {
+            elements = data.size();
+            glGenBuffers(1, &handle);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.size() * sizeof(GLuint), data.data(), usage);
+        }
 
     private:
         friend class Mesh;
@@ -18,16 +44,5 @@ namespace nq {
         GLuint handle;
     };
 }
-
-template<typename T>
-nq::Buffer<T>::Buffer(GLenum type, const std::vector<T>& data, GLenum usage) {
-    elements = data.size();
-    glGenBuffers(1, &handle);
-    glBindBuffer(type, handle);
-    glBufferData(type, data.size() * sizeof(T), data.data(), usage);
-}
-
-template<typename T>
-nq::Buffer<T>::~Buffer() { glDeleteBuffers(1, &handle); }
 
 #endif

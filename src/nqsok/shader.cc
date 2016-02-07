@@ -22,9 +22,14 @@ nq::Shader::Shader(const std::string& vertex_shader_path,
 
 nq::Shader::~Shader() { glDeleteProgram(handle); }
 
-void nq::Shader::uniform(const std::string& name, float value) {
+void nq::Shader::uniformf(const std::string& name, float value) {
     GLint location {glGetUniformLocation(handle, name.c_str())};
     glUniform1f(location, value);
+}
+
+void nq::Shader::uniformi(const std::string& name, int value) {
+    GLint location {glGetUniformLocation(handle, name.c_str())};
+    glUniform1i(location, value);
 }
 
 void nq::Shader::uniform_vector(const std::string& name, const glm::vec3& value) {
