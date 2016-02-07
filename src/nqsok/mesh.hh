@@ -14,6 +14,10 @@ namespace nq {
 
     class Mesh final {
     public:
+        // Currently only supports
+        // GLfloat, might be able to fix
+        // this so it's generic for all.
+        // Later that is :)
         struct Attribute {
             Buffer<GLfloat>& buffer;
             std::string name;
@@ -24,12 +28,9 @@ namespace nq {
         };
 
         ~Mesh() = default;
-        Mesh(Buffer<GLuint>& index_buffer,
-             std::initializer_list<Attribute> attribs)
-             : index_buffer {index_buffer},
-               vertex_attributes{attribs.begin(), attribs.end()} {};
+        Mesh(Buffer<GLuint>&, std::initializer_list<Attribute>);
         std::size_t size() const { return index_buffer.size(); }
-        void enable(const Shader&) const;
+        void enable(const Shader&) const; // With shader that is.
 
     private:
         Buffer<GLuint>& index_buffer;
