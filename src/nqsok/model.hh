@@ -17,6 +17,7 @@ namespace nq {
         void translate(const glm::vec3&);
         void rotate(const glm::vec3&, float);
         glm::mat4 get_transform() const { return transform; }
+        void reset() { transform = glm::mat4{1.0}; }
         void append(const glm::mat4&);
         void append(const Model&);
 

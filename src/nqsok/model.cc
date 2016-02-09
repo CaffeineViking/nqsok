@@ -5,7 +5,6 @@
 
 void nq::Model::apply(const std::string& uniform) {
     shader.uniform_matrix(uniform, transform);
-    transform = glm::mat4{1.0}; // Reset matrix.
 }
 
 void nq::Model::append(const glm::mat4& matrix) {
