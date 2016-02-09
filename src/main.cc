@@ -14,7 +14,7 @@
 
 int main(int, char**) {
     nq::Window::Context context {2, 1, false, false};
-    nq::Window window {1280, 720, "NQ Sokoban", context, false, true};
+    nq::Window window {1280, 720, "NQ Sokoban", context, true, true};
     // Window above has a size of 1280x720, title of 'NQ Sokoban", has
     // a context initialized to GL 2.1 (not core and not forward compat),
     // will not open in fullscreen mode and will use vertical sync (60 Hz).
@@ -99,7 +99,7 @@ int main(int, char**) {
     nq::Mesh cube_mesh {index_buffer, {position_attribute,
                                        normal_attribute,
                                        mapping_attribute}};
-    cube_mesh.enable(phong_shader);
+    nq::Model phong_cube {cube_mesh, phong_shader};
 
     std::vector<GLfloat> checkers = {
         1.0, 1.0, 1.0,
@@ -121,16 +121,17 @@ int main(int, char**) {
         renderer.clear();
 
         glm::mat4 view {1.0};
-        phong_shader.uniform_matrix("view", view);
-        glm::mat4 projection {glm::perspective(glm::half_pi<double>(), 16.0 / 9.0, 0.1, 10.0)};
-        phong_shader.uniform_matrix("projection", projection);
+        glm::mat4 projection {glm::perspective(glm::half_pi<double>(),
+                                               16.0 / 9.0, 0.1, 10.0)};
 
-        glm::mat4 model {1.0};
-        model = glm::translate(model, glm::vec3{0.0, 0.0, -1.5});
-        model = glm::rotate(model, std::sin((float)glfwGetTime()) * glm::pi<float>(), glm::vec3{0.0, 1.0, 0.0});
-        model = glm::rotate(model, std::cos((float)glfwGetTime()) * glm::pi<float>(), glm::vec3{1.0, 0.0, 0.0});
-        phong_shader.uniform_matrix("model", model);
-        glDrawElements(GL_TRIANGLES, cube_mesh.size(), GL_UNSIGNED_INT, nullptr);
+        phong_cube.translate({0.0, 0.0, -1.5});
+        phong_cube.rotate(glm::vec3{0.0, 1.0, 0.0}, std::sin((float)glfwGetTime()) * glm::pi<float>());
+        phong_cube.rotate(glm::vec3{1.0, 0.0, 0.0}, std::cos((float)glfwGetTime()) * glm::pi<float>());
+        glm::mat4 parent_transform {phong_cube.get_transform()};
+        renderer.draw(phong_cube, view, projection);
+        phong_cube.append(parent_transform);
+        phong_cube.translate({0.0, 0.0, -1.0});
+        renderer.draw(phong_cube, view, projection);
 
         window.display();
     }

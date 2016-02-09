@@ -18,7 +18,7 @@ nq::Mesh::Mesh(Buffer<GLuint>& index_buffer,
     std::cout << "...done (Mesh)" << std::endl;
 }
 
-void nq::Mesh::enable(const Shader& shader) const {
+void nq::Mesh::enable(const Shader& shader) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer.handle);
     for (const Attribute& attribute : vertex_attributes) {
         glBindBuffer(GL_ARRAY_BUFFER, attribute.buffer.handle);

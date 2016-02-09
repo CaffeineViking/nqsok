@@ -30,7 +30,7 @@ namespace nq {
         ~Mesh() = default;
         Mesh(Buffer<GLuint>&, std::initializer_list<Attribute>);
         std::size_t size() const { return index_buffer.size(); }
-        void enable(const Shader&) const; // With shader that is.
+        void enable(const Shader&); // With shader that is.
 
     private:
         Buffer<GLuint>& index_buffer;

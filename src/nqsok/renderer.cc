@@ -1,5 +1,7 @@
 #include "renderer.hh"
+
 #include <iostream>
+#include <glm/gtc/type_ptr.hpp>
 
 nq::Renderer::Renderer(Window& window, const Settings& settings)
                       : window {window}, settings {settings} {
@@ -31,6 +33,24 @@ void nq::Renderer::clear() {
     if (settings.depth_test) mask |= GL_DEPTH_BUFFER_BIT;
     if (settings.stencil_test) mask |= GL_STENCIL_BUFFER_BIT;
     glClear(mask); // Should clear all relevant buffers.
+}
+
+void nq::Renderer::draw(Model& model) {
+    model.shader.use();
+    model.apply("model");
+    model.mesh.enable(model.shader);
+    glDrawElements(GL_TRIANGLES, model.mesh.size(),
+                   GL_UNSIGNED_INT, nullptr);
+}
+
+void nq::Renderer::draw(Model& model, const glm::mat4 view, const glm::mat4 projection) {
+    model.shader.use();
+    model.apply("model");
+    model.shader.uniform_matrix("view", view);
+    model.shader.uniform_matrix("projection", projection);
+    model.mesh.enable(model.shader);
+    glDrawElements(GL_TRIANGLES, model.mesh.size(),
+                   GL_UNSIGNED_INT, nullptr);
 }
 
 void nq::Renderer::report_settings() const {

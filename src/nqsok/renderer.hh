@@ -2,9 +2,10 @@
 #define NQSOK_RENDERER_HH
 
 #include <stdexcept>
+#include <glm/glm.hpp>
 #include "window.hh"
-#include "shader.hh"
 #include "color.hh"
+#include "model.hh"
 
 namespace nq {
     class Renderer_error final : public std::runtime_error {
@@ -35,7 +36,8 @@ namespace nq {
         ~Renderer(); // Releases GPU resources.
 
         void clear(); // Clears all relevant display buffers.
-        // Renderer should handle most draw() functions here.
+        void draw(Model&, const glm::mat4, const glm::mat4);
+        void draw(Model&); // User needs to handle stuff manually...
 
     private:
         // Maybe more reports later?
