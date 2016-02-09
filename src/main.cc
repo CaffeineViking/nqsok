@@ -125,7 +125,7 @@ int main(int, char**) {
                                                16.0 / 9.0, 0.1, 10.0)};
 
         phong_cube.reset();
-        phong_cube.translate({0.0, 0.0, -1.5});
+        phong_cube.translate({0.0, 0.0, -2.5});
         phong_cube.rotate(glm::vec3{0.0, 1.0, 0.0}, std::sin((float)glfwGetTime()) * glm::pi<float>());
         phong_cube.rotate(glm::vec3{1.0, 0.0, 0.0}, std::cos((float)glfwGetTime()) * glm::pi<float>());
         glm::mat4 parent_transform {phong_cube.get_transform()};
