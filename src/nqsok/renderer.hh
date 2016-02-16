@@ -44,6 +44,7 @@ namespace nq {
         // Possible number of triangles draw
         // every second or something like that?
         void report_settings() const;
+        void setup(Model&) const;
 
         Window& window;
         Settings settings;

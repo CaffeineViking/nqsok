@@ -99,7 +99,8 @@ int main(int, char**) {
     nq::Mesh cube_mesh {index_buffer, {position_attribute,
                                        normal_attribute,
                                        mapping_attribute}};
-    nq::Model phong_cube {cube_mesh, phong_shader};
+    nq::Model::Material white_material {glm::vec3{1.0}, glm::vec3{1.0}, glm::vec3{1.0}, 5};
+    nq::Model phong_cube {cube_mesh, phong_shader, white_material};
 
     std::vector<GLfloat> checkers = {
         1.0, 1.0, 1.0,

@@ -10,8 +10,15 @@
 namespace nq {
     class Model {
     public:
-        Model(Mesh& mesh, Shader& shader)
-              : mesh {mesh}, shader {shader} {}
+        struct Material {
+            glm::vec3 ambient;
+            glm::vec3 diffuse;
+            glm::vec3 specular;
+            GLuint shininess;
+        };
+
+        Model(Mesh& mesh, Shader& shader, const Material& material)
+              : mesh {mesh}, shader {shader}, material {material} {}
 
         void scale(const glm::vec3&);
         void translate(const glm::vec3&);
@@ -24,6 +31,7 @@ namespace nq {
     private:
         Mesh& mesh;
         Shader& shader;
+        Material material;
         glm::mat4 transform;
         friend class Renderer;
         void apply(const std::string&);

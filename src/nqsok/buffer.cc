@@ -1,2 +1,2 @@
 #include "buffer.hh"
-// Templated class, see buffer.cc.
+// Templated class, see buffer.hh.

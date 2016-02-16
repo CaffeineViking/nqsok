@@ -36,21 +36,27 @@ void nq::Renderer::clear() {
 }
 
 void nq::Renderer::draw(Model& model) {
-    model.shader.use();
-    model.apply("model");
-    model.mesh.enable(model.shader);
+    setup(model); // Done in all draw methods.
     glDrawElements(GL_TRIANGLES, model.mesh.size(),
                    GL_UNSIGNED_INT, nullptr);
 }
 
 void nq::Renderer::draw(Model& model, const glm::mat4 view, const glm::mat4 projection) {
-    model.shader.use();
-    model.apply("model");
+    setup(model); // Done in all draw methods.
     model.shader.uniform_matrix("view", view);
     model.shader.uniform_matrix("projection", projection);
-    model.mesh.enable(model.shader);
     glDrawElements(GL_TRIANGLES, model.mesh.size(),
                    GL_UNSIGNED_INT, nullptr);
+}
+
+void nq::Renderer::setup(Model& model) const {
+    model.shader.use();
+    model.apply("model");
+    model.shader.uniform_vector("material.ambient", model.material.ambient);
+    model.shader.uniform_vector("material.diffuse", model.material.diffuse);
+    model.shader.uniform_vector("material.specular", model.material.specular);
+    model.shader.uniform_vector("material.shininess", model.material.specular);
+    model.mesh.enable(model.shader);
 }
 
 void nq::Renderer::report_settings() const {

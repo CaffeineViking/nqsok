@@ -7,6 +7,7 @@ nq::Mesh::Mesh(Buffer<GLuint>& index_buffer,
                : index_buffer {index_buffer},
                  vertex_attributes {attribs.begin(), attribs.end()} {
     std::cout << "\nMesh (binding attributes)..." << std::endl;
+    std::cout << "Found element array buffer with GPU handle id number " << index_buffer.handle << std::endl;
     std::cout << "Total of " << index_buffer.size() << " vertices encountered, "
               << "assuming triangles, " << index_buffer.size() / 3 << " polygons" << std::endl;
     for (const Attribute& attribute : vertex_attributes) {
