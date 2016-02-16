@@ -21,7 +21,7 @@ namespace nq {
 
             elements = data.size();
             glGenBuffers(1, &handle);
-            std::cout << "Assigned buffer handle id " << handle << std::endl;
+            std::cout << "Assigned buffer GPU handle id number " << handle << std::endl;
 
             glBindBuffer(GL_ARRAY_BUFFER, handle);
             std::cout << "Uploading buffer (type array)...";
@@ -48,7 +48,7 @@ namespace nq {
 
             elements = data.size();
             glGenBuffers(1, &handle);
-            std::cout << "Assigned buffer handle id " << handle << std::endl;
+            std::cout << "Assigned buffer GPU handle id number " << handle << std::endl;
 
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
             std::cout << "Uploading buffer (type element)...";

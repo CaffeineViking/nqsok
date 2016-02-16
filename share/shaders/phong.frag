@@ -8,6 +8,7 @@ struct Material {
 };
 
 uniform Material material;
+uniform sampler2D checkers;
 
 varying vec3 vnormal;
 varying vec2 vmapping;

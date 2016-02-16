@@ -18,8 +18,8 @@ nq::Texture::Texture(std::vector<GLfloat>& data, GLsizei width,
                  GL_RGB, GL_FLOAT, data.data());
     std::cout << "done" << std::endl;
 
-    std::cout << "Using minifying filter " << params.minifying_filter << std::endl;
-    std::cout << "Using magnifying filter " << params.magnifying_filter << std::endl;
+    std::cout << "Minifying filter " << params.minifying_filter << std::endl;
+    std::cout << "Magnifying filter " << params.magnifying_filter << std::endl;
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, params.minifying_filter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, params.magnifying_filter);
     // Might make it so the above filters are more customizable in the future (cube etc...).

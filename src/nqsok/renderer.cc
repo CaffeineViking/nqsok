@@ -56,6 +56,10 @@ void nq::Renderer::setup(Model& model) const {
     model.shader.uniform_vector("material.diffuse", model.material.diffuse);
     model.shader.uniform_vector("material.specular", model.material.specular);
     model.shader.uniformi("material.shininess", model.material.shininess);
+    for (Model::Sampler& sampler : model.samplers) {
+        sampler.texture.active(model.shader,
+                sampler.unit, sampler.name);
+    }
     model.mesh.enable(model.shader);
 }
 

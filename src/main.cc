@@ -99,8 +99,6 @@ int main(int, char**) {
     nq::Mesh cube_mesh {index_buffer, {position_attribute,
                                        normal_attribute,
                                        mapping_attribute}};
-    nq::Model::Material white_material {glm::vec3{1.0}, glm::vec3{1.0}, glm::vec3{1.0}, 5};
-    nq::Model phong_cube {cube_mesh, phong_shader, white_material};
 
     std::vector<GLfloat> checkers = {
         1.0, 1.0, 1.0,
@@ -110,7 +108,9 @@ int main(int, char**) {
     };
 
     nq::Texture checkers_texture {checkers, 2, 2, {GL_LINEAR, GL_LINEAR}};
-    checkers_texture.active(phong_shader, GL_TEXTURE0, "checkers");
+    nq::Model::Sampler checkers_sampler {checkers_texture, "checkers", GL_TEXTURE0};
+    nq::Model::Material white_material {glm::vec3{1.0}, glm::vec3{1.0}, glm::vec3{1.0}, 5};
+    nq::Model phong_cube {cube_mesh, phong_shader, white_material, {checkers_sampler}};
 
     while (window.is_open()) {
         if (nq::Input::state(window, "close")) window.close();
@@ -126,15 +126,9 @@ int main(int, char**) {
                                                16.0 / 9.0, 0.1, 10.0)};
 
         phong_cube.reset();
-        phong_cube.translate({0.0, 0.0, -2.5});
+        phong_cube.translate({0.0, 0.0, -1.5});
         phong_cube.rotate(glm::vec3{0.0, 1.0, 0.0}, std::sin((float)glfwGetTime()) * glm::pi<float>());
         phong_cube.rotate(glm::vec3{1.0, 0.0, 0.0}, std::cos((float)glfwGetTime()) * glm::pi<float>());
-        glm::mat4 parent_transform {phong_cube.get_transform()};
-        renderer.draw(phong_cube, view, projection);
-
-        phong_cube.reset();
-        phong_cube.append(parent_transform);
-        phong_cube.translate({0.0, 0.0, -1.0});
         renderer.draw(phong_cube, view, projection);
 
         window.display();

@@ -3,6 +3,8 @@
 
 #include <glm/glm.hpp>
 #include <GL/glew.h>
+#include <vector>
+#include <initializer_list>
 #include "mesh.hh"
 #include "shader.hh"
 #include "texture.hh"
@@ -17,8 +19,18 @@ namespace nq {
             GLint shininess;
         };
 
+        struct Sampler {
+            Texture& texture;
+            std::string name;
+            GLint unit {-1};
+        };
+
+        Model(Mesh& mesh, Shader& shader, const Material& material,
+              std::initializer_list<Sampler> samplers)
+              : mesh {mesh}, shader {shader}, material {material},
+                samplers {samplers.begin(), samplers.end()} {}
         Model(Mesh& mesh, Shader& shader, const Material& material)
-              : mesh {mesh}, shader {shader}, material {material} {}
+              : Model {mesh, shader, material, {}} {}
 
         void scale(const glm::vec3&);
         void translate(const glm::vec3&);
@@ -33,6 +45,7 @@ namespace nq {
         Mesh& mesh;
         Shader& shader;
         Material material;
+        std::vector<Sampler> samplers;
         glm::mat4 transform;
         friend class Renderer;
     };
