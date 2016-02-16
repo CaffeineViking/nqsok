@@ -55,7 +55,7 @@ void nq::Renderer::setup(Model& model) const {
     model.shader.uniform_vector("material.ambient", model.material.ambient);
     model.shader.uniform_vector("material.diffuse", model.material.diffuse);
     model.shader.uniform_vector("material.specular", model.material.specular);
-    model.shader.uniform_vector("material.shininess", model.material.specular);
+    model.shader.uniformi("material.shininess", model.material.shininess);
     model.mesh.enable(model.shader);
 }
 

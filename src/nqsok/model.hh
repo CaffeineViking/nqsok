@@ -14,7 +14,7 @@ namespace nq {
             glm::vec3 ambient;
             glm::vec3 diffuse;
             glm::vec3 specular;
-            GLuint shininess;
+            GLint shininess;
         };
 
         Model(Mesh& mesh, Shader& shader, const Material& material)
@@ -25,6 +25,7 @@ namespace nq {
         void rotate(const glm::vec3&, float);
         glm::mat4 get_transform() const { return transform; }
         void reset() { transform = glm::mat4{1.0}; }
+        void apply(const std::string&);
         void append(const glm::mat4&);
         void append(const Model&);
 
@@ -34,7 +35,6 @@ namespace nq {
         Material material;
         glm::mat4 transform;
         friend class Renderer;
-        void apply(const std::string&);
     };
 }
 

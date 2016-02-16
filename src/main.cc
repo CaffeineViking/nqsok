@@ -109,8 +109,8 @@ int main(int, char**) {
         1.0, 1.0, 1.0
     };
 
-    // nq::Texture checkers_texture {checkers, 2, 2, {GL_LINEAR, GL_LINEAR}};
-    // checkers_texture.active(phong_shader, GL_TEXTURE0, "checkers");
+    nq::Texture checkers_texture {checkers, 2, 2, {GL_LINEAR, GL_LINEAR}};
+    checkers_texture.active(phong_shader, GL_TEXTURE0, "checkers");
 
     while (window.is_open()) {
         if (nq::Input::state(window, "close")) window.close();
