@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/constants.hpp>
+#include "extern/tiny_obj_loader.h"
 
 #include "nqsok/window.hh"
 #include "nqsok/renderer.hh"
@@ -30,106 +31,38 @@ int main(int, char**) {
     nq::Shader phong_shader {"share/shaders/phong.vert",
                              "share/shaders/phong.frag"};
 
-    std::vector<GLfloat> vertices = {
-        -0.5, +0.5, +0.5,
-        -0.5, -0.5, +0.5,
-        +0.5, -0.5, +0.5,
-        +0.5, +0.5, +0.5,
+    std::string error;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    tinyobj::LoadObj(shapes, materials, error, "share/models/bunny.obj");
+    if (!error.empty()) std::cerr << error << std::endl;
 
-        -0.5, +0.5, -0.5,
-        -0.5, -0.5, -0.5,
-        +0.5, -0.5, -0.5,
-        +0.5, +0.5, -0.5
-    };
+    nq::Buffer<GLuint> indices {shapes[0].mesh.indices, GL_STATIC_DRAW};
+    nq::Buffer<GLfloat> vertices {shapes[0].mesh.positions, GL_STATIC_DRAW};
+    nq::Mesh::Attribute position_attribute {vertices, "position"};
+    nq::Buffer<GLfloat> normals {shapes[0].mesh.normals, GL_STATIC_DRAW};
+    nq::Mesh::Attribute normal_attribute {normals, "normal"};
+    nq::Mesh mesh {indices, {position_attribute, normal_attribute}};
 
-    nq::Buffer<GLfloat> vertex_buffer {vertices, GL_STATIC_DRAW};
-    nq::Mesh::Attribute position_attribute {vertex_buffer, "position"};
-
-    std::vector<GLfloat> normals = {
-        -0.58, +0.58, +0.58,
-        -0.58, -0.58, +0.58,
-        +0.58, -0.58, +0.58,
-        +0.58, +0.58, +0.58,
-
-        -0.58, +0.58, -0.58,
-        -0.58, -0.58, -0.58,
-        +0.58, -0.58, -0.58,
-        +0.58, +0.58, -0.58
-    };
-
-    nq::Buffer<GLfloat> normal_buffer {normals, GL_STATIC_DRAW};
-    nq::Mesh::Attribute normal_attribute {normal_buffer, "normal"};
-
-    std::vector<GLfloat> mappings = {
-        +0.0, +0.0,
-        +0.0, +10.0,
-        +10.0, +10.0,
-        +10.0, +0.0,
-
-        +10.0, +0.0,
-        +10.0, +10.0,
-        +0.0, +10.0,
-        +0.0, +0.0
-    };
-
-    nq::Buffer<GLfloat> mapping_buffer {mappings, GL_STATIC_DRAW};
-    nq::Mesh::Attribute mapping_attribute {mapping_buffer, "mapping", 2};
-
-    std::vector<GLuint> indices = {
-        0, 1, 2,
-        0, 2, 3,
-
-        4, 0, 3,
-        4, 3, 7,
-
-        1, 5, 6,
-        1, 6, 2,
-
-        4, 5, 1,
-        4, 1, 0,
-
-        3, 2, 6,
-        3, 6, 7,
-
-        7, 6, 5,
-        7, 5, 4
-    };
-
-    nq::Buffer<GLuint> index_buffer {indices, GL_STATIC_DRAW};
-    nq::Mesh cube_mesh {index_buffer, {position_attribute,
-                                       normal_attribute,
-                                       mapping_attribute}};
-
-    std::vector<GLfloat> checkers = {
-        1.0, 1.0, 1.0,
-        0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0,
-        1.0, 1.0, 1.0
-    };
-
-    nq::Texture checkers_texture {checkers, 2, 2, {GL_LINEAR, GL_LINEAR}};
-    nq::Model::Sampler checkers_sampler {checkers_texture, "checkers", GL_TEXTURE0};
-    nq::Model::Material white_material {glm::vec3{1.0}, glm::vec3{1.0}, glm::vec3{1.0}, 5};
-    nq::Model phong_cube {cube_mesh, phong_shader, white_material, {checkers_sampler}};
+    nq::Model::Material material {glm::vec3{0.2}, glm::vec3{0.6}, glm::vec3{0.2}, 70};
+    nq::Model model {mesh, phong_shader, material};
+    nq::Camera camera {glm::lookAt(glm::vec3{0.0, 1.0, 0.0},
+                                   glm::vec3{0.0, 0.0, -5.0},
+                                   glm::vec3{0.0, 1.0, 0.0})};
 
     while (window.is_open()) {
         if (nq::Input::state(window, "close")) window.close();
         if (nq::Input::state(window, "press")) {
-            std::cout << '(' << nq::Input::value(window, "xaxis") << ", "
-                      << nq::Input::value(window, "yaxis") << ')' << std::endl;
+            // std::cout << '(' << nq::Input::value(window, "xaxis") << ", "
+            //           << nq::Input::value(window, "yaxis") << ')' << std::endl;
         }
 
         renderer.clear();
 
-        glm::mat4 view {1.0};
-        glm::mat4 projection {glm::perspective(glm::half_pi<double>(),
-                                               16.0 / 9.0, 0.1, 10.0)};
-
-        phong_cube.reset();
-        phong_cube.translate({0.0, 0.0, -1.5});
-        phong_cube.rotate(glm::vec3{0.0, 1.0, 0.0}, std::sin((float)glfwGetTime()) * glm::pi<float>());
-        phong_cube.rotate(glm::vec3{1.0, 0.0, 0.0}, std::cos((float)glfwGetTime()) * glm::pi<float>());
-        renderer.draw(phong_cube, view, projection);
+        model.transform().reset();
+        model.transform().translate({0.0, 0.0, -5.0});
+        model.transform().rotate({0.0, 1.0, 0.0}, glfwGetTime() / 1.0f);
+        renderer.draw(model, camera);
 
         window.display();
     }

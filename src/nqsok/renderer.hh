@@ -6,6 +6,7 @@
 #include "window.hh"
 #include "color.hh"
 #include "model.hh"
+#include "camera.hh"
 
 namespace nq {
     class Renderer_error final : public std::runtime_error {
@@ -36,7 +37,7 @@ namespace nq {
         ~Renderer(); // Releases GPU resources.
 
         void clear(); // Clears all relevant display buffers.
-        void draw(Model&, const glm::mat4, const glm::mat4);
+        void draw(Model&, const nq::Camera&); // Also do light stuff?
         void draw(Model&); // User needs to handle stuff manually...
 
     private:

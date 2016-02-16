@@ -3,23 +3,26 @@
 
 #include <glm/glm.hpp>
 #include <GL/glew.h>
+
 #include <vector>
 #include <initializer_list>
+
 #include "mesh.hh"
 #include "shader.hh"
 #include "texture.hh"
+#include "transform.hh"
 
 namespace nq {
     class Model {
     public:
-        struct Material {
+        struct Material final {
             glm::vec3 ambient;
             glm::vec3 diffuse;
             glm::vec3 specular;
             GLint shininess;
         };
 
-        struct Sampler {
+        struct Sampler final {
             Texture& texture;
             std::string name;
             GLint unit {-1};
@@ -32,21 +35,19 @@ namespace nq {
         Model(Mesh& mesh, Shader& shader, const Material& material)
               : Model {mesh, shader, material, {}} {}
 
-        void scale(const glm::vec3&);
-        void translate(const glm::vec3&);
-        void rotate(const glm::vec3&, float);
-        glm::mat4 get_transform() const { return transform; }
-        void reset() { transform = glm::mat4{1.0}; }
-        void apply(const std::string&);
-        void append(const glm::mat4&);
-        void append(const Model&);
+        Transform& transform() { return model_transform; }
+        const Transform& transform() const { return model_transform; }
+        void apply(const std::string& uniform) {
+            shader.uniform_matrix(uniform,
+            model_transform.get_matrix());
+        }
 
     private:
         Mesh& mesh;
         Shader& shader;
         Material material;
+        Transform model_transform;
         std::vector<Sampler> samplers;
-        glm::mat4 transform;
         friend class Renderer;
     };
 }
