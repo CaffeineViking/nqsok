@@ -53,7 +53,9 @@ int main(int, char**) {
                                    glm::vec3{0.0, 0.0, -5.0},
                                    glm::vec3{0.0, 1.0, 0.0})};
 
-    std::vector<nq::Light> lights {{false, {0.58, 0.58, 0.58}, {3.0, 3.0, 3.0}}};
+    std::vector<nq::Light> lights {{true, {0.58, 0.58, 0.58}, {1.0, 1.0, 1.0}},
+                                   {false, {-2.5, 0.0, -5.0}, {3.0, 0.0, 0.0}},
+                                   {false, {+2.5, 0.0, -5.0}, {0.0, 0.0, 3.0}}};
 
     while (window.is_open()) {
         if (nq::Input::state(window, "close")) window.close();
@@ -70,7 +72,6 @@ int main(int, char**) {
         } else if (nq::Input::state(window, "right")) {
             lights[0].push({+0.1, 0.0, 0.0});
         }
-
 
         renderer.clear();
         model.transform.reset();
