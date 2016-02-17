@@ -52,18 +52,21 @@ int main(int, char**) {
 
     while (window.is_open()) {
         if (nq::Input::state(window, "close")) window.close();
-        if (nq::Input::state(window, "press")) {
-            // std::cout << '(' << nq::Input::value(window, "xaxis") << ", "
-            //           << nq::Input::value(window, "yaxis") << ')' << std::endl;
+        if (nq::Input::state(window, "fullscreen")) window.fullscreen(true);
+
+        if (nq::Input::state(window, "up")) {
+        } else if (nq::Input::state(window, "down")) {
+        }
+
+        if (nq::Input::state(window, "left")) {
+        } else if (nq::Input::state(window, "right")) {
         }
 
         renderer.clear();
-
         model.transform().reset();
         model.transform().translate({0.0, 0.0, -5.0});
         model.transform().rotate({0.0, 1.0, 0.0}, glfwGetTime() / 1.0f);
         renderer.draw(model, camera);
-
         window.display();
     }
 

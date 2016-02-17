@@ -9,7 +9,7 @@ nq::Window::Window(int width, int height, const std::string& title,
     glfwSetErrorCallback(error); // Will throw exception...
     glfwInit(); // Handled by error callback.
 
-    glfwWindowHint(GLFW_SAMPLES, 8); // 8xMSAA, enable in renderer.
+    glfwWindowHint(GLFW_SAMPLES, 4); // 4xMSAA, enable in renderer.
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE); // Why wouldn't you?!
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, context.major_version);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, context.minor_version);
@@ -71,6 +71,11 @@ void nq::Window::toggle_fullscreen() {
         cached_fullscreen = false;
         resize(cached_width, cached_height);
     }
+}
+
+void nq::Window::fullscreen(bool state) {
+    if (state == cached_fullscreen) return
+    else toggle_fullscreen();
 }
 
 void nq::Window::resize(int width, int height) {

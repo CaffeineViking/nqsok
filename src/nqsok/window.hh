@@ -42,6 +42,7 @@ namespace nq {
         double aspect_ratio() const { return (double)width() / (double)height(); }
         int width() const; int height() const; // GLFW reports these wrong...
         void toggle_fullscreen();
+        void fullscreen(bool);
         void resize(int, int);
         void display();
 

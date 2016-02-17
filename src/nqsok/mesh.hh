@@ -21,7 +21,7 @@ namespace nq {
         struct Attribute {
             Buffer<GLfloat>& buffer;
             std::string name;
-            GLuint components {3};
+            GLuint components;
             GLboolean normalized {false};
             GLsizei stride {0};
             void* offset {nullptr};

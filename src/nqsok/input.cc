@@ -6,8 +6,20 @@ bool nq::Input::state(const Window& window,
         if (key_pressed(window, GLFW_KEY_ESCAPE)
             || key_pressed(window, GLFW_KEY_Q)) return true;
         return false;
-    } else if (id == "press") {
-        if (mouse_pressed(window, GLFW_MOUSE_BUTTON_LEFT)) return true;
+    } else if (id == "fullscreen") {
+        if (key_pressed(window, GLFW_KEY_F)) return true;
+        return false;
+    } else if (id == "up") {
+        if (key_pressed(window, GLFW_KEY_UP)) return true;
+        return false;
+    } else if (id == "left") {
+        if (key_pressed(window, GLFW_KEY_LEFT)) return true;
+        return false;
+    } else if (id == "down") {
+        if (key_pressed(window, GLFW_KEY_DOWN)) return true;
+        return false;
+    } else if (id == "right") {
+        if (key_pressed(window, GLFW_KEY_LEFT)) return true;
         return false;
     } else { return false; }
 }

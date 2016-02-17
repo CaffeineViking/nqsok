@@ -9,17 +9,17 @@ namespace nq {
     public:
         Light(bool directional, const glm::vec4& position, const glm::vec3 intensity)
              : directional {directional}, position {position}, intensity {intensity} {}
-        glm::vec4 get_position() const { return light_transform.get_matrix() * position; }
+        void move(const glm::vec3& position) { this->position = position; }
+        void push(const glm::vec3& direction) { this->position += direction; }
+        void color(const glm::vec3& color) { this->intensity = color; }
+        glm::vec3 get_position() const { return position; }
         glm::vec3 get_intensity() const { return intensity; }
         bool is_directional() const { return directional; }
-        Transform& transform() { return light_transform; }
-        const Transform& transform() const { return light_transform; }
 
     private:
         bool directional;
-        glm::vec4 position;
+        glm::vec3 position;
         glm::vec3 intensity;
-        Transform light_transform;
     };
 }
 

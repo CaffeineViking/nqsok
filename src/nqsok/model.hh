@@ -25,7 +25,7 @@ namespace nq {
         struct Sampler final {
             Texture& texture;
             std::string name;
-            GLint unit {-1};
+            GLint unit;
         };
 
         Model(Mesh& mesh, Shader& shader, const Material& material,
@@ -35,18 +35,15 @@ namespace nq {
         Model(Mesh& mesh, Shader& shader, const Material& material)
               : Model {mesh, shader, material, {}} {}
 
-        Transform& transform() { return model_transform; }
-        const Transform& transform() const { return model_transform; }
+        Transform transform; // Shhhh...
         void apply(const std::string& uniform) {
-            shader.uniform_matrix(uniform,
-            model_transform.get_matrix());
+            shader.uniform_matrix(uniform, transform.get_matrix());
         }
 
     private:
         Mesh& mesh;
         Shader& shader;
         Material material;
-        Transform model_transform;
         std::vector<Sampler> samplers;
         friend class Renderer;
     };
