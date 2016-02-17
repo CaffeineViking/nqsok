@@ -10,8 +10,8 @@ struct Material {
 struct Light {
     vec3 position;
     vec3 intensity;
-    bool directional;
-    bool enabled;
+    int directional;
+    int enabled;
 };
 
 uniform Material material;
@@ -43,17 +43,32 @@ vec3 specular(vec3 k, vec3 i,
 }
 
 void main() {
-    const vec3 light_color = vec3(1.0, 1.0, 1.0);
-    vec3 Iambi = ambient(material.ambient, light_color);
+    const vec3 ambient_color = vec3(1.0, 1.0, 1.0);
+    vec3 Iambi = ambient(material.ambient, ambient_color);
 
-    const vec3 light_direction = normalize(vec3(0.58, 0.58, 0.58));
-    vec3 Idiff = diffuse(material.diffuse, light_color,
-                         normalize(vnormal), light_direction);
+    vec3 Idiff = vec3(0.0),
+         Ispec = vec3(0.0);
+    vec3 normal = normalize(vnormal);
+    for (int i = 0; i < 16; ++i) {
+        vec3 light_vector = vec3(0.0),
+             light_intensity = vec3(0.0);
+        if (lights[i].enabled == 0) break;
+        if (lights[i].directional == 1) {
+            light_vector = normalize(lights[i].position);
+            light_intensity = lights[i].intensity;
+        } else if (lights[i].directional == 0) {
+            light_vector = lights[i].position - vposition.xyz;
+            light_intensity = lights[i].intensity / pow(length(light_vector), 2);
+            light_vector = normalize(light_vector);
+        }
 
-    const vec3 view = normalize(vec3(0.0, 0.0, 1.0));
-    vec3 Ispec = specular(material.specular, light_color,
-                          reflect(-light_direction, normalize(vnormal)),
-                          view, material.shininess);
+        const vec3 view = normalize(vec3(0.0, 0.0, 1.0));
+        Idiff += diffuse(material.diffuse, light_intensity, normal, light_vector);
+        Ispec += specular(material.specular, light_intensity,
+                            reflect(-light_vector, normal),
+                            view, material.shininess);
+    }
+
     vec3 I = Iambi + Idiff + Ispec;
     gl_FragColor = vec4(I, 1.0);
 }

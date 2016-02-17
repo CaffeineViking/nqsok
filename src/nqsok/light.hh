@@ -7,7 +7,7 @@
 namespace nq {
     class Light final {
     public:
-        Light(bool directional, const glm::vec4& position, const glm::vec3 intensity)
+        Light(bool directional, const glm::vec3& position, const glm::vec3 intensity)
              : directional {directional}, position {position}, intensity {intensity} {}
         void move(const glm::vec3& position) { this->position = position; }
         void push(const glm::vec3& direction) { this->position += direction; }

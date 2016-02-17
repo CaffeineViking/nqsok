@@ -19,7 +19,7 @@ bool nq::Input::state(const Window& window,
         if (key_pressed(window, GLFW_KEY_DOWN)) return true;
         return false;
     } else if (id == "right") {
-        if (key_pressed(window, GLFW_KEY_LEFT)) return true;
+        if (key_pressed(window, GLFW_KEY_RIGHT)) return true;
         return false;
     } else { return false; }
 }

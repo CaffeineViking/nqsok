@@ -74,7 +74,7 @@ void nq::Window::toggle_fullscreen() {
 }
 
 void nq::Window::fullscreen(bool state) {
-    if (state == cached_fullscreen) return
+    if (state == cached_fullscreen) return;
     else toggle_fullscreen();
 }
 
