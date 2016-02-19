@@ -6,8 +6,7 @@
 #include <vector>
 
 namespace nq {
-    template<typename T>
-    class Buffer final {};
+    template<typename T> class Buffer final {};
 
     template<>
     class Buffer<GLfloat> final {

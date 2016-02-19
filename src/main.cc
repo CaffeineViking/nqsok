@@ -37,7 +37,7 @@ int main(int, char**) {
     std::string error;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
-    tinyobj::LoadObj(shapes, materials, error, "share/models/bunny.obj");
+    tinyobj::LoadObj(shapes, materials, error, "share/models/voxel.obj");
     if (!error.empty()) std::cerr << error << std::endl;
 
     nq::Buffer<GLuint> indices {shapes[0].mesh.indices, GL_STATIC_DRAW};
@@ -51,12 +51,13 @@ int main(int, char**) {
                              normal_attribute,
                              mapping_attribute}};
 
-    std::vector<GLfloat> texture_data {1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
-                                       0.0, 0.0, 0.0, 1.0, 1.0, 1.0};
-    nq::Texture texture {texture_data, 2, 2, {GL_NEAREST, GL_NEAREST}};
-    nq::Model::Sampler texture_sampler {texture, "checkers", 0};
+    // std::vector<GLfloat> texture_data {1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
+    //                                    0.0, 0.0, 0.0, 1.0, 1.0, 1.0};
+    // nq::Texture texture {texture_data, 2, 2, {GL_NEAREST, GL_NEAREST}};
+    nq::Texture texture {"share/textures/voxel.png", {GL_LINEAR, GL_LINEAR}};
+    nq::Model::Sampler texture_sampler {texture, "specmap", 0};
 
-    nq::Model::Material material {glm::vec3{0.2}, glm::vec3{0.6}, glm::vec3{0.2}, 70};
+    nq::Model::Material material {glm::vec3{0.2}, glm::vec3{0.6}, glm::vec3{0.2}, 72};
     nq::Model model {mesh, phong_shader, material, {texture_sampler}};
     nq::Camera camera {glm::vec3{0.0, 1.0, 0.0},
                        glm::vec3{0.0, 0.0, -5.0},

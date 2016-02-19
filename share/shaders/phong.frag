@@ -14,6 +14,7 @@ struct Light {
     int enabled;
 };
 
+uniform sampler2D map_sampler;
 uniform vec3 view_direction;
 uniform Material material;
 uniform Light lights[16];
@@ -50,6 +51,7 @@ void main() {
     vec3 Idiff = vec3(0.0),
          Ispec = vec3(0.0);
     vec3 normal = normalize(vnormal);
+    vec3 map_sample = texture2D(map_sampler, vmapping * 0.5).xyz;
     for (int i = 0; i < 16; ++i) {
         vec3 light_vector = vec3(0.0),
              light_intensity = vec3(0.0);
@@ -65,10 +67,10 @@ void main() {
 
         const vec3 view = normalize(vec3(0.0, 0.0, 1.0));
         vec3 view_normal = normalize(vec4(view_direction, 1.0) - vposition).xyz;
-        Idiff += diffuse(material.diffuse, light_intensity, normal, light_vector);
-        Ispec += specular(material.specular, light_intensity,
-                            reflect(-light_vector, normal),
-                            view_normal, material.shininess);
+        Idiff += diffuse(map_sample * material.diffuse, light_intensity, normal, light_vector);
+        Ispec += specular(map_sample * material.specular, light_intensity,
+                          reflect(-light_vector, normal),
+                          view_normal, material.shininess);
     }
 
     vec3 I = Iambi + Idiff + Ispec;
