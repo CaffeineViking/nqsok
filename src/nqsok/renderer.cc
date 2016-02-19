@@ -53,7 +53,8 @@ void nq::Renderer::draw(Model& model, const Camera& camera, const std::vector<nq
         model.shader.uniform_vector(lighti + ".intensity", lights[i].get_intensity());
     }
 
-    model.shader.uniform_matrix("view", camera.transform.get_matrix());
+    model.shader.uniform_matrix("view", camera.get_matrix());
+    model.shader.uniform_vector("view_direction", camera.get_position());
     glm::mat4 projection {glm::perspective(glm::half_pi<double>(), window.aspect_ratio(), 0.1, 100.0)};
     model.shader.uniform_matrix("projection", projection);
     glDrawElements(GL_TRIANGLES, model.mesh.size(),

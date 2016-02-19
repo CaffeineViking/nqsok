@@ -45,13 +45,22 @@ int main(int, char**) {
     nq::Mesh::Attribute position_attribute {vertices, "position", 3};
     nq::Buffer<GLfloat> normals {shapes[0].mesh.normals, GL_STATIC_DRAW};
     nq::Mesh::Attribute normal_attribute {normals, "normal", 3};
-    nq::Mesh mesh {indices, {position_attribute, normal_attribute}};
+    nq::Buffer<GLfloat> texcoords {shapes[0].mesh.texcoords, GL_STATIC_DRAW};
+    nq::Mesh::Attribute mapping_attribute {texcoords, "mapping", 2};
+    nq::Mesh mesh {indices, {position_attribute,
+                             normal_attribute,
+                             mapping_attribute}};
+
+    std::vector<GLfloat> texture_data {1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
+                                       0.0, 0.0, 0.0, 1.0, 1.0, 1.0};
+    nq::Texture texture {texture_data, 2, 2, {GL_NEAREST, GL_NEAREST}};
+    nq::Model::Sampler texture_sampler {texture, "checkers", 0};
 
     nq::Model::Material material {glm::vec3{0.2}, glm::vec3{0.6}, glm::vec3{0.2}, 70};
-    nq::Model model {mesh, phong_shader, material};
-    nq::Camera camera {glm::lookAt(glm::vec3{0.0, 1.0, 0.0},
-                                   glm::vec3{0.0, 0.0, -5.0},
-                                   glm::vec3{0.0, 1.0, 0.0})};
+    nq::Model model {mesh, phong_shader, material, {texture_sampler}};
+    nq::Camera camera {glm::vec3{0.0, 1.0, 0.0},
+                       glm::vec3{0.0, 0.0, -5.0},
+                       glm::vec3{0.0, 1.0, 0.0}};
 
     std::vector<nq::Light> lights {{true, {0.58, 0.58, 0.58}, {1.0, 1.0, 1.0}},
                                    {false, {-2.5, 0.0, -5.0}, {3.0, 0.0, 0.0}},

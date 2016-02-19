@@ -14,6 +14,7 @@ struct Light {
     int enabled;
 };
 
+uniform vec3 view_direction;
 uniform Material material;
 uniform Light lights[16];
 
@@ -63,10 +64,11 @@ void main() {
         }
 
         const vec3 view = normalize(vec3(0.0, 0.0, 1.0));
+        vec3 view_normal = normalize(vec4(view_direction, 1.0) - vposition).xyz;
         Idiff += diffuse(material.diffuse, light_intensity, normal, light_vector);
         Ispec += specular(material.specular, light_intensity,
                             reflect(-light_vector, normal),
-                            view, material.shininess);
+                            view_normal, material.shininess);
     }
 
     vec3 I = Iambi + Idiff + Ispec;
