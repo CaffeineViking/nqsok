@@ -51,7 +51,8 @@ void main() {
     vec3 Idiff = vec3(0.0),
          Ispec = vec3(0.0);
     vec3 normal = normalize(vnormal);
-    vec3 map_sample = texture2D(map_sampler, vmapping).xyz;
+    // vec3 map_sample = texture2D(map_sampler, vmapping).xyz;
+    vec3 map_sample = vec3(1.0);
     for (int i = 0; i < 16; ++i) {
         vec3 light_vector = vec3(0.0),
              light_intensity = vec3(0.0);

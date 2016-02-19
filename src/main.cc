@@ -37,7 +37,7 @@ int main(int, char**) {
     std::string error;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
-    tinyobj::LoadObj(shapes, materials, error, "share/models/f16.obj");
+    tinyobj::LoadObj(shapes, materials, error, "share/models/bunny.obj");
     if (!error.empty()) std::cerr << error << std::endl;
 
     nq::Buffer<GLuint> indices {shapes[0].mesh.indices, GL_STATIC_DRAW};
@@ -59,7 +59,7 @@ int main(int, char**) {
 
     nq::Model::Material material {glm::vec3{0.2}, glm::vec3{0.6}, glm::vec3{0.2}, 72};
     nq::Model model {mesh, phong_shader, material, {texture_sampler}};
-    nq::Camera camera {glm::vec3{0.0, 0.5, 0.0},
+    nq::Camera camera {glm::vec3{0.0, 1.5, 0.0},
                        glm::vec3{0.0, 0.0, -5.0},
                        glm::vec3{0.0, 1.0, 0.0}};
 
@@ -85,7 +85,7 @@ int main(int, char**) {
 
         renderer.clear();
         model.transform.reset();
-        model.transform.translate({0.0, 0.0, -2.0});
+        model.transform.translate({0.0, 0.0, -5.0});
         model.transform.rotate({0.0, 1.0, 0.0}, glfwGetTime() / 1.0f);
         renderer.draw(model, camera, lights);
         window.display();
