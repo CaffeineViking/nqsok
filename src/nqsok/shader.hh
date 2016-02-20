@@ -24,6 +24,17 @@ namespace nq {
         GLint attribute_location(const std::string&) const;
         void use() { glUseProgram(handle); }
 
+        Shader(Shader&& other) noexcept {
+            this->handle = other.handle;
+            other.handle = 0;
+        }
+
+        Shader& operator=(Shader&& other) noexcept {
+            this->handle = other.handle;
+            other.handle = 0;
+            return *this;
+        }
+
     private:
         friend class Mesh;
         friend class Renderer;

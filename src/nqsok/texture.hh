@@ -23,6 +23,21 @@ namespace nq {
         void active(Shader&, GLenum, const std::string&); // What texture unit and name?
         GLsizei get_width() const { return width; } GLsizei get_height() const { return height; }
 
+        Texture(Texture&& other) noexcept {
+            this->width = other.width;
+            this->height = other.height;
+            this->handle = other.handle;
+            other.handle = 0;
+        }
+
+        Texture& operator=(Texture&& other) noexcept {
+            this->width = other.width;
+            this->height = other.height;
+            this->handle = other.handle;
+            other.handle = 0;
+            return *this;
+        }
+
     private:
         GLsizei width, height;
         GLuint handle;
