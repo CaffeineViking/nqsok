@@ -13,6 +13,20 @@ namespace nq {
     public:
         ~Buffer() { glDeleteBuffers(1, &handle); } // Deallocate memory on GPU.
         std::size_t size() const { return elements; }
+
+        Buffer(Buffer&& other) noexcept {
+            this->elements = other.elements;
+            this->handle = other.handle;
+            other.handle = 0;
+        }
+
+        Buffer& operator=(Buffer&& other) noexcept {
+            this->elements = other.elements;
+            this->handle = other.handle;
+            other.handle = 0;
+            return *this;
+        }
+
         Buffer(const std::vector<GLfloat>& data, GLenum usage) {
             std::cout << "\nBuffer (uploading)..." << std::endl;
             std::cout << "Total of " << data.size() << " elements of type GLfloat, "
@@ -54,6 +68,19 @@ namespace nq {
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.size() * sizeof(GLuint), data.data(), usage);
             std::cout << "done" << std::endl;
             std::cout << "...done (Buffer)" << std::endl;
+        }
+
+        Buffer(Buffer&& other) noexcept {
+            this->elements = other.elements;
+            this->handle = other.handle;
+            other.handle = 0;
+        }
+
+        Buffer& operator=(Buffer&& other) noexcept {
+            this->elements = other.elements;
+            this->handle = other.handle;
+            other.handle = 0;
+            return *this;
         }
 
     private:

@@ -1,9 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/constants.hpp>
-#include "extern/tiny_obj_loader.h"
+#include "extern/tinyobj.hh"
 
 #include "nqsok/window.hh"
 #include "nqsok/renderer.hh"

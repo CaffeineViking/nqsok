@@ -41,6 +41,8 @@ nq::Texture::Texture(const std::string& file,
     png_uint_32 width, height;
     int bit_depth, color_type, interlace_type;
     png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, &interlace_type, nullptr, nullptr);
+    this->width = width;
+    this->height = height;
 
     std::cout << "Texture of size " << width << "x"  << height << ", bit depth of "
               << bit_depth << " with color type #" << color_type << " found" << std::endl;

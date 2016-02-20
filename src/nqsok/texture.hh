@@ -21,6 +21,7 @@ namespace nq {
         Texture(const std::string&, const Parameters&);
         Texture(std::vector<GLfloat>&, GLsizei, GLsizei, const Parameters&);
         void active(Shader&, GLenum, const std::string&); // What texture unit and name?
+        GLsizei get_width() const { return width; } GLsizei get_height() const { return height; }
 
     private:
         GLsizei width, height;
