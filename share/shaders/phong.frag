@@ -17,6 +17,7 @@ struct Light {
 uniform sampler2D sampler;
 uniform Material material;
 uniform Light lights[16];
+uniform vec3 camera;
 
 varying vec4 vposition;
 varying vec3 vnormal;
@@ -65,11 +66,10 @@ void main() {
             light_vector = normalize(light_vector);
         }
 
-        vec3 viewing_normal = normalize(-vposition).xyz;
+        vec3 camera_normal = normalize(vec4(camera, 1.0) - vposition).xyz;
         Idiff += diffuse(texel * material.diffuse, light_intensity, normal, light_vector);
-        Ispec += specular(texel * material.specular, light_intensity,
-                          reflect(-light_vector, normal), viewing_normal,
-                          material.shininess);
+        Ispec += specular(material.specular, light_intensity, reflect(-light_vector, normal),
+                          camera_normal, material.shininess);
     }
 
     vec3 I = Iambi + Idiff + Ispec;

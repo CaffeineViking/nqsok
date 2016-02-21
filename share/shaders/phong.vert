@@ -18,8 +18,7 @@ void main() {
     vec4 projection_coordinates = projection * view_coordinates;
     gl_Position = projection_coordinates;
 
-    vposition = view_coordinates;
-    mat4 model2view = view * model;
-    vnormal = mat3(model2view) * normal;
+    vposition = world_coordinates;
+    vnormal = mat3(model) * normal;
     vmapping = mapping;
 }

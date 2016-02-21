@@ -1,7 +1,6 @@
 #include <vector>
 #include <iostream>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include "extern/tinyobj.hh"
 
 #include "nqsok/window.hh"
@@ -36,7 +35,7 @@ int main(int, char**) {
     std::string error;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
-    tinyobj::LoadObj(shapes, materials, error, "share/models/bunny.obj");
+    tinyobj::LoadObj(shapes, materials, error, "share/models/dragon.obj");
     if (!error.empty()) std::cerr << error << std::endl;
 
     nq::Buffer<GLuint> indices {shapes[0].mesh.indices, GL_STATIC_DRAW};
@@ -51,17 +50,17 @@ int main(int, char**) {
                              mapping_attribute}};
 
     nq::Texture texture {"share/textures/f16.png", {GL_LINEAR, GL_LINEAR}};
-    nq::Model::Sampler texture_sampler {texture, "map_sampler", 0};
+    nq::Model::Sampler texture_sampler {texture, "sampler", 0};
 
-    nq::Model::Material material {glm::vec3{0.2}, glm::vec3{0.6}, glm::vec3{0.4}, 42};
+    nq::Model::Material material {glm::vec3{0.2}, glm::vec3{0.6}, glm::vec3{0.2}, 72};
     nq::Model model {mesh, phong_shader, material, {texture_sampler}};
-    nq::Camera camera {glm::lookAt(glm::vec3{0.0, 1.5, 0.0},
-                                   glm::vec3{0.0, 0.0, -5.0},
-                                   glm::vec3{0.0, 1.0, 0.0})};
+    nq::Camera camera {glm::vec3{0.0, 1.5, 0.0},
+                       glm::vec3{0.0, 0.0, -3.0},
+                       glm::vec3{0.0, 1.0, 0.0}};
 
     std::vector<nq::Light> lights {{true, {0.58, 0.58, 0.58}, {1.0, 1.0, 1.0}},
-                                   {false, {-2.5, 0.0, -5.0}, {2.5, 0.0, 0.0}},
-                                   {false, {+2.5, 0.0, -5.0}, {0.0, 0.0, 2.5}}};
+                                   {false, {-2.5, 0.0, -3.0}, {2.5, 0.0, 0.0}},
+                                   {false, {+2.5, 0.0, -3.0}, {0.0, 0.0, 2.5}}};
 
     while (window.is_open()) {
         if (nq::Input::state(window, "close")) window.close();
@@ -81,7 +80,7 @@ int main(int, char**) {
 
         renderer.clear();
         model.transform.reset();
-        model.transform.translate({0.0, 0.0, -5.0});
+        model.transform.translate({0.0, 0.0, -3.0});
         model.transform.rotate({0.0, 1.0, 0.0}, glfwGetTime() / 1.0f);
         renderer.draw(model, camera, lights);
         window.display();

@@ -40,25 +40,24 @@ void nq::Renderer::clear() {
 }
 
 void nq::Renderer::draw(Model& model) {
-    setup(model); // Done in all draw methods.
+    setup(model);
     glDrawElements(GL_TRIANGLES, model.mesh.size(),
                    GL_UNSIGNED_INT, nullptr);
 }
 
 void nq::Renderer::draw(Model& model, const Camera& camera, const std::vector<nq::Light>& lights) {
-    setup(model); // Done in all draw methods.
+    setup(model);
     for (std::size_t i {0}; i < 16; ++i) {
         std::string lighti {"lights[" + std::to_string(i) + "]"};
         if (i < lights.size()) model.shader.uniformi(lighti + ".enabled", 1);
         else { model.shader.uniformi(lighti + ".enabled", 0); break; }
         model.shader.uniformi(lighti + ".directional", static_cast<int>(lights[i].directional));
-        glm::vec4 light_vposition {camera.transform.get_matrix() * glm::vec4{lights[i].position,
-                                   lights[i].directional ? 0.0 : 1.0}};
-        model.shader.uniform_vector(lighti + ".position", glm::vec3{light_vposition});
         model.shader.uniform_vector(lighti + ".intensity", lights[i].intensity);
+        model.shader.uniform_vector(lighti + ".position", lights[i].position);
     }
 
-    model.shader.uniform_matrix("view", camera.transform.get_matrix());
+    model.shader.uniform_vector("camera", camera.position);
+    model.shader.uniform_matrix("view", camera.get_matrix());
     model.shader.uniform_matrix("projection", projection);
     glDrawElements(GL_TRIANGLES, model.mesh.size(),
                    GL_UNSIGNED_INT, nullptr);
