@@ -1,6 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "extern/tinyobj.hh"
 
 #include "nqsok/window.hh"
@@ -49,19 +50,16 @@ int main(int, char**) {
                              normal_attribute,
                              mapping_attribute}};
 
-    // std::vector<GLfloat> texture_data {1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
-    //                                    0.0, 0.0, 0.0, 1.0, 1.0, 1.0};
-    // nq::Texture texture {texture_data, 2, 2, {GL_NEAREST, GL_NEAREST}};
     nq::Texture texture {"share/textures/f16.png", {GL_LINEAR, GL_LINEAR}};
     nq::Model::Sampler texture_sampler {texture, "map_sampler", 0};
 
     nq::Model::Material material {glm::vec3{0.2}, glm::vec3{0.6}, glm::vec3{0.2}, 72};
     nq::Model model {mesh, phong_shader, material, {texture_sampler}};
-    nq::Camera camera {glm::lookAt(glm::vec3{0.0, 1.5, -10.0},
-                                   glm::vec3{0.0, 0.0, 0.0},
+    nq::Camera camera {glm::lookAt(glm::vec3{0.0, 1.5, 0.0},
+                                   glm::vec3{0.0, 0.0, -5.0},
                                    glm::vec3{0.0, 1.0, 0.0})};
 
-    std::vector<nq::Light> lights {{true, {0.58, 0.58, 0.58}, {1.0, 1.0, 1.0}},
+    std::vector<nq::Light> lights {{false, {0.58, 0.58, 0.58}, {1.0, 1.0, 1.0}},
                                    {false, {-2.5, 0.0, -5.0}, {3.0, 0.0, 0.0}},
                                    {false, {+2.5, 0.0, -5.0}, {0.0, 0.0, 3.0}}};
 

@@ -50,6 +50,7 @@ namespace nq {
 
         Window& window;
         Settings settings;
+        glm::mat4 projection;
     };
 }
 
