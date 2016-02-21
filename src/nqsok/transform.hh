@@ -6,6 +6,10 @@
 namespace nq {
     class Transform final {
     public:
+        Transform() = default;
+        Transform(const glm::mat4& matrix)
+                 : transform {matrix} {}
+
         void scale(const glm::vec3&);
         void translate(const glm::vec3&);
         void rotate(const glm::vec3&, float);

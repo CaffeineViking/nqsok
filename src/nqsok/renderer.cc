@@ -48,12 +48,12 @@ void nq::Renderer::draw(Model& model, const Camera& camera, const std::vector<nq
         std::string lighti {"lights[" + std::to_string(i) + "]"};
         if (i < lights.size()) model.shader.uniformi(lighti + ".enabled", 1);
         else { model.shader.uniformi(lighti + ".enabled", 0); break; }
-        model.shader.uniformi(lighti + ".directional", static_cast<int>(lights[i].is_directional()));
-        model.shader.uniform_vector(lighti + ".position", lights[i].get_position());
-        model.shader.uniform_vector(lighti + ".intensity", lights[i].get_intensity());
+        model.shader.uniformi(lighti + ".directional", static_cast<int>(lights[i].directional));
+        model.shader.uniform_vector(lighti + ".position", lights[i].position);
+        model.shader.uniform_vector(lighti + ".intensity", lights[i].intensity);
     }
 
-    model.shader.uniform_matrix("view", camera.get_matrix());
+    model.shader.uniform_matrix("view", camera.transform.get_matrix());
     model.shader.uniform_vector("view_direction", camera.get_position());
     glm::mat4 projection {glm::perspective(glm::half_pi<double>(), window.aspect_ratio(), 0.1, 100.0)};
     model.shader.uniform_matrix("projection", projection);

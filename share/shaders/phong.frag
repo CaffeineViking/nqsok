@@ -66,7 +66,6 @@ void main() {
             light_vector = normalize(light_vector);
         }
 
-        const vec3 view = normalize(vec3(0.0, 0.0, 1.0));
         vec3 view_normal = normalize(vec4(view_direction, 1.0) - vposition).xyz;
         Idiff += diffuse(map_sample * material.diffuse, light_intensity, normal, light_vector);
         Ispec += specular(map_sample * material.specular, light_intensity,

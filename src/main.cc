@@ -57,9 +57,9 @@ int main(int, char**) {
 
     nq::Model::Material material {glm::vec3{0.2}, glm::vec3{0.6}, glm::vec3{0.2}, 72};
     nq::Model model {mesh, phong_shader, material, {texture_sampler}};
-    nq::Camera camera {glm::vec3{0.0, 1.5, 0.0},
-                       glm::vec3{0.0, 0.0, -5.0},
-                       glm::vec3{0.0, 1.0, 0.0}};
+    nq::Camera camera {glm::lookAt(glm::vec3{0.0, 1.5, -10.0},
+                                   glm::vec3{0.0, 0.0, 0.0},
+                                   glm::vec3{0.0, 1.0, 0.0})};
 
     std::vector<nq::Light> lights {{true, {0.58, 0.58, 0.58}, {1.0, 1.0, 1.0}},
                                    {false, {-2.5, 0.0, -5.0}, {3.0, 0.0, 0.0}},
@@ -70,15 +70,15 @@ int main(int, char**) {
         if (nq::Input::state(window, "fullscreen")) window.fullscreen(true);
 
         if (nq::Input::state(window, "up")) {
-            lights[0].push({0.0, 0.0, -0.1});
+            lights[0].position.z -= 0.1;
         } else if (nq::Input::state(window, "down")) {
-            lights[0].push({0.0, 0.0, +0.1});
+            lights[0].position.z += 0.1;
         }
 
         if (nq::Input::state(window, "left")) {
-            lights[0].push({-0.1, 0.0, 0.0});
+            lights[0].position.x -= 0.1;
         } else if (nq::Input::state(window, "right")) {
-            lights[0].push({+0.1, 0.0, 0.0});
+            lights[0].position.x += 0.1;
         }
 
         renderer.clear();
