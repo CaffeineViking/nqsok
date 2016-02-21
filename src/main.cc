@@ -53,7 +53,7 @@ int main(int, char**) {
     nq::Texture texture {"share/textures/f16.png", {GL_LINEAR, GL_LINEAR}};
     nq::Model::Sampler texture_sampler {texture, "map_sampler", 0};
 
-    nq::Model::Material material {glm::vec3{0.2}, glm::vec3{0.6}, glm::vec3{0.4}, 72};
+    nq::Model::Material material {glm::vec3{0.2}, glm::vec3{0.6}, glm::vec3{0.4}, 42};
     nq::Model model {mesh, phong_shader, material, {texture_sampler}};
     nq::Camera camera {glm::lookAt(glm::vec3{0.0, 1.5, 0.0},
                                    glm::vec3{0.0, 0.0, -5.0},
