@@ -2,6 +2,7 @@
 #define NQSOK_INPUT_HH
 
 #include <stdexcept>
+#include <unordered_map>
 #include "window.hh"
 
 namespace nq {
@@ -10,21 +11,45 @@ namespace nq {
 
     class Input final {
     public:
-        static bool state(const Window&, const std::string&);
-        static double value(const Window&, const std::string&);
+        static bool key_pressed(int, int);
+        static bool key_down(int, int);
+        static bool key_up(int, int) ;
 
-        static void grab_cursor(const Window&);
-        static void hide_cursor(const Window&);
-        static void normal_cursor(const Window&);
+        static bool mouse_pressed(int, int);
+        static bool mouse_down(int, int);
+        static bool mouse_up(int, int);
+
+        static void cursor_style(int); // GLFW_CURSOR.
+        static double mouse_x(); static double mouse_y();
+
+        static void listen(Window& window) {
+            handle = window.handle;
+            glfwSetKeyCallback(window.handle,
+                               key_callback);
+            glfwSetMouseButtonCallback(window.handle,
+                                       mouse_callback);
+            keyboard_state.clear();
+            mouseb_state.clear();
+        }
 
     private:
-        static bool key_pressed(const Window&, int);
-        static bool key_released(const Window&, int);
+        struct Key {
+            int state {GLFW_RELEASE};
+            int modifier {0x0000};
+            bool pressed {false};
+        };
 
-        static double mouse_position_x(const Window&);
-        static double mouse_position_y(const Window&);
-        static bool mouse_pressed(const Window&, int);
-        static bool mouse_released(const Window&, int);
+        struct Mouse {
+            int state {GLFW_RELEASE};
+            int modifier {0x0000};
+            bool pressed {false};
+        };
+
+        static GLFWwindow* handle;
+        static std::unordered_map<int, Key> keyboard_state;
+        static std::unordered_map<int, Mouse> mouseb_state;
+        static void key_callback(GLFWwindow*, int, int, int, int);
+        static void mouse_callback(GLFWwindow*, int, int, int);
     };
 }
 

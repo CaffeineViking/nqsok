@@ -13,6 +13,7 @@
 #include "nqsok/model.hh"
 #include "nqsok/camera.hh"
 #include "nqsok/light.hh"
+#include <GLFW/glfw3.h>
 
 int main(int, char**) {
     nq::Window::Context context {2, 1, false, false};
@@ -20,6 +21,7 @@ int main(int, char**) {
     // Window above has a size of 1280x720, title of 'NQ Sokoban", has
     // a context initialized to GL 2.1 (not core and not forward compat),
     // will not open in fullscreen mode and will use vertical sync (60 Hz).
+    nq::Input::listen(window); // Listen to all input from this window.
 
     window.current_context();
     nq::Renderer::Settings settings;
@@ -63,20 +65,14 @@ int main(int, char**) {
                                    {false, {+2.5, 0.0, -3.0}, {0.0, 0.0, 2.5}}};
 
     while (window.is_open()) {
-        if (nq::Input::state(window, "close")) window.close();
-        if (nq::Input::state(window, "fullscreen")) window.fullscreen(true);
+        if (nq::Input::key_pressed(GLFW_KEY_Q, 0)
+            || nq::Input::key_pressed(GLFW_KEY_ESCAPE, 0)) window.close();
+        if (nq::Input::key_pressed(GLFW_KEY_F, 0)) window.toggle_fullscreen();
 
-        if (nq::Input::state(window, "up")) {
-            lights[0].position.z -= 0.1;
-        } else if (nq::Input::state(window, "down")) {
-            lights[0].position.z += 0.1;
-        }
-
-        if (nq::Input::state(window, "left")) {
-            lights[0].position.x -= 0.1;
-        } else if (nq::Input::state(window, "right")) {
-            lights[0].position.x += 0.1;
-        }
+        if (nq::Input::key_down(GLFW_KEY_UP, 0)) lights[0].position.z -= 0.1;
+        else if (nq::Input::key_down(GLFW_KEY_DOWN, 0)) lights[0].position.z += 0.1;
+        if (nq::Input::key_down(GLFW_KEY_LEFT, 0)) lights[0].position.x -= 0.1;
+        else if (nq::Input::key_down(GLFW_KEY_RIGHT, 0)) lights[0].position.x += 0.1;
 
         renderer.clear();
         model.transform.reset();

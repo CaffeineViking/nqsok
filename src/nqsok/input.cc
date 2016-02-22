@@ -1,83 +1,88 @@
 #include "input.hh"
+#include <iostream>
 
-bool nq::Input::state(const Window& window,
-                      const std::string& id) {
-    if (id == "close") {
-        if (key_pressed(window, GLFW_KEY_ESCAPE)
-            || key_pressed(window, GLFW_KEY_Q)) return true;
-        return false;
-    } else if (id == "fullscreen") {
-        if (key_pressed(window, GLFW_KEY_F)) return true;
-        return false;
-    } else if (id == "up") {
-        if (key_pressed(window, GLFW_KEY_UP)) return true;
-        return false;
-    } else if (id == "left") {
-        if (key_pressed(window, GLFW_KEY_LEFT)) return true;
-        return false;
-    } else if (id == "down") {
-        if (key_pressed(window, GLFW_KEY_DOWN)) return true;
-        return false;
-    } else if (id == "right") {
-        if (key_pressed(window, GLFW_KEY_RIGHT)) return true;
-        return false;
-    } else { return false; }
+bool nq::Input::key_pressed(int key, int modifier) {
+    if (key_down(key, modifier) && keyboard_state[key].pressed) {
+        keyboard_state[key].pressed = false;
+        return true;
+    }
+
+    keyboard_state[key].pressed = false;
+    return false;
 }
 
-double nq::Input::value(const Window& window,
-                        const std::string& id) {
-    if (id == "xaxis") {
-        return mouse_position_x(window);
-    } else if (id == "yaxis") {
-        return mouse_position_y(window);
-    } else { return 42.0; }
-}
-
-bool nq::Input::key_pressed(const Window& window, int key) {
-    if (glfwGetKey(window.handle, key) == GLFW_PRESS) return true;
+bool nq::Input::key_down(int key, int modifier) {
+    if (keyboard_state.count(key) == 0) return false;
+    if (keyboard_state[key].state == GLFW_PRESS
+        && keyboard_state[key].modifier == modifier) return true;
     else return false;
 }
 
-bool nq::Input::key_released(const Window& window, int key) {
-    if (glfwGetKey(window.handle, key) == GLFW_RELEASE) return true;
+bool nq::Input::key_up(int key, int modifier) {
+    if (keyboard_state.count(key) == 0) return true;
+    if (keyboard_state[key].state == GLFW_RELEASE
+        && keyboard_state[key].modifier == modifier) return true;
     else return false;
 }
 
-void nq::Input::grab_cursor(const Window& window) {
-    glfwSetInputMode(window.handle, GLFW_CURSOR,
-                     GLFW_CURSOR_DISABLED);
+GLFWwindow* nq::Input::handle;
+std::unordered_map<int, nq::Input::Key> nq::Input::keyboard_state;
+void nq::Input::key_callback(GLFWwindow*, int key,
+                             int, int action, int mods) {
+    if (keyboard_state.count(key) == 0) keyboard_state[key] = {};
+    if (keyboard_state[key].state == GLFW_RELEASE
+        && action == GLFW_PRESS) keyboard_state[key].pressed = true;
+    else keyboard_state[key].pressed = false;
+    keyboard_state[key].state = action;
+    keyboard_state[key].modifier = mods;
 }
 
-void nq::Input::hide_cursor(const Window& window) {
-    glfwSetInputMode(window.handle, GLFW_CURSOR,
-                     GLFW_CURSOR_HIDDEN);
+bool nq::Input::mouse_pressed(int button, int modifier) {
+    if (mouse_down(button, modifier) && mouseb_state[button].pressed) {
+        mouseb_state[button].pressed = false;
+        return true;
+    }
+
+    mouseb_state[button].pressed = false;
+    return false;
 }
 
-void nq::Input::normal_cursor(const Window& window) {
-    glfwSetInputMode(window.handle, GLFW_CURSOR,
-                     GLFW_CURSOR_NORMAL);
+bool nq::Input::mouse_down(int button, int modifier) {
+    if (mouseb_state.count(button) == 0) return false;
+    if (mouseb_state[button].state == GLFW_PRESS
+        && mouseb_state[button].modifier == modifier) return true;
+    else return false;
 }
 
-double nq::Input::mouse_position_x(const Window& window) {
+bool nq::Input::mouse_up(int button, int modifier) {
+    if (mouseb_state.count(button) == 0) return true;
+    if (mouseb_state[button].state == GLFW_RELEASE
+        && mouseb_state[button].modifier == modifier) return true;
+    else return false;
+}
+
+std::unordered_map<int, nq::Input::Mouse> nq::Input::mouseb_state;
+void nq::Input::mouse_callback(GLFWwindow*, int button,
+                               int action, int mods) {
+    if (mouseb_state.count(button) == 0) mouseb_state[button] = {};
+    if (mouseb_state[button].state == GLFW_RELEASE
+        && action == GLFW_PRESS) mouseb_state[button].pressed = true;
+    else mouseb_state[button].pressed = false;
+    mouseb_state[button].state = action;
+    mouseb_state[button].modifier = mods;
+}
+
+void nq::Input::cursor_style(int value) { glfwSetInputMode(handle, GLFW_CURSOR, value); }
+double nq::Input::mouse_x() {
     double value;
-    glfwGetCursorPos(window.handle,
-                     &value, nullptr);
+    glfwGetCursorPos(handle, &value,
+                     nullptr);
     return value;
 }
 
-double nq::Input::mouse_position_y(const Window& window) {
+double nq::Input::mouse_y() {
     double value;
-    glfwGetCursorPos(window.handle,
-                     nullptr, &value);
+    glfwGetCursorPos(handle, nullptr,
+                     &value);
     return value;
-}
-
-bool nq::Input::mouse_pressed(const Window& window, int button) {
-    if (glfwGetMouseButton(window.handle, button) == GLFW_PRESS) return true;
-    else return false;
-}
-
-bool nq::Input::mouse_released(const Window& window, int button) {
-    if (glfwGetMouseButton(window.handle, button) == GLFW_RELEASE) return true;
-    else return false;
 }
