@@ -64,18 +64,20 @@ void nq::Renderer::draw(Model& model, const Camera& camera, const std::vector<nq
 }
 
 void nq::Renderer::setup(Model& model) const {
-    model.shader.use();
-    model.apply("model");
+    if (!model.shader.is_current()) model.shader.use();
     model.shader.uniform_vector("material.ambient", model.material.ambient);
     model.shader.uniform_vector("material.diffuse", model.material.diffuse);
     model.shader.uniform_vector("material.specular", model.material.specular);
     model.shader.uniformi("material.shininess", model.material.shininess);
     for (Model::Sampler& sampler : model.samplers) {
-        sampler.texture.active(model.shader,
-                sampler.unit, sampler.name);
+        if (!sampler.texture.is_current()) {
+            sampler.texture.active(model.shader,
+                    sampler.unit, sampler.name);
+        }
     }
 
-    model.mesh.enable(model.shader);
+    model.apply("model"); // Apply model matrix transform.
+    if (!model.mesh.is_current()) model.mesh.enable(model.shader);
 }
 
 void nq::Renderer::report_settings() const {

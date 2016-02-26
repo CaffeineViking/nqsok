@@ -31,8 +31,10 @@ namespace nq {
         Mesh(Buffer<GLuint>&, std::initializer_list<Attribute>);
         std::size_t size() const { return index_buffer.size(); }
         void enable(const Shader&); // With shader that is.
+        bool is_current() const; // Less context swaps.
 
     private:
+        static Mesh* current;
         Buffer<GLuint>& index_buffer;
         std::vector<Attribute> vertex_attributes;
     };

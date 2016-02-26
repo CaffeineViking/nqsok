@@ -22,6 +22,12 @@ nq::Shader::Shader(const std::string& vertex_shader_path,
 
 nq::Shader::~Shader() { glDeleteProgram(handle); }
 
+nq::Shader* nq::Shader::current {nullptr};
+bool nq::Shader::is_current() const {
+    if (current == this) return true;
+    else return false;
+}
+
 void nq::Shader::uniformf(const std::string& name, float value) {
     GLint location {glGetUniformLocation(handle, name.c_str())};
     glUniform1f(location, value);

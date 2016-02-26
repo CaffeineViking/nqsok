@@ -13,7 +13,7 @@ bool nq::Input::key_pressed(int key, int modifier) {
 
 bool nq::Input::key_down(int key, int modifier) {
     if (keyboard_state.count(key) == 0) return false;
-    if (keyboard_state[key].state == GLFW_PRESS
+    if ((keyboard_state[key].state == GLFW_PRESS || keyboard_state[key].state == GLFW_REPEAT)
         && keyboard_state[key].modifier == modifier) return true;
     else return false;
 }

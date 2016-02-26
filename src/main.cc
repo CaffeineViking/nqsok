@@ -64,6 +64,7 @@ int main(int, char**) {
                                    {false, {-2.5, 0.0, -3.0}, {2.5, 0.0, 0.0}},
                                    {false, {+2.5, 0.0, -3.0}, {0.0, 0.0, 2.5}}};
 
+    double cached_time {glfwGetTime()};
     while (window.is_open()) {
         if (nq::Input::key_pressed(GLFW_KEY_Q, 0)
             || nq::Input::key_pressed(GLFW_KEY_ESCAPE, 0)) window.close();
@@ -74,10 +75,39 @@ int main(int, char**) {
         if (nq::Input::key_down(GLFW_KEY_LEFT, 0)) lights[0].position.x -= 0.1;
         else if (nq::Input::key_down(GLFW_KEY_RIGHT, 0)) lights[0].position.x += 0.1;
 
+        constexpr float CAMERA_SPEED {0.05};
+        if (nq::Input::key_down(GLFW_KEY_W, 0)) {
+            camera.position.z -= CAMERA_SPEED;
+            camera.direction.z -= CAMERA_SPEED;
+        } else if (nq::Input::key_down(GLFW_KEY_S, 0)) {
+            camera.position.z += CAMERA_SPEED;
+            camera.direction.z += CAMERA_SPEED;
+        }
+
+        if (nq::Input::key_down(GLFW_KEY_A, 0)) {
+            camera.position.x -= CAMERA_SPEED;
+            camera.direction.x -= CAMERA_SPEED;
+        } else if (nq::Input::key_down(GLFW_KEY_D, 0)) {
+            camera.position.x += CAMERA_SPEED;
+            camera.direction.x += CAMERA_SPEED;
+        }
+
+        if (nq::Input::key_down(GLFW_KEY_J, 0)) {
+            camera.position.y -= CAMERA_SPEED;
+            camera.direction.y -= CAMERA_SPEED;
+        } else if (nq::Input::key_down(GLFW_KEY_K, 0)) {
+            camera.position.y += CAMERA_SPEED;
+            camera.direction.y += CAMERA_SPEED;
+        }
+
+        double current_time {glfwGetTime()};
+        double delta_time {current_time - cached_time};
+        cached_time = current_time;
+
         renderer.clear();
         model.transform.reset();
         model.transform.translate({0.0, 0.0, -3.0});
-        model.transform.rotate({0.0, 1.0, 0.0}, glfwGetTime() / 1.0f);
+        // model.transform.rotate({0.0, 1.0, 0.0}, glfwGetTime() / 1.0f);
         renderer.draw(model, camera, lights);
         window.display();
     }

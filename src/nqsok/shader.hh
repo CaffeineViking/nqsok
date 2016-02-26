@@ -22,7 +22,8 @@ namespace nq {
         void uniform_vector(const std::string&, const glm::vec3&);
         void uniform_matrix(const std::string&, const glm::mat4&);
         GLint attribute_location(const std::string&) const;
-        void use() { glUseProgram(handle); }
+        void use() { glUseProgram(handle); current = this; }
+        bool is_current() const;
 
         Shader(Shader&& other) noexcept {
             this->handle = other.handle;
@@ -38,6 +39,7 @@ namespace nq {
     private:
         friend class Mesh;
         friend class Renderer;
+        static Shader* current;
         GLuint load_shader(const std::string&, GLenum);
         GLuint load_program(GLuint, GLuint);
         GLuint handle;

@@ -22,6 +22,7 @@ namespace nq {
         Texture(std::vector<GLfloat>&, GLsizei, GLsizei, const Parameters&);
         void active(Shader&, GLenum, const std::string&); // What texture unit and name?
         GLsizei get_width() const { return width; } GLsizei get_height() const { return height; }
+        bool is_current() const;
 
         Texture(Texture&& other) noexcept {
             this->width = other.width;
@@ -39,6 +40,7 @@ namespace nq {
         }
 
     private:
+        static Texture* current;
         GLsizei width, height;
         GLuint handle;
     };

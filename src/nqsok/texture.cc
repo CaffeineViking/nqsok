@@ -106,4 +106,11 @@ void nq::Texture::active(Shader& shader, GLenum texture_unit,
     glActiveTexture(texture_unit);
     glBindTexture(GL_TEXTURE_2D, handle);
     shader.uniformi(uniform_name.c_str(), texture_unit);
+    current = this;
+}
+
+nq::Texture* nq::Texture::current {nullptr};
+bool nq::Texture::is_current() const {
+    if (current == this) return true;
+    else return false;
 }

@@ -19,6 +19,12 @@ nq::Mesh::Mesh(Buffer<GLuint>& index_buffer,
     std::cout << "...done (Mesh)" << std::endl;
 }
 
+nq::Mesh* nq::Mesh::current {nullptr};
+bool nq::Mesh::is_current() const {
+    if (current == this) return true;
+    else return false;
+}
+
 void nq::Mesh::enable(const Shader& shader) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer.handle);
     for (const Attribute& attribute : vertex_attributes) {
@@ -26,5 +32,5 @@ void nq::Mesh::enable(const Shader& shader) {
         glVertexAttribPointer(shader.attribute_location(attribute.name), attribute.components, GL_FLOAT,
                               attribute.normalized, attribute.stride, attribute.offset);
         glEnableVertexAttribArray(shader.attribute_location(attribute.name));
-    }
+    } current = this;
 }
