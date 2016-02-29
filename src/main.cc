@@ -1,6 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <glm/glm.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 #include "extern/tinyobj.hh"
 
 #include "nqsok/window.hh"
@@ -56,15 +57,16 @@ int main(int, char**) {
 
     nq::Model::Material material {glm::vec3{0.2}, glm::vec3{0.6}, glm::vec3{0.2}, 72};
     nq::Model model {mesh, phong_shader, material, {texture_sampler}};
-    nq::Camera camera {glm::vec3{0.0, 1.5, 0.0},
-                       glm::vec3{0.0, 0.0, -3.0},
+    nq::Camera camera {glm::vec3{0.0, 0.0, 0.0},
+                       glm::vec3{0.0, 0.0, -1.0},
                        glm::vec3{0.0, 1.0, 0.0}};
 
     std::vector<nq::Light> lights {{true, {0.58, 0.58, 0.58}, {1.0, 1.0, 1.0}},
                                    {false, {-2.5, 0.0, -3.0}, {2.5, 0.0, 0.0}},
                                    {false, {+2.5, 0.0, -3.0}, {0.0, 0.0, 2.5}}};
 
-    double cached_time {glfwGetTime()};
+    double itime {glfwGetTime()};
+    double cached_time {itime};
     while (window.is_open()) {
         if (nq::Input::key_pressed(GLFW_KEY_Q, 0)
             || nq::Input::key_pressed(GLFW_KEY_ESCAPE, 0)) window.close();
@@ -75,29 +77,56 @@ int main(int, char**) {
         if (nq::Input::key_down(GLFW_KEY_LEFT, 0)) lights[0].position.x -= 0.1;
         else if (nq::Input::key_down(GLFW_KEY_RIGHT, 0)) lights[0].position.x += 0.1;
 
-        constexpr float CAMERA_SPEED {0.05};
-        if (nq::Input::key_down(GLFW_KEY_W, 0)) {
-            camera.position.z -= CAMERA_SPEED;
-            camera.direction.z -= CAMERA_SPEED;
-        } else if (nq::Input::key_down(GLFW_KEY_S, 0)) {
-            camera.position.z += CAMERA_SPEED;
-            camera.direction.z += CAMERA_SPEED;
+        constexpr float CAMERA_MSPEED {0.05};
+        if (nq::Input::key_down(GLFW_KEY_W, 0)
+            || nq::Input::key_down(GLFW_KEY_S, 0)) {
+            glm::vec3 direction {camera.direction - camera.position};
+            glm::vec3 displacement {glm::normalize(direction) * CAMERA_MSPEED};
+            if (nq::Input::key_down(GLFW_KEY_W, 0)) {
+                camera.position += displacement;
+                camera.direction += displacement;
+            } else if (nq::Input::key_down(GLFW_KEY_S, 0)) {
+                camera.position -= displacement;
+                camera.direction -= displacement;
+            }
         }
 
-        if (nq::Input::key_down(GLFW_KEY_A, 0)) {
-            camera.position.x -= CAMERA_SPEED;
-            camera.direction.x -= CAMERA_SPEED;
-        } else if (nq::Input::key_down(GLFW_KEY_D, 0)) {
-            camera.position.x += CAMERA_SPEED;
-            camera.direction.x += CAMERA_SPEED;
+        if (nq::Input::key_down(GLFW_KEY_A, 0)
+            || nq::Input::key_down(GLFW_KEY_D, 0)) {
+            glm::vec3 direction {camera.direction - camera.position};
+            glm::vec3 odirection {glm::cross(glm::normalize(direction), glm::normalize(camera.up))};
+            glm::vec3 displacement {glm::normalize(odirection) * CAMERA_MSPEED};
+            if (nq::Input::key_down(GLFW_KEY_A, 0)) {
+                camera.position -= displacement;
+                camera.direction -= displacement;
+            } else if (nq::Input::key_down(GLFW_KEY_D, 0)) {
+                camera.position += displacement;
+                camera.direction += displacement;
+            }
         }
 
-        if (nq::Input::key_down(GLFW_KEY_J, 0)) {
-            camera.position.y -= CAMERA_SPEED;
-            camera.direction.y -= CAMERA_SPEED;
-        } else if (nq::Input::key_down(GLFW_KEY_K, 0)) {
-            camera.position.y += CAMERA_SPEED;
-            camera.direction.y += CAMERA_SPEED;
+        if (nq::Input::key_down(GLFW_KEY_J, 0)
+            || nq::Input::key_down(GLFW_KEY_K, 0)) {
+            if (nq::Input::key_down(GLFW_KEY_J, 0)) {
+                camera.position.y -= CAMERA_MSPEED;
+                camera.direction.y -= CAMERA_MSPEED;
+            } else if (nq::Input::key_down(GLFW_KEY_K, 0)) {
+                camera.position.y += CAMERA_MSPEED;
+                camera.direction.y += CAMERA_MSPEED;
+            }
+        }
+
+        constexpr float CAMERA_RSPEED {0.025};
+        if (nq::Input::key_down(GLFW_KEY_H, 0)
+            || nq::Input::key_down(GLFW_KEY_L, 0)) {
+            glm::vec3 direction {camera.direction - camera.position};
+            if (nq::Input::key_down(GLFW_KEY_H, 0)) {
+                glm::vec3 ndirection {glm::rotateY(direction, +CAMERA_RSPEED)};
+                camera.direction = ndirection + camera.position;
+            } else if (nq::Input::key_down(GLFW_KEY_L, 0)) {
+                glm::vec3 ndirection {glm::rotateY(direction, -CAMERA_RSPEED)};
+                camera.direction = ndirection + camera.position;
+            }
         }
 
         double current_time {glfwGetTime()};

@@ -9,13 +9,11 @@ namespace nq {
     class Camera {
     public:
         glm::vec3 position,
-                  direction,
-                  up_vector;
+                  direction, up;
 
         glm::mat4 get_matrix() const {
             return glm::lookAt(position,
-                               direction,
-                               up_vector);
+                               direction, up);
         }
 
         Camera(const glm::vec3& position,
@@ -23,7 +21,7 @@ namespace nq {
                const glm::vec3& up_vector)
                : position {position},
                  direction {direction},
-                 up_vector {up_vector} {}
+                 up {up_vector} {}
     };
 }
 
