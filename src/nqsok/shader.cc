@@ -5,7 +5,9 @@
 #include <iostream>
 
 nq::Shader::Shader(const std::string& vertex_shader_path,
-                   const std::string& fragment_shader_path) {
+                   const std::string& fragment_shader_path)
+                   : vertex_shader_file {vertex_shader_path},
+                     fragment_shader_file {fragment_shader_path} {
     std::cout << "\nShader (compiling and linking)..." << std::endl;
 
     GLuint vertex_shader {load_shader(vertex_shader_path, GL_VERTEX_SHADER)};

@@ -34,6 +34,7 @@ namespace nq {
         bool is_current() const; // Less context swaps.
 
     private:
+        friend class Model;
         static Mesh* current;
         Buffer<GLuint>& index_buffer;
         std::vector<Attribute> vertex_attributes;

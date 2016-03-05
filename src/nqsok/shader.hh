@@ -17,6 +17,8 @@ namespace nq {
         Shader(const std::string&,
                const std::string&);
 
+        std::string vertex_shader_file;
+        std::string fragment_shader_file;
         void uniformi(const std::string&, int);
         void uniformf(const std::string&, float);
         void uniform_vector(const std::string&, const glm::vec3&);
@@ -38,6 +40,7 @@ namespace nq {
 
     private:
         friend class Mesh;
+        friend class Model;
         friend class Renderer;
         static Shader* current;
         GLuint load_shader(const std::string&, GLenum);

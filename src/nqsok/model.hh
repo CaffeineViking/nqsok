@@ -31,9 +31,9 @@ namespace nq {
         Model(Mesh& mesh, Shader& shader, const Material& material,
               std::initializer_list<Sampler> samplers)
               : mesh {mesh}, shader {shader}, material {material},
-                samplers {samplers.begin(), samplers.end()} {}
+                samplers {samplers.begin(), samplers.end()} { report_model(); }
         Model(Mesh& mesh, Shader& shader, const Material& material)
-              : Model {mesh, shader, material, {}} {}
+              : Model {mesh, shader, material, {}} { report_model(); }
 
         Transform transform; // Shhhh...
         void apply(const std::string& uniform) {
@@ -41,6 +41,12 @@ namespace nq {
         }
 
     private:
+        // Prints buffers, shaders,
+        // samplers and meshes bound
+        // to this current texture.
+        void report_model() const;
+        void report_color(const glm::vec3&) const;
+
         Mesh& mesh;
         Shader& shader;
         Material material;

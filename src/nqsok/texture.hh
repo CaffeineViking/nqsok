@@ -40,6 +40,7 @@ namespace nq {
         }
 
     private:
+        friend class Model;
         static Texture* current;
         GLsizei width, height;
         GLuint handle;
