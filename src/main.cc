@@ -1,4 +1,5 @@
 #include <vector>
+#include <cstring>
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
@@ -16,7 +17,19 @@
 #include "nqsok/light.hh"
 #include <GLFW/glfw3.h>
 
-int main(int, char**) {
+enum class Argument {
+    NONE, ROOT,
+    LEVEL, PACK
+};
+
+int main(int argc, char** argv) {
+    Argument type {Argument::NONE};
+    if (argc == 2) type = Argument::ROOT;
+    else if (argc == 3) {
+        if (!std::strcmp(argv[1], "level")) type = Argument::LEVEL;
+        else if (!std::strcmp(argv[1], "pack")) type = Argument::PACK;
+    }
+
     nq::Window::Context context {2, 1, false, false};
     nq::Window window {1280, 720, "NQ Sokoban", context, false, true};
     // Window above has a size of 1280x720, title of 'NQ Sokoban", has
