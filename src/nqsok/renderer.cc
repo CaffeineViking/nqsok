@@ -36,9 +36,8 @@ void nq::Renderer::clear() {
     if (settings.depth_test) mask |= GL_DEPTH_BUFFER_BIT;
     if (settings.stencil_test) mask |= GL_STENCIL_BUFFER_BIT;
     glClear(mask); // Should clear all relevant buffers.
-    projection = glm::perspective(glm::half_pi<double>(),
-                                  window.aspect_ratio(),
-                                  0.1, 100.0);
+    projection = glm::perspective(glm::radians(60.0), window.aspect_ratio(),
+                                  VIEWING_FRUSTRUM_NEAR, VIEWING_FRUSTRUM_FAR);
 }
 
 void nq::Renderer::draw(Model& model) {

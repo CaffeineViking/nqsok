@@ -49,6 +49,9 @@ namespace nq {
         void report_settings() const;
         void setup(Model&) const;
 
+        static constexpr double VIEWING_FRUSTRUM_NEAR {0.1};
+        static constexpr double VIEWING_FRUSTRUM_FAR {100.0};
+
         Window& window;
         Settings settings;
         glm::mat4 projection;
