@@ -25,6 +25,7 @@ namespace nq {
             bool depth_test {false};
             bool stencil_test {false};
             bool multisampling {false};
+            bool blending {false};
 
             bool face_culling {false};
             GLenum front_face {GL_CCW};

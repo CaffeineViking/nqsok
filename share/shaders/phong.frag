@@ -51,8 +51,8 @@ void main() {
     vec3 Idiff = vec3(0.0),
          Ispec = vec3(0.0);
     vec3 normal = normalize(vnormal);
-    // vec3 texel = texture2D(sampler, vmapping).xyz;
-    vec3 texel = vec3(1.0);
+    // vec4 texel = texture2D(sampler, vmapping).xyz;
+    vec4 texel = vec4(1.0, 1.0, 1.0, 1.0);
     for (int i = 0; i < 16; ++i) {
         vec3 light_vector = vec3(0.0),
              light_intensity = vec3(0.0);
@@ -67,11 +67,11 @@ void main() {
         }
 
         vec3 camera_normal = normalize(vec4(camera, 1.0) - vposition).xyz;
-        Idiff += diffuse(texel * material.diffuse, light_intensity, normal, light_vector);
+        Idiff += diffuse(texel.rgb * material.diffuse, light_intensity, normal, light_vector);
         Ispec += specular(material.specular, light_intensity, reflect(-light_vector, normal),
                           camera_normal, material.shininess);
     }
 
     vec3 I = Iambi + Idiff + Ispec;
-    gl_FragColor = vec4(I, 1.0);
+    gl_FragColor = vec4(I, texel.a);
 }
