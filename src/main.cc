@@ -52,7 +52,7 @@ int main(int, char**) {
                              normal_attribute,
                              mapping_attribute}};
 
-    nq::Texture texture {"share/textures/f16.png", {GL_LINEAR, GL_LINEAR}};
+    nq::Texture texture {"share/textures/voxel.png", {GL_LINEAR, GL_LINEAR}};
     nq::Model::Sampler texture_sampler {texture, "sampler", 0};
 
     nq::Model::Material material {glm::vec3{0.2}, glm::vec3{0.6}, glm::vec3{0.2}, 72};
