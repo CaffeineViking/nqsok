@@ -3,6 +3,7 @@
     "author": "Erik S. Vasconcelos Jansson",
     "width": 5, "depth": 6, "height": 3,
     "palette": {
+        "void": [0, 0, 0],
         "player": [0, 0, 255],
         "moveable": [255, 0, 0],
         "objective": [0, 255, 0]

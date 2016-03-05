@@ -38,7 +38,10 @@ nq::Image::Image(const std::string& file)
 
     png_init_io(png_ptr, file_pointer);
     png_set_sig_bytes(png_ptr, HEADER_SIZE);
-    png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_STRIP_16|PNG_TRANSFORM_PACKING|PNG_TRANSFORM_EXPAND, nullptr);
+    png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_STRIP_16
+                                    | PNG_TRANSFORM_PACKING
+                                    | PNG_TRANSFORM_EXPAND
+                                    | PNG_TRANSFORM_STRIP_ALPHA, nullptr);
     std::cout << "done" << std::endl;
 
     png_uint_32 pwidth, pheight;
@@ -55,7 +58,7 @@ nq::Image::Image(const std::string& file)
     std::size_t row_bytes {png_get_rowbytes(png_ptr, info_ptr)};
     data = static_cast<GLubyte*>(std::malloc(row_bytes * pheight));
     png_bytepp row_pointers {png_get_rows(png_ptr, info_ptr)};
-    for (std::size_t y {0}; y < pwidth; ++y) {
+    for (std::size_t y {0}; y < pheight; ++y) {
         std::memcpy(&data[row_bytes * (pheight - 1 - y)],
                     row_pointers[y], row_bytes);
     }
