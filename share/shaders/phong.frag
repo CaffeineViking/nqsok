@@ -68,7 +68,7 @@ void main() {
 
         vec3 camera_normal = normalize(vec4(camera, 1.0) - vposition).xyz;
         Idiff += diffuse(texel.rgb * material.diffuse, light_intensity, normal, light_vector);
-        Ispec += specular(material.specular, light_intensity, reflect(-light_vector, normal),
+        Ispec += specular(texel.rbg * material.specular, light_intensity, reflect(-light_vector, normal),
                           camera_normal, material.shininess);
     }
 
