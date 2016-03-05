@@ -52,12 +52,7 @@ int main(int, char**) {
                              normal_attribute,
                              mapping_attribute}};
 
-    nq::Image image {"share/levels/core/hello/1.png"};
-    for (int y {0}; y < image.get_height(); ++y) {
-        for (int x {0}; x < image.get_width(); ++x) {
-            std::cout << (int)image[x + y*image.get_width()] << " ";
-        } std::cout << std::endl;
-    }
+    nq::Image image {"share/textures/voxel.png"};
     nq::Texture texture {image, {GL_NEAREST, GL_NEAREST}};
     nq::Model::Sampler texture_sampler {texture, "sampler", 0};
 
