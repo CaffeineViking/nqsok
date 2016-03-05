@@ -1,0 +1,6 @@
+{
+    "directory": "share", "packs": [
+        "packs/core.nqp",
+        "packs/classic.nqp"
+    ]
+}

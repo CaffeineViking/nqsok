@@ -1,0 +1,17 @@
+{
+    "title": "Hello World!",
+    "author": "Erik S. Vasconcelos Jansson",
+    "width": 5, "depth": 6, "height": 3,
+    "palette": {
+        "player": [0, 0, 255],
+        "moveable": [255, 0, 0],
+        "objective": [0, 255, 0]
+    },
+
+    "directory": "hello",
+    "level": [
+        "1.png",
+        "2.png",
+        "3.png"
+    ]
+}
