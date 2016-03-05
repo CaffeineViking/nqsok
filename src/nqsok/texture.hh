@@ -5,6 +5,7 @@
 #include <string>
 #include <GL/glew.h>
 #include "shader.hh"
+#include "image.hh"
 
 namespace nq {
     class Texture_error final : public std::runtime_error {
@@ -17,8 +18,8 @@ namespace nq {
             GLenum magnifying_filter {GL_NEAREST};
         };
 
+        Texture(Image&, const Parameters&);
         ~Texture() { glDeleteTextures(1, &handle); }
-        Texture(const std::string&, const Parameters&);
         Texture(std::vector<GLfloat>&, GLsizei, GLsizei, const Parameters&);
         void active(Shader&, GLenum, const std::string&); // What texture unit and name?
         GLsizei get_width() const { return width; } GLsizei get_height() const { return height; }

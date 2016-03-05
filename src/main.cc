@@ -38,7 +38,7 @@ int main(int, char**) {
     std::string error;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
-    tinyobj::LoadObj(shapes, materials, error, "share/models/dragon.obj");
+    tinyobj::LoadObj(shapes, materials, error, "share/models/voxel.obj");
     if (!error.empty()) std::cerr << error << std::endl;
 
     nq::Buffer<GLuint> indices {shapes[0].mesh.indices, GL_STATIC_DRAW};
@@ -52,7 +52,8 @@ int main(int, char**) {
                              normal_attribute,
                              mapping_attribute}};
 
-    nq::Texture texture {"share/textures/voxel.png", {GL_LINEAR, GL_LINEAR}};
+    nq::Image image {"share/textures/voxel.png"};
+    nq::Texture texture {image, {GL_LINEAR, GL_LINEAR}};
     nq::Model::Sampler texture_sampler {texture, "sampler", 0};
 
     nq::Model::Material material {glm::vec3{0.2}, glm::vec3{0.6}, glm::vec3{0.2}, 72};
