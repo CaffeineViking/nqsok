@@ -50,8 +50,8 @@ int main(int argc, char** argv) {
     settings.clear_color = {0x30, 0x30, 0x30};
     nq::Renderer renderer {window, settings};
 
-    nq::Shader phong_shader {"share/shaders/phong.vert",
-                             "share/shaders/phong.frag"};
+    nq::Shader phong_shader {"share/shaders/tphong.vert",
+                             "share/shaders/tphong.frag"};
 
     std::string error;
     std::vector<tinyobj::shape_t> shapes;

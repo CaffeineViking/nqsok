@@ -14,14 +14,12 @@ struct Light {
     int enabled;
 };
 
-uniform sampler2D sampler;
 uniform Material material;
 uniform Light lights[16];
 uniform vec3 camera;
 
 varying vec4 vposition;
 varying vec3 vnormal;
-varying vec2 vmapping;
 
 vec3 ambient(vec3 k, vec3 i) {
     vec3 blend = k * i;
@@ -51,12 +49,12 @@ void main() {
     vec3 Idiff = vec3(0.0),
          Ispec = vec3(0.0);
     vec3 normal = normalize(vnormal);
-    vec4 texel = texture2D(sampler, vmapping);
-    // vec4 texel = vec4(1.0, 1.0, 1.0, 1.0);
+
     for (int i = 0; i < 16; ++i) {
         vec3 light_vector = vec3(0.0),
              light_intensity = vec3(0.0);
         if (lights[i].enabled == 0) break;
+
         if (lights[i].directional == 1) {
             light_vector = normalize(lights[i].position);
             light_intensity = lights[i].intensity;
@@ -67,11 +65,11 @@ void main() {
         }
 
         vec3 camera_normal = normalize(vec4(camera, 1.0) - vposition).xyz;
-        Idiff += diffuse(texel.rgb * material.diffuse, light_intensity, normal, light_vector);
-        Ispec += specular(texel.rbg * material.specular, light_intensity, reflect(-light_vector, normal),
+        Idiff += diffuse(material.diffuse, light_intensity, normal, light_vector);
+        Ispec += specular(material.specular, light_intensity, reflect(-light_vector, normal),
                           camera_normal, material.shininess);
     }
 
     vec3 I = Iambi + Idiff + Ispec;
-    gl_FragColor = vec4(I, texel.a);
+    gl_FragColor = vec4(I, 1.0);
 }
