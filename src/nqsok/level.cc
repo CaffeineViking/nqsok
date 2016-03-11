@@ -1,0 +1,66 @@
+#include "level.hh"
+
+#include <fstream>
+#include <iostream>
+
+nq::Level::Level(const std::string& path) {
+    std::cout << "\nLevel (parsing)..." << std::endl;
+    std::cout << "Level is '" << path << "'" << std::endl;
+
+    std::ifstream file {path};
+    if (!file) throw Level_error{"Level error (#1) no such file!"};
+    std::cout << "File exists, parsing JSON..." << std::endl;
+
+    Json::Value root; file >> root;
+    title = root.get("title", "Untitled").asString();
+    std::cout << "Title is '" << title << "'\n";
+    author = root.get("author", "Anonymous").asString();
+    std::cout << "Author is '" << author << std::endl;
+
+    Json::Value size_value {root["width"]};
+    if (!size_value) throw Level_error{"Level error (#2) width needs to be given!"};
+    width = size_value.asUInt();
+    size_value = root["height"];
+    if (!size_value) throw Level_error{"Level error (#3) height needs to be given!"};
+    height = size_value.asUInt();
+    size_value = root["depth"];
+    if (!size_value) throw Level_error{"Level error (#4) depth needs to be given!"};
+    depth = size_value.asUInt();
+    std::cout << "Size of ("
+              << width << ", "
+              << height << ", "
+              << depth << ")\n";
+
+    Json::Value directory_value = root["directory"];
+    if (!directory_value) throw Level_error{"Level error (#5) no directory specified!"};
+    directory = directory_value.asString();
+    std::cout << "Directory is '" << directory << "'" << std::endl;
+
+    Json::Value palette_value = root["palette"];
+    if (!!palette_value) {
+        palette.empty = get_color(palette_value, "empty");
+        palette.player = get_color(palette_value, "player");
+        palette.moveable = get_color(palette_value, "moveable");
+        palette.objective = get_color(palette_value, "objective");
+        std::cout << "Palette specified" << std::endl;
+    }
+
+    Json::Value layers_value = root["layers"];
+    if (!layers_value) throw Level_error{"Level error (#6) at least one layer needs to exist!"};
+    layers.reserve(layers_value.size());
+    for (std::size_t i {0}; i < layers_value.size(); ++i) {
+        layers.push_back(layers_value[static_cast<int>(i)].asString());
+    }
+
+    std::cout << "Found " << layers.size() << " layer(s)" << std::endl;
+    std::cout << "...done (Level)" << std::endl;
+}
+
+nq::Color<char> nq::Level::get_color(const Json::Value& node,
+                                     const std::string& name) const {
+    Color<char> result;
+    result.red = node[name][0].asUInt();
+    result.green = node[name][1].asUInt();
+    result.blue = node[name][2].asUInt();
+    return result;
+}

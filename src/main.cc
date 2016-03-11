@@ -18,16 +18,16 @@
 #include <GLFW/glfw3.h>
 
 #ifndef SHARE
-#define SHARE "share"
+#define SHARE "share/"
 #endif
 
+static std::string share {SHARE};
 enum class Argument {
     NONE, ROOT,
     LEVEL, PACK
 };
 
 int main(int argc, char** argv) {
-    std::string share {SHARE};
     Argument type {Argument::NONE};
     if (argc == 2) type = Argument::ROOT;
     else if (argc == 3) {
