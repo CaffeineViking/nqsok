@@ -8,31 +8,41 @@
 #include "nqsok/window.hh"
 #include "nqsok/renderer.hh"
 #include "nqsok/input.hh"
+
 #include "nqsok/shader.hh"
 #include "nqsok/buffer.hh"
 #include "nqsok/mesh.hh"
 #include "nqsok/texture.hh"
+
 #include "nqsok/model.hh"
 #include "nqsok/camera.hh"
 #include "nqsok/light.hh"
+
+#include "nqsok/root.hh"
+#include "nqsok/pack.hh"
+#include "nqsok/level.hh"
 #include <GLFW/glfw3.h>
 
 #ifndef SHARE
 #define SHARE "share/"
 #endif
 
-static std::string share {SHARE};
 enum class Argument {
     NONE, ROOT,
-    LEVEL, PACK
+    LEVEL, PACK,
+    HELP_NEEDED
 };
 
+static std::string share {SHARE};
+static std::string rootf {share + "packs.nqr"};
+Argument pargs(int, char**);
+void help(const char*);
+
 int main(int argc, char** argv) {
-    Argument type {Argument::NONE};
-    if (argc == 2) type = Argument::ROOT;
-    else if (argc == 3) {
-        if (!std::strcmp(argv[1], "level")) type = Argument::LEVEL;
-        else if (!std::strcmp(argv[1], "pack")) type = Argument::PACK;
+    Argument type {pargs(argc, argv)};
+    if (type == Argument::HELP_NEEDED) {
+        help(argv[0]);
+        return 0;
     }
 
     nq::Window::Context context {2, 1, false, false};
@@ -165,4 +175,25 @@ int main(int argc, char** argv) {
     std::cout << "\nHave a nice day!"
               << std::endl;
     return 0;
+}
+
+Argument pargs(int argc, char** argv) {
+    if (argc == 1) {
+        return Argument::NONE;
+    } else if (argc == 2) {
+        if (!std::strcmp(argv[1], "help")) return Argument::HELP_NEEDED;
+        else return Argument::ROOT;
+    } else if (argc > 2) {
+        if (!std::strcmp(argv[1], "level")) return Argument::LEVEL;
+        else if (!std::strcmp(argv[1], "pack")) return Argument::PACK;
+        else return Argument::HELP_NEEDED;
+    } else return Argument::HELP_NEEDED;
+}
+
+void help(const char* path) {
+    std::cout << "usage: " << path << " <argument>" << std::endl;
+    std::cout << "<argument> ::= help" << " 'shows this message'" << std::endl;
+    std::cout << "<argument> ::= pack <directory> <pack-file>" << " 'loads <pack-file> with relative path at <directory>'" << std::endl;
+    std::cout << "<argument> ::= level <directory> <level-file>" <<  " 'loads <level-file> with relative path at <directory>'" << std::endl;
+    std::cout << "<argument> ::= <root-file>" << " 'sets the root nq file to <root-file>'" << std::endl;
 }
