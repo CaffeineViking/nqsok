@@ -10,6 +10,7 @@ nq::Texture::Texture(Image& image, const Parameters& params) {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glBindTexture(GL_TEXTURE_2D, handle);
     std::cout << "Uploading texture...";
+    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE); // Since GL 1.4.
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.get_width(), image.get_height(),
                  0, GL_RGB, GL_UNSIGNED_BYTE, image.pixel_data());
     std::cout << "done" << std::endl;

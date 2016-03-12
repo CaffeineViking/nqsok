@@ -1,6 +1,7 @@
 #include <vector>
 #include <cstring>
 #include <iostream>
+
 #include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include "extern/tinyobj.hh"
@@ -81,7 +82,8 @@ int main(int argc, char** argv) {
                              mapping_attribute}};
 
     nq::Image image {"share/textures/voxel.png"};
-    nq::Texture texture {image, {GL_LINEAR, GL_LINEAR}};
+    nq::Texture texture {image, {GL_LINEAR_MIPMAP_LINEAR,
+                                 GL_LINEAR_MIPMAP_LINEAR}};
     nq::Model::Sampler texture_sampler {texture, "sampler", 0};
 
     nq::Model::Material material {glm::vec3{0.2}, glm::vec3{0.6}, glm::vec3{0.2}, 72};
