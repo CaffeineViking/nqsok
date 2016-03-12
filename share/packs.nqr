@@ -1,5 +1,5 @@
 {
-    "directory": "share", "packs": [
+    "directory": "share/", "packs": [
         "packs/core.nqp",
         "packs/classic.nqp"
     ]
