@@ -43,8 +43,8 @@ void nq::Mesh::Builder::merge(const std::vector<GLuint>& indices) {
             largest_tindex = tindices[i];
     }
 
-    largest_index = largest_tindex;
-    elements.insert(elements.end(), indices.cbegin(), indices.cend());
+    largest_index = largest_tindex + 1; // Since we might be adding more.
+    elements.insert(elements.end(), tindices.cbegin(), tindices.cend());
 }
 
 void nq::Mesh::Builder::merge(const std::string& name,

@@ -71,10 +71,25 @@ int main(int argc, char** argv) {
     if (!error.empty()) std::cerr << error << std::endl;
 
     nq::Mesh::Builder mesh_builder;
-    mesh_builder.merge(shapes[0].mesh.indices);
-    mesh_builder.merge("position", shapes[0].mesh.positions);
-    mesh_builder.merge("normal", shapes[0].mesh.normals);
-    mesh_builder.merge("mapping", shapes[0].mesh.texcoords);
+    const std::size_t gx {16}, gz {16};
+    for (std::size_t z {0}; z < gz; ++z) {
+        for (std::size_t x {0}; x < gx; ++x) {
+            mesh_builder.merge(shapes[0].mesh.indices);
+            mesh_builder.merge("position", shapes[0].mesh.positions,
+                               [x, z](const std::vector<GLfloat>& v) {
+                                   std::vector<GLfloat> vt {v};
+                                   std::size_t vt_size {vt.size() / 3};
+                                   for (std::size_t i {0}; i < vt_size; ++i) {
+                                       vt[i*3 + 0] += x*2.0;
+                                       vt[i*3 + 2] += z*2.0;
+                                   }
+
+                                   return vt;
+                               });
+            mesh_builder.merge("normal", shapes[0].mesh.normals);
+            mesh_builder.merge("mapping", shapes[0].mesh.texcoords);
+        }
+    }
 
     nq::Buffer<GLuint> indices {mesh_builder.get_elements(), GL_STATIC_DRAW};
     nq::Buffer<GLfloat> vertices {mesh_builder.get_attributes("position"), GL_STATIC_DRAW};
