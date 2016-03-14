@@ -1,5 +1,4 @@
 #include "mesh.hh"
-
 #include <iostream>
 
 nq::Mesh::Mesh(Buffer<GLuint>& index_buffer,
@@ -33,4 +32,23 @@ void nq::Mesh::enable(const Shader& shader) {
                               attribute.normalized, attribute.stride, attribute.offset);
         glEnableVertexAttribArray(shader.attribute_location(attribute.name));
     } current = this;
+}
+
+void nq::Mesh::Builder::merge(const std::vector<GLuint>& indices) {
+    GLuint largest_tindex {0};
+    std::vector<GLuint> tindices {indices};
+    for (std::size_t i {0}; i < tindices.size(); ++i) {
+        tindices[i] += largest_index;
+        if (tindices[i] > largest_tindex)
+            largest_tindex = tindices[i];
+    }
+
+    largest_index = largest_tindex;
+    elements.insert(elements.end(), indices.cbegin(), indices.cend());
+}
+
+void nq::Mesh::Builder::merge(const std::string& name,
+                              const std::vector<GLfloat>& data) {
+    attributes[name].insert(attributes[name].end(),
+                            data.cbegin(), data.cend());
 }
