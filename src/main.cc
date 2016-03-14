@@ -4,7 +4,6 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
-#include "extern/tinyobj.hh"
 
 #include "nqsok/window.hh"
 #include "nqsok/renderer.hh"
@@ -22,6 +21,7 @@
 #include "nqsok/root.hh"
 #include "nqsok/pack.hh"
 #include "nqsok/level.hh"
+#include "nqsok/voxel.hh"
 #include <GLFW/glfw3.h>
 
 #ifndef SHARE
@@ -64,22 +64,26 @@ int main(int argc, char** argv) {
     nq::Shader phong_shader {"share/shaders/tphong.vert",
                              "share/shaders/tphong.frag"};
 
-    std::string error;
-    std::vector<tinyobj::shape_t> shapes;
-    std::vector<tinyobj::material_t> materials;
-    tinyobj::LoadObj(shapes, materials, error, "share/models/voxel.obj");
-    if (!error.empty()) std::cerr << error << std::endl;
+    nq::Voxel voxel {"share/models/voxel.obj"};
+    std::vector<GLuint> voxel_indices {voxel.indices(0)};
+    std::vector<GLfloat> voxel_vertices {voxel.vertices(0.0, 0.0, 0.0)};
+    std::vector<GLfloat> voxel_colors {voxel.colors({1.0, 1.0, 1.0})};
+    std::vector<GLfloat> voxel_normals {voxel.normals()};
+    std::vector<GLfloat> voxel_mapping {voxel.mapping()};
 
-    nq::Buffer<GLuint> indices {shapes[0].mesh.indices, GL_STATIC_DRAW};
-    nq::Buffer<GLfloat> vertices {shapes[0].mesh.positions, GL_STATIC_DRAW};
+    nq::Buffer<GLuint> indices {voxel_indices, GL_STATIC_DRAW};
+    nq::Buffer<GLfloat> vertices {voxel_vertices, GL_STATIC_DRAW};
     nq::Mesh::Attribute position_attribute {vertices, "position", 3};
-    nq::Buffer<GLfloat> normals {shapes[0].mesh.normals, GL_STATIC_DRAW};
+    nq::Buffer<GLfloat> normals {voxel_normals, GL_STATIC_DRAW};
     nq::Mesh::Attribute normal_attribute {normals, "normal", 3};
-    nq::Buffer<GLfloat> texcoords {shapes[0].mesh.texcoords, GL_STATIC_DRAW};
+    nq::Buffer<GLfloat> texcoords {voxel_mapping, GL_STATIC_DRAW};
     nq::Mesh::Attribute mapping_attribute {texcoords, "mapping", 2};
+    nq::Buffer<GLfloat> colors {voxel_colors, GL_STATIC_DRAW};
+    nq::Mesh::Attribute color_attribute {colors, "color", 3};
     nq::Mesh mesh {indices, {position_attribute,
                              normal_attribute,
-                             mapping_attribute}};
+                             mapping_attribute,
+                             color_attribute}};
 
     nq::Image image {"share/textures/voxel.png"};
     nq::Texture texture {image, {GL_LINEAR_MIPMAP_LINEAR,

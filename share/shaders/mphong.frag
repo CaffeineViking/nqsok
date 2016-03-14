@@ -20,7 +20,6 @@ uniform vec3 camera;
 
 varying vec4 vposition;
 varying vec3 vnormal;
-varying vec3 vcolor;
 
 vec3 ambient(vec3 k, vec3 i) {
     vec3 blend = k * i;
@@ -66,8 +65,8 @@ void main() {
         }
 
         vec3 camera_normal = normalize(vec4(camera, 1.0) - vposition).xyz;
-        Idiff += diffuse(vcolor * material.diffuse, light_intensity, normal, light_vector);
-        Ispec += specular(vcolor * material.specular, light_intensity, reflect(-light_vector, normal),
+        Idiff += diffuse(material.diffuse, light_intensity, normal, light_vector);
+        Ispec += specular(material.specular, light_intensity, reflect(-light_vector, normal),
                           camera_normal, material.shininess);
     }
 
