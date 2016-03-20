@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include "image.hh"
 
 nq::Level::Level(const std::string& path) {
     std::cout << "\nLevel (parsing)..." << std::endl;
@@ -56,11 +57,30 @@ nq::Level::Level(const std::string& path) {
     std::cout << "...done (Level)" << std::endl;
 }
 
-nq::Color<char> nq::Level::get_color(const Json::Value& node,
-                                     const std::string& name) const {
-    Color<char> result;
+nq::Color<unsigned char> nq::Level::get_color(const Json::Value& node,
+                                              const std::string& name) const {
+    Color<unsigned char> result;
     result.red = node[name][0].asUInt();
     result.green = node[name][1].asUInt();
     result.blue = node[name][2].asUInt();
     return result;
+}
+
+nq::Level::Data nq::Level::data(const std::string& ldir) const {
+    Data level_data;
+    level_data.reserve(height);
+    for (unsigned h {0}; h < height; ++h) {
+        unsigned size {width*depth};
+        nq::Image layer_image {ldir + directory + layers[h]};
+        Layer layer_data; layer_data.reserve(size);
+        for (unsigned i {0}; i < size; ++i) {
+            layer_data.push_back({layer_image[0 + i*3],
+                                  layer_image[1 + i*3],
+                                  layer_image[2 + i*3]});
+        }
+
+        level_data.push_back(layer_data);
+    }
+
+    return level_data;
 }

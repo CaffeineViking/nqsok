@@ -6,17 +6,30 @@ namespace nq {
     struct Color final {};
 
     template<>
-    struct Color<char> final {
-        char red,
-             green,
-             blue;
-    };
-
-    template<>
     struct Color<float> final {
         float red,
               green,
               blue;
+    };
+
+    template<>
+    struct Color<unsigned char> final {
+        operator Color<float>() const {
+            return {red / 255.0f,
+                    green / 255.0f,
+                    blue / 255.0f};
+        }
+
+        bool operator!=(const Color<unsigned char>& other) { return !(*this == other); }
+        bool operator==(const Color<unsigned char>& other) {
+            return (red == other.red
+                    && green == other.green
+                    && blue == other.blue);
+        }
+
+        unsigned char red,
+                      green,
+                      blue;
     };
 }
 

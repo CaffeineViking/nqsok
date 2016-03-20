@@ -30,9 +30,9 @@ namespace nq {
             bool face_culling {false};
             GLenum front_face {GL_CCW};
             GLenum cull_face {GL_BACK};
-            Color<GLchar> clear_color {0x00,
-                                       0x00,
-                                       0x00};
+            Color<unsigned char> clear_color {0x00,
+                                              0x00,
+                                              0x00};
         };
 
         Renderer(Window&, const Settings&);

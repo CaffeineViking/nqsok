@@ -61,8 +61,12 @@ int main(int argc, char** argv) {
     settings.clear_color = {0x30, 0x30, 0x30};
     nq::Renderer renderer {window, settings};
 
-    nq::Shader phong_shader {"share/shaders/tphong.vert",
-                             "share/shaders/tphong.frag"};
+    nq::Shader phong_shader {"share/shaders/tcphong.vert",
+                             "share/shaders/tcphong.frag"};
+
+    nq::Level level {"share/levels/classic/01.nql"};
+    nq::Level::Data level_data {level.data("share/levels/classic/")};
+    // Above operation is quite expensive, only do this once...
 
     std::string error;
     std::vector<tinyobj::shape_t> shapes;
@@ -71,10 +75,41 @@ int main(int argc, char** argv) {
     if (!error.empty()) std::cerr << error << std::endl;
 
     nq::Mesh::Builder mesh_builder;
-    mesh_builder.merge(shapes[0].mesh.indices);
-    mesh_builder.merge("position", shapes[0].mesh.positions);
-    mesh_builder.merge("normal", shapes[0].mesh.normals);
-    mesh_builder.merge("mapping", shapes[0].mesh.texcoords);
+    for (unsigned h {0}; h < level.get_height(); ++h) {
+        for (unsigned d {0}; d < level.get_depth(); ++d) {
+            for (unsigned w {0}; w < level.get_width(); ++w) {
+                nq::Color<unsigned char> voxelc {level_data[h][w+d*level.get_width()]};
+                if (voxelc == level.get_palette().empty) continue;
+                nq::Color<float> voxel_color = voxelc;
+                std::vector<GLfloat> mesh_color;
+                // We might want to make this more efficient...
+                mesh_color.reserve(shapes[0].mesh.positions.size());
+                std::size_t size {shapes[0].mesh.positions.size() / 3};
+                for (std::size_t i {0}; i < size; ++i) {
+                    mesh_color.push_back(voxel_color.red);
+                    mesh_color.push_back(voxel_color.green);
+                    mesh_color.push_back(voxel_color.blue);
+                }
+
+                mesh_builder.merge(shapes[0].mesh.indices);
+                mesh_builder.merge("normal", shapes[0].mesh.normals);
+                mesh_builder.merge("mapping", shapes[0].mesh.texcoords);
+                mesh_builder.merge("color", mesh_color);
+                mesh_builder.merge("position", shapes[0].mesh.positions,
+                                   [w, d, h](const std::vector<GLfloat>& v) {
+                                       std::size_t size {v.size() / 3};
+                                       std::vector<GLfloat> copy {v};
+                                       for (std::size_t i {0}; i < size; ++i) {
+                                           copy[i*3 + 0] += w*2.0f;
+                                           copy[i*3 + 1] += h*2.0f;
+                                           copy[i*3 + 2] += d*2.0f;
+                                       }
+
+                                       return copy;
+                                   });
+            }
+        }
+    }
 
     nq::Buffer<GLuint> indices {mesh_builder.get_elements(), GL_STATIC_DRAW};
     nq::Buffer<GLfloat> vertices {mesh_builder.get_attributes("position"), GL_STATIC_DRAW};
@@ -83,9 +118,12 @@ int main(int argc, char** argv) {
     nq::Mesh::Attribute normal_attribute {normals, "normal", 3};
     nq::Buffer<GLfloat> texcoords {mesh_builder.get_attributes("mapping"), GL_STATIC_DRAW};
     nq::Mesh::Attribute mapping_attribute {texcoords, "mapping", 2};
+    nq::Buffer<GLfloat> colors {mesh_builder.get_attributes("color"), GL_STATIC_DRAW};
+    nq::Mesh::Attribute color_attribute {colors, "color", 3};
     nq::Mesh mesh {indices, {position_attribute,
                              normal_attribute,
-                             mapping_attribute}};
+                             mapping_attribute,
+                             color_attribute}};
 
     nq::Image image {"share/textures/voxel.png"};
     nq::Texture texture {image, {GL_LINEAR_MIPMAP_LINEAR,

@@ -19,6 +19,7 @@ namespace nq {
         GLubyte* pixel_data() { return data; }
         GLsizei get_width() const { return width; }
         GLsizei get_height() const { return height; }
+        GLsizei size() const { return width*height; }
         int get_bit_depth() const { return bit_depth; }
     private:
         int bit_depth;

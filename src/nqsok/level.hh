@@ -14,10 +14,10 @@ namespace nq {
     class Level final {
     public:
         struct Palette {
-            Color<char> empty {(char)0, (char)0, (char)0};
-            Color<char> player {(char)0, (char)0, (char)255};
-            Color<char> moveable {(char)255, (char)0, (char)0};
-            Color<char> objective {(char)0, (char)255, (char)0};
+            Color<unsigned char> empty {0, 0, 0};
+            Color<unsigned char> player {0, 0, 255};
+            Color<unsigned char> moveable {255, 0, 0};
+            Color<unsigned char> objective {0, 255, 0};
         };
 
         Level(const std::string&);
@@ -30,6 +30,10 @@ namespace nq {
         const std::string& get_directory() const { return directory; }
         const std::vector<std::string>& get_layers() const { return layers; }
 
+        using Layer = std::vector<Color<unsigned char>>;
+        using Data = std::vector<Layer>;
+        Data data(const std::string&) const;
+
     private:
         Palette palette;
         std::string title;
@@ -37,8 +41,8 @@ namespace nq {
         unsigned width, height, depth;
         std::string directory;
         std::vector<std::string> layers;
-        Color<char> get_color(const Json::Value&,
-                              const std::string&) const;
+        Color<unsigned char> get_color(const Json::Value&,
+                                       const std::string&) const;
     };
 }
 

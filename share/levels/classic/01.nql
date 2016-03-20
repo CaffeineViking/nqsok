@@ -1,0 +1,17 @@
+{
+    "title": "01",
+    "author": "Hiroyuki Imabayashi",
+    "width": 19, "depth": 11, "height": 2,
+    "palette": {
+        "empty": [0, 0, 0],
+        "player": [0, 0, 255],
+        "moveable": [255, 0, 0],
+        "objective": [0, 255, 0]
+    },
+
+    "directory": "01/",
+    "layers": [
+        "1.png",
+        "2.png"
+    ]
+}
