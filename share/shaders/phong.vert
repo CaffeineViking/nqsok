@@ -29,6 +29,7 @@ attribute vec3 normal;
 attribute vec3 color;
 
 varying vec2 vmapping;
+varying vec4 vshading;
 varying vec4 vcolor;
 
 vec3 ambient(vec3 k, vec3 i) {
@@ -88,6 +89,7 @@ void main() {
     }
 
     vec3 isum = iambi + idiff + ispec;
-    vcolor = vec4(isum * color, 1.0);
+    vshading = vec4(isum, 1.0);
+    vcolor = vec4(color, 1.0);
     vmapping = mapping;
 }

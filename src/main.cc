@@ -125,7 +125,7 @@ int main(int argc, char** argv) {
                              mapping_attribute,
                              color_attribute}};
 
-    nq::Image image {"share/textures/voxel.png"};
+    nq::Image image {"share/textures/surface.png"};
     nq::Texture texture {image, {GL_LINEAR_MIPMAP_LINEAR,
                                  GL_LINEAR_MIPMAP_LINEAR}};
     nq::Model::Sampler texture_sampler {texture, "sampler", 0};
@@ -229,7 +229,8 @@ Argument pargs(int argc, char** argv) {
         if (!std::strcmp(argv[1], "help")) return Argument::HELP_NEEDED;
         else return Argument::ROOT;
     } else if (argc > 2) {
-        if (!std::strcmp(argv[1], "level")) return Argument::LEVEL;
+        if (argc != 4) return Argument::HELP_NEEDED;
+        else if (!std::strcmp(argv[1], "level")) return Argument::LEVEL;
         else if (!std::strcmp(argv[1], "pack")) return Argument::PACK;
         else return Argument::HELP_NEEDED;
     } else return Argument::HELP_NEEDED;
