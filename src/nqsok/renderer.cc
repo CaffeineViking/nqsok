@@ -41,23 +41,24 @@ void nq::Renderer::clear() {
 }
 
 void nq::Renderer::draw(Model& model) {
-    setup(model);
+    setup(model); // Setup vertex uniform/attribs.
     glDrawElements(GL_TRIANGLES, model.mesh.size(),
                    GL_UNSIGNED_INT, nullptr);
 }
 
 void nq::Renderer::draw(Model& model, const Camera& camera, const std::vector<nq::Light>& lights) {
-    setup(model);
+    setup(model); // Setup vertex stuff.
     for (std::size_t i {0}; i < 16; ++i) {
         std::string lighti {"lights[" + std::to_string(i) + "]"};
         if (i < lights.size()) model.shader.uniformi(lighti + ".enabled", 1);
-        else { model.shader.uniformi(lighti + ".enabled", 0); break; }
+        else { model.shader.uniformi(lighti + ".enabled", 0); break; } // I'm so sorry, ok?
         model.shader.uniformi(lighti + ".directional", static_cast<int>(lights[i].directional));
         model.shader.uniform_vector(lighti + ".intensity", lights[i].intensity);
         model.shader.uniform_vector(lighti + ".position", lights[i].position);
     }
 
-    model.shader.uniform_vector("camera", camera.position);
+    model.shader.uniform_vector("ambient_color", this->ambient);
+    model.shader.uniform_vector("camera_position", camera.position);
     model.shader.uniform_matrix("view", camera.get_matrix());
     model.shader.uniform_matrix("projection", projection);
     glDrawElements(GL_TRIANGLES, model.mesh.size(),
@@ -66,7 +67,6 @@ void nq::Renderer::draw(Model& model, const Camera& camera, const std::vector<nq
 
 void nq::Renderer::setup(Model& model) const {
     if (!model.shader.is_current()) model.shader.use();
-    model.shader.uniform_vector("material.ambient", model.material.ambient);
     model.shader.uniform_vector("material.diffuse", model.material.diffuse);
     model.shader.uniform_vector("material.specular", model.material.specular);
     model.shader.uniformi("material.shininess", model.material.shininess);
@@ -77,7 +77,7 @@ void nq::Renderer::setup(Model& model) const {
         }
     }
 
-    model.apply("model"); // Apply model matrix transform.
+    model.apply("model"); // Apply model matrix transform, right?.
     if (!model.mesh.is_current()) model.mesh.enable(model.shader);
 }
 

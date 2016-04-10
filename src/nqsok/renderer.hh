@@ -42,6 +42,10 @@ namespace nq {
         void draw(Model&, const nq::Camera&, const std::vector<nq::Light>&);
         void draw(Model&); // User needs to handle stuff manually...
 
+        // Ambient is applied globally for the entire game scene.
+        void set_ambient(const glm::vec3& value) { ambient = value; }
+        const glm::vec3& get_ambient() const { return ambient; }
+
     private:
         // Maybe more reports later?
         // Possible number of triangles draw
@@ -55,6 +59,7 @@ namespace nq {
         Window& window;
         Settings settings;
         glm::mat4 projection;
+        glm::vec3 ambient {0.4};
     };
 }
 

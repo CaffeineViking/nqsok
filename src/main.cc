@@ -61,8 +61,8 @@ int main(int argc, char** argv) {
     settings.clear_color = {0x30, 0x30, 0x30};
     nq::Renderer renderer {window, settings};
 
-    nq::Shader phong_shader {"share/shaders/tcphong.vert",
-                             "share/shaders/tcphong.frag"};
+    nq::Shader phong_shader {"share/shaders/phong.vert",
+                             "share/shaders/phong.frag"};
 
     nq::Level level {"share/levels/classic/01.nql"};
     nq::Level::Data level_data {level.data("share/levels/classic/")};
@@ -130,7 +130,7 @@ int main(int argc, char** argv) {
                                  GL_LINEAR_MIPMAP_LINEAR}};
     nq::Model::Sampler texture_sampler {texture, "sampler", 0};
 
-    nq::Model::Material material {glm::vec3{0.2}, glm::vec3{0.6}, glm::vec3{0.2}, 72};
+    nq::Model::Material material {glm::vec3{0.8}, glm::vec3{0.4}, 42};
     nq::Model model {mesh, phong_shader, material, {texture_sampler}};
     nq::Camera camera {glm::vec3{0.0, 0.0, 0.0},
                        glm::vec3{0.0, 0.0, -1.0},
@@ -210,8 +210,7 @@ int main(int argc, char** argv) {
 
         renderer.clear();
         model.transform.reset();
-        model.transform.translate({0.0, 0.0, -3.0});
-        // model.transform.rotate({0.0, 1.0, 0.0}, glfwGetTime() / 1.0f);
+        model.transform.translate({0.0, 0.0, 0.0});
         renderer.draw(model, camera, lights);
         window.display();
     }

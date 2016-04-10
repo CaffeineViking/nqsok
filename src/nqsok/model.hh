@@ -16,7 +16,6 @@ namespace nq {
     class Model {
     public:
         struct Material final {
-            glm::vec3 ambient;
             glm::vec3 diffuse;
             glm::vec3 specular;
             GLint shininess;
