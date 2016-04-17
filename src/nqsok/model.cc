@@ -16,8 +16,8 @@ void nq::Model::report_model() const {
     std::cout << "Fragment shader used for mesh: '"
               << shader.fragment_shader_file << "'" << std::endl;
 
-    std::cout << "Diffuse intensity for mesh: "; report_color(material.diffuse);
-    std::cout << "Specular intensity for mesh: "; report_color(material.specular);
+    std::cout << "Diffuse reflectivity for mesh: "; report_color(material.diffuse);
+    std::cout << "Specular reflectivity for mesh: "; report_color(material.specular);
     std::cout << "Material exponent for mesh: " << material.shininess << std::endl;
 
     std::cout << "Textures bound: ";
