@@ -22,6 +22,7 @@
 #include "nqsok/root.hh"
 #include "nqsok/pack.hh"
 #include "nqsok/level.hh"
+#include "nqsok/sokoban.hh"
 #include <GLFW/glfw3.h>
 
 #ifndef SHARE
@@ -61,12 +62,10 @@ int main(int argc, char** argv) {
     settings.clear_color = {0x30, 0x30, 0x30};
     nq::Renderer renderer {window, settings};
 
-    nq::Shader phong_shader {"share/shaders/phong.vert",
-                             "share/shaders/phong.frag"};
-
     nq::Level level {"share/levels/classic/01.nql"};
     nq::Level::Data level_data {level.data("share/levels/classic/")};
     // Above operation is quite expensive, only do this once...
+    nq::Sokoban sokoban {level, level_data}; // Game itself.
 
     std::string error;
     std::vector<tinyobj::shape_t> shapes;
@@ -110,6 +109,9 @@ int main(int argc, char** argv) {
             }
         }
     }
+
+    nq::Shader phong_shader {"share/shaders/phong.vert",
+                             "share/shaders/phong.frag"};
 
     nq::Buffer<GLuint> indices {mesh_builder.get_elements(), GL_STATIC_DRAW};
     nq::Buffer<GLfloat> vertices {mesh_builder.get_attributes("position"), GL_STATIC_DRAW};
