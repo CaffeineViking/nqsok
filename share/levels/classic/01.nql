@@ -6,7 +6,8 @@
         "empty": [0, 0, 0],
         "player": [0, 0, 255],
         "moveable": [255, 0, 0],
-        "objective": [0, 255, 0]
+        "objective": [0, 255, 0],
+        "background": [30, 30, 30]
     },
 
     "directory": "01/",

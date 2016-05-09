@@ -149,10 +149,10 @@ int main(int argc, char** argv) {
             || nq::Input::key_pressed(GLFW_KEY_ESCAPE, 0)) window.close();
         if (nq::Input::key_pressed(GLFW_KEY_F, 0)) window.toggle_fullscreen();
 
-        if (nq::Input::key_down(GLFW_KEY_UP, 0)) lights[0].position.z -= 0.1;
-        else if (nq::Input::key_down(GLFW_KEY_DOWN, 0)) lights[0].position.z += 0.1;
-        if (nq::Input::key_down(GLFW_KEY_LEFT, 0)) lights[0].position.x -= 0.1;
-        else if (nq::Input::key_down(GLFW_KEY_RIGHT, 0)) lights[0].position.x += 0.1;
+        if (nq::Input::key_pressed(GLFW_KEY_UP, 0)) sokoban.step(nq::Sokoban::Action::FORWARD);
+        else if (nq::Input::key_pressed(GLFW_KEY_DOWN, 0)) sokoban.step(nq::Sokoban::Action::BACKWARD);
+        if (nq::Input::key_pressed(GLFW_KEY_LEFT, 0)) sokoban.step(nq::Sokoban::Action::LEFT);
+        else if (nq::Input::key_pressed(GLFW_KEY_RIGHT, 0)) sokoban.step(nq::Sokoban::Action::RIGHT);
 
         constexpr float CAMERA_MSPEED {0.05};
         if (nq::Input::key_down(GLFW_KEY_W, 0)

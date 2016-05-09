@@ -53,6 +53,7 @@ namespace nq {
         Position bottom(const Position&) const;
         // Predict future of a certain block with an action.
         Position future(const Position&, const Action&) const;
+        Position reverse(const Position&, const Action&) const;
         void moveable_set(const Position&, const Position&);
 
         std::string saction(const Action& action) const {

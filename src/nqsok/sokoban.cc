@@ -39,12 +39,18 @@ bool nq::Sokoban::step(const Action& action) {
                           << sposition(player_position)
                           << std::endl;
             }
+
             return true;
         }
     } else if (block_types == Block::IMMOVABLE) {
         Position roof = top(position);
         if (roof.y - position.y != 1) return false;
         else {
+            Position back {reverse(player_position, action)};
+            Block back_block {type(back)};
+            if (back_block == Block::IMMOVABLE
+                || back_block == Block::EMPTY) return false;
+
             // Player can climb up.
             player_position = roof;
             actions.push(action);
@@ -52,6 +58,7 @@ bool nq::Sokoban::step(const Action& action) {
             std::cout << "Event: player climbed up to "
                       << sposition(player_position)
                       << std::endl;
+
             return true;
         }
     } else if (block_types == Block::MOVEABLE) {
@@ -69,7 +76,7 @@ bool nq::Sokoban::step(const Action& action) {
                 std::cout << "Event: player moved to "
                           << sposition(player_position)
                           << std::endl;
-                if (moveable.y - position.y != 0) {
+                if (moveable.y - position.y == 0) {
                     std::cout << "Event: player pushed moveable to "
                             << sposition(moveable)
                             << std::endl;
@@ -78,6 +85,7 @@ bool nq::Sokoban::step(const Action& action) {
                             << sposition(moveable)
                             << std::endl;
                 }
+
                 return true;
             }
         } else if (future_block == Block::IMMOVABLE
@@ -93,6 +101,7 @@ bool nq::Sokoban::step(const Action& action) {
                 std::cout << "Event: player climbed moveable to "
                           << sposition(player_position)
                           << std::endl;
+
                 return true;
             }
         }
@@ -193,6 +202,15 @@ nq::Sokoban::Position nq::Sokoban::future(const Position& of, const Action& acti
     if (action == Action::RIGHT && position.x < (level.get_width() - 1)) ++position.x;
     if (action == Action::BACKWARD && position.z >= 1) --position.z;
     if (action == Action::LEFT && position.z >= 1) --position.x;
+    return position;
+}
+
+nq::Sokoban::Position nq::Sokoban::reverse(const Position& of, const Action& action) const {
+    Position position = of;
+    if (action == Action::FORWARD) return future(of, Action::BACKWARD);
+    if (action == Action::RIGHT) return future(of, Action::LEFT);
+    if (action == Action::BACKWARD) return future(of, Action::FORWARD);
+    if (action == Action::LEFT) return future(of, Action::RIGHT);
     return position;
 }
 

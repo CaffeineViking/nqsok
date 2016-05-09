@@ -43,6 +43,7 @@ nq::Level::Level(const std::string& path) {
         palette.player = get_color(palette_value, "player");
         palette.moveable = get_color(palette_value, "moveable");
         palette.objective = get_color(palette_value, "objective");
+        palette.background = get_color(palette_value, "background");
         std::cout << "Palette specified" << std::endl;
     }
 

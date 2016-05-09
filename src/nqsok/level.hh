@@ -18,6 +18,7 @@ namespace nq {
             Color<unsigned char> player {0, 0, 255};
             Color<unsigned char> moveable {255, 0, 0};
             Color<unsigned char> objective {0, 255, 0};
+            Color<unsigned char> background {30, 30, 30};
         };
 
         Level(const std::string&);
