@@ -4,7 +4,8 @@
 #include <iostream>
 #include "image.hh"
 
-nq::Level::Level(const std::string& path) {
+nq::Level::Level(const std::string& path)
+                : level_path {path} {
     std::cout << "\nLevel (parsing)..." << std::endl;
     std::cout << "Level is '" << path << "'" << std::endl;
 

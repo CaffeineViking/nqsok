@@ -4,7 +4,6 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
-#include "extern/tinyobj.hh"
 
 #include "nqsok/window.hh"
 #include "nqsok/renderer.hh"
@@ -14,6 +13,7 @@
 #include "nqsok/buffer.hh"
 #include "nqsok/mesh.hh"
 #include "nqsok/texture.hh"
+#include "nqsok/resources.hh"
 
 #include "nqsok/model.hh"
 #include "nqsok/camera.hh"
@@ -62,78 +62,21 @@ int main(int argc, char** argv) {
     settings.clear_color = {0x30, 0x30, 0x30};
     nq::Renderer renderer {window, settings};
 
-    nq::Level level {"share/levels/classic/01.nql"};
-    nq::Level::Data level_data {level.data("share/levels/classic/")};
+    nq::Level level {share + "/levels/classic/01.nql"};
+    nq::Level::Data level_data {level.data(share + "/levels/classic/")};
     // Above operation is quite expensive, only do this once...
     nq::Sokoban sokoban {level, level_data}; // Game itself.
+    nq::Resource_manager rm; // Quite a shitty solution...
 
-    std::string error;
-    std::vector<tinyobj::shape_t> shapes;
-    std::vector<tinyobj::material_t> materials;
-    tinyobj::LoadObj(shapes, materials, error, "share/models/voxel.obj");
-    if (!error.empty()) std::cerr << error << std::endl;
+    nq::Mesh& level_mesh {rm.load_mesh(share + "/models/voxel.obj", level, level_data, GL_STATIC_DRAW)};
+    nq::Texture::Parameters surface_texture_parameters {GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR_MIPMAP_LINEAR};
+    nq::Texture& surface_texture {rm.load_texture(share + "/textures/surface.png", surface_texture_parameters)};
+    nq::Shader& phong_shader {rm.load_shader(share + "/shaders/phong.vert", share + "/shaders/phong.frag")};
 
-    nq::Mesh::Builder mesh_builder;
-    for (unsigned h {0}; h < level.get_height(); ++h) {
-        for (unsigned d {0}; d < level.get_depth(); ++d) {
-            for (unsigned w {0}; w < level.get_width(); ++w) {
-                nq::Color<unsigned char> voxelc {level_data[h][w+d*level.get_width()]};
-                if (voxelc == level.get_palette().empty) continue;
-                nq::Color<float> voxel_color = voxelc;
-                std::vector<GLfloat> mesh_color;
-                // We might want to make this more efficient...
-                mesh_color.reserve(shapes[0].mesh.positions.size());
-                std::size_t size {shapes[0].mesh.positions.size() / 3};
-                for (std::size_t i {0}; i < size; ++i) {
-                    mesh_color.push_back(voxel_color.red);
-                    mesh_color.push_back(voxel_color.green);
-                    mesh_color.push_back(voxel_color.blue);
-                }
+    nq::Model::Sampler level_model_sampler {surface_texture, "sampler", 0};
+    nq::Model::Material level_model_material {glm::vec3{0.8}, glm::vec3{0.4}, 42};
+    nq::Model level_model {level_mesh, phong_shader, level_model_material, {level_model_sampler}};
 
-                mesh_builder.merge(shapes[0].mesh.indices);
-                mesh_builder.merge("normal", shapes[0].mesh.normals);
-                mesh_builder.merge("mapping", shapes[0].mesh.texcoords);
-                mesh_builder.merge("color", mesh_color);
-                mesh_builder.merge("position", shapes[0].mesh.positions,
-                                   [w, d, h](const std::vector<GLfloat>& v) {
-                                       std::size_t size {v.size() / 3};
-                                       std::vector<GLfloat> copy {v};
-                                       for (std::size_t i {0}; i < size; ++i) {
-                                           copy[i*3 + 0] += w*2.0f;
-                                           copy[i*3 + 1] += h*2.0f;
-                                           copy[i*3 + 2] += d*2.0f;
-                                       }
-
-                                       return copy;
-                                   });
-            }
-        }
-    }
-
-    nq::Shader phong_shader {"share/shaders/phong.vert",
-                             "share/shaders/phong.frag"};
-
-    nq::Buffer<GLuint> indices {mesh_builder.get_elements(), GL_STATIC_DRAW};
-    nq::Buffer<GLfloat> vertices {mesh_builder.get_attributes("position"), GL_STATIC_DRAW};
-    nq::Mesh::Attribute position_attribute {vertices, "position", 3};
-    nq::Buffer<GLfloat> normals {mesh_builder.get_attributes("normal"), GL_STATIC_DRAW};
-    nq::Mesh::Attribute normal_attribute {normals, "normal", 3};
-    nq::Buffer<GLfloat> texcoords {mesh_builder.get_attributes("mapping"), GL_STATIC_DRAW};
-    nq::Mesh::Attribute mapping_attribute {texcoords, "mapping", 2};
-    nq::Buffer<GLfloat> colors {mesh_builder.get_attributes("color"), GL_STATIC_DRAW};
-    nq::Mesh::Attribute color_attribute {colors, "color", 3};
-    nq::Mesh mesh {indices, {position_attribute,
-                             normal_attribute,
-                             mapping_attribute,
-                             color_attribute}};
-
-    nq::Image image {"share/textures/surface.png"};
-    nq::Texture texture {image, {GL_LINEAR_MIPMAP_LINEAR,
-                                 GL_LINEAR_MIPMAP_LINEAR}};
-    nq::Model::Sampler texture_sampler {texture, "sampler", 0};
-
-    nq::Model::Material material {glm::vec3{0.8}, glm::vec3{0.4}, 42};
-    nq::Model model {mesh, phong_shader, material, {texture_sampler}};
     nq::Camera camera {glm::vec3{0.0, 0.0, 0.0},
                        glm::vec3{0.0, 0.0, -1.0},
                        glm::vec3{0.0, 1.0, 0.0}};
@@ -211,9 +154,9 @@ int main(int argc, char** argv) {
         cached_time = current_time;
 
         renderer.clear();
-        model.transform.reset();
-        model.transform.translate({0.0, 0.0, 0.0});
-        renderer.draw(model, camera, lights);
+        level_model.transform.reset();
+        level_model.transform.translate({0.0, 0.0, 0.0});
+        renderer.draw(level_model, camera, lights);
         window.display();
     }
 

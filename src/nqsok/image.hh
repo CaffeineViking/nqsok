@@ -1,5 +1,5 @@
-#ifndef NQSOK_IMAGE
-#define NQSOK_IMAGE
+#ifndef NQSOK_IMAGE_HH
+#define NQSOK_IMAGE_HH
 
 #include <string>
 #include <GL/glew.h>
@@ -21,6 +21,27 @@ namespace nq {
         GLsizei get_height() const { return height; }
         GLsizei size() const { return width*height; }
         int get_bit_depth() const { return bit_depth; }
+
+        Image(Image&& other) noexcept {
+            this->bit_depth = other.bit_depth;
+            this->file = other.file;
+            this->width = other.width;
+            this->height = other.height;
+            this->data = other.data;
+            other.data = nullptr;
+            other.file = "MOVED";
+        }
+
+        Image& operator=(Image&& other) noexcept {
+            this->bit_depth = other.bit_depth;
+            this->file = other.file;
+            this->width = other.width;
+            this->height = other.height;
+            this->data = other.data;
+            other.data = nullptr;
+            other.file = "MOVED";
+            return *this;
+        }
     private:
         int bit_depth;
         std::string file;
