@@ -84,6 +84,9 @@ int main(int argc, char** argv) {
     nq::Model::Material voxel_model_material {glm::vec3{0.8}, glm::vec3{0.4}, 42};
     nq::Model voxel_model {voxel_mesh, uphong_shader, voxel_model_material, {voxel_model_sampler}};
 
+    nq::Mesh& svoxel_mesh {rm.load_mesh(share + "models/svoxel.obj", GL_STATIC_DRAW)};
+    nq::Model svoxel_model {svoxel_mesh, uphong_shader, voxel_model_material, {voxel_model_sampler}};
+
     nq::Camera camera {glm::vec3{0.0, 0.0, 0.0},
                        glm::vec3{0.0, 0.0, -1.0},
                        glm::vec3{0.0, 1.0, 0.0}};
@@ -166,14 +169,27 @@ int main(int argc, char** argv) {
         level_model.transform.translate({0.0, 0.0, 0.0});
         renderer.draw(level_model, camera, lights);
 
-        for (const nq::Sokoban::Position& moveable: sokoban.get_moveables()) {
+        for (const nq::Sokoban::Position& moveable : sokoban.get_moveables()) {
             voxel_model.transform.reset();
             glm::vec3 moveable_vector_position = glm::vec3{moveable} * nq::Level::VOXEL_SIZE;
             voxel_model.transform.translate(moveable_vector_position); // Very nice, yes?
             nq::Color<float> moveable_color = level.get_palette().moveable;
             glm::vec3 moveable_vcolor {moveable_color.red, moveable_color.green, moveable_color.blue};
-            uphong_shader.uniform_vector("color", moveable_vcolor);
+            nq::Color<float> objective_color = level.get_palette().objective;
+            glm::vec3 objective_vcolor {objective_color.red, objective_color.green, objective_color.blue};
+            if (sokoban.objective(moveable)) uphong_shader.uniform_vector("color", objective_vcolor);
+            else uphong_shader.uniform_vector("color", moveable_vcolor);
             renderer.draw(voxel_model, camera, lights);
+        }
+
+        for (const nq::Sokoban::Position& objective : sokoban.get_objectives()) {
+            svoxel_model.transform.reset();
+            glm::vec3 objective_vector_position = glm::vec3{objective} * nq::Level::VOXEL_SIZE;
+            svoxel_model.transform.translate(objective_vector_position);
+            nq::Color<float> objective_color = level.get_palette().moveable;
+            glm::vec3 objective_vcolor {objective_color.red, objective_color.green, objective_color.blue};
+            uphong_shader.uniform_vector("color", objective_vcolor);
+            renderer.draw(svoxel_model, camera, lights);
         }
 
         voxel_model.transform.reset();

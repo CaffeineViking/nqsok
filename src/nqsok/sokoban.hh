@@ -39,10 +39,11 @@ namespace nq {
         bool success() const; // Check if: winning! Winning! WINNING!
         bool undo(); // Latest action on stack is undone. Fails if empty.
         bool step(const Action&); // Does step, fails if not valid with rule.
+        bool objective(const Position&) const; // See if position is objective.
         void reset(); // Copies state of initial level, which is level_data.
         void check(); // Makes sure this level is valid before starting it.
 
-        std::size_t get_moves() const { return actions.size(); }
+        std::size_t steps() const { return actions.size(); }
         const Position& get_player() const { return player_position; }
         const Positions& get_moveables() const { return moveable_positions; }
         const Positions& get_objectives() const { return objective_positions; }

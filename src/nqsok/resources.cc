@@ -89,6 +89,7 @@ nq::Mesh& nq::Resource_manager::load_mesh(const std::string& mesh_file, const Le
                     if (voxelc == level.get_palette().empty) continue;
                     else if (voxelc == level.get_palette().player) continue;
                     else if (voxelc == level.get_palette().moveable) continue;
+                    else if (voxelc == level.get_palette().objective) continue;
                     nq::Color<float> voxel_color = voxelc;
                     std::vector<GLfloat> mesh_color;
                     // We might want to make this more efficient...

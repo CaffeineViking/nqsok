@@ -114,6 +114,12 @@ void nq::Sokoban::reset() {
     if (players != 1) throw Sokoban_error{"Sokoban error (#7) there exists more than one player voxel, ok!"};
 }
 
+bool nq::Sokoban::objective(const Position& position) const {
+    for (const Position& objective_position : objective_positions)
+        if (objective_position == position) return true;
+    return false;
+}
+
 nq::Sokoban::Block nq::Sokoban::type(const Position& position) const {
     for (const Position& moveable_position : moveable_positions)
         if (moveable_position == position) return Block::MOVEABLE;
