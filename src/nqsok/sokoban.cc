@@ -49,7 +49,7 @@ bool nq::Sokoban::step(const Action& action) {
             Position back {reverse(player_position, action)};
             Block back_block {type(back)};
             if (back_block == Block::IMMOVABLE
-                || back_block == Block::EMPTY) return false;
+                || back_block == Block::MOVEABLE) return false;
 
             // Player can climb up.
             player_position = roof;

@@ -62,20 +62,27 @@ int main(int argc, char** argv) {
     settings.clear_color = {0x30, 0x30, 0x30};
     nq::Renderer renderer {window, settings};
 
-    nq::Level level {share + "/levels/classic/01.nql"};
-    nq::Level::Data level_data {level.data(share + "/levels/classic/")};
+    nq::Level level {share + "levels/classic/01.nql"};
+    nq::Level::Data level_data {level.data(share + "levels/classic/")};
     // Above operation is quite expensive, only do this once...
     nq::Sokoban sokoban {level, level_data}; // Game itself.
     nq::Resource_manager rm; // Quite a shitty solution...
 
-    nq::Mesh& level_mesh {rm.load_mesh(share + "/models/voxel.obj", level, level_data, GL_STATIC_DRAW)};
+    nq::Mesh& level_mesh {rm.load_mesh(share + "models/voxel.obj", level, level_data, GL_STATIC_DRAW)};
     nq::Texture::Parameters surface_texture_parameters {GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR_MIPMAP_LINEAR};
-    nq::Texture& surface_texture {rm.load_texture(share + "/textures/surface.png", surface_texture_parameters)};
-    nq::Shader& phong_shader {rm.load_shader(share + "/shaders/phong.vert", share + "/shaders/phong.frag")};
+    nq::Texture& surface_texture {rm.load_texture(share + "textures/surface.png", surface_texture_parameters)};
+    nq::Shader& aphong_shader {rm.load_shader(share + "shaders/aphong.vert", share + "shaders/aphong.frag")};
 
     nq::Model::Sampler level_model_sampler {surface_texture, "sampler", 0};
     nq::Model::Material level_model_material {glm::vec3{0.8}, glm::vec3{0.4}, 42};
-    nq::Model level_model {level_mesh, phong_shader, level_model_material, {level_model_sampler}};
+    nq::Model level_model {level_mesh, aphong_shader, level_model_material, {level_model_sampler}};
+
+    nq::Mesh& voxel_mesh {rm.load_mesh(share + "models/voxel.obj", GL_STATIC_DRAW)};
+    nq::Shader& uphong_shader {rm.load_shader(share + "shaders/uphong.vert", share + "shaders/uphong.frag")};
+
+    nq::Model::Sampler voxel_model_sampler {surface_texture, "sampler", 0};
+    nq::Model::Material voxel_model_material {glm::vec3{0.8}, glm::vec3{0.4}, 42};
+    nq::Model voxel_model {voxel_mesh, uphong_shader, voxel_model_material, {voxel_model_sampler}};
 
     nq::Camera camera {glm::vec3{0.0, 0.0, 0.0},
                        glm::vec3{0.0, 0.0, -1.0},
@@ -94,8 +101,8 @@ int main(int argc, char** argv) {
 
         if (nq::Input::key_pressed(GLFW_KEY_UP, 0)) sokoban.step(nq::Sokoban::Action::FORWARD);
         else if (nq::Input::key_pressed(GLFW_KEY_DOWN, 0)) sokoban.step(nq::Sokoban::Action::BACKWARD);
-        if (nq::Input::key_pressed(GLFW_KEY_LEFT, 0)) sokoban.step(nq::Sokoban::Action::LEFT);
-        else if (nq::Input::key_pressed(GLFW_KEY_RIGHT, 0)) sokoban.step(nq::Sokoban::Action::RIGHT);
+        if (nq::Input::key_pressed(GLFW_KEY_LEFT, 0)) sokoban.step(nq::Sokoban::Action::RIGHT);
+        else if (nq::Input::key_pressed(GLFW_KEY_RIGHT, 0)) sokoban.step(nq::Sokoban::Action::LEFT);
 
         constexpr float CAMERA_MSPEED {0.05};
         if (nq::Input::key_down(GLFW_KEY_W, 0)
@@ -157,6 +164,25 @@ int main(int argc, char** argv) {
         level_model.transform.reset();
         level_model.transform.translate({0.0, 0.0, 0.0});
         renderer.draw(level_model, camera, lights);
+
+        for (const nq::Sokoban::Position& moveable: sokoban.get_moveables()) {
+            voxel_model.transform.reset();
+            glm::vec3 moveable_vector_position = glm::vec3{moveable} * nq::Level::VOXEL_SIZE;
+            voxel_model.transform.translate(moveable_vector_position); // Very nice, yes?
+            nq::Color<float> moveable_color = level.get_palette().moveable;
+            glm::vec3 moveable_vcolor {moveable_color.red, moveable_color.green, moveable_color.blue};
+            uphong_shader.uniform_vector("color", moveable_vcolor);
+            renderer.draw(voxel_model, camera, lights);
+        }
+
+        voxel_model.transform.reset();
+        const nq::Sokoban::Position& player_position {sokoban.get_player()};
+        glm::vec3 player_vector_position = glm::vec3{player_position} * nq::Level::VOXEL_SIZE;
+        voxel_model.transform.translate(player_vector_position); // Very nice, yes?
+        nq::Color<float> player_color = level.get_palette().player;
+        glm::vec3 player_vcolor {player_color.red, player_color.green, player_color.blue};
+        uphong_shader.uniform_vector("color", player_vcolor);
+        renderer.draw(voxel_model, camera, lights);
         window.display();
     }
 

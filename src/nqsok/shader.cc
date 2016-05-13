@@ -31,21 +31,25 @@ bool nq::Shader::is_current() const {
 }
 
 void nq::Shader::uniformf(const std::string& name, float value) {
+    if (!is_current()) use(); // Make sure we are using this...
     GLint location {glGetUniformLocation(handle, name.c_str())};
     glUniform1f(location, value);
 }
 
 void nq::Shader::uniformi(const std::string& name, int value) {
+    if (!is_current()) use(); // Make sure we are using this...
     GLint location {glGetUniformLocation(handle, name.c_str())};
     glUniform1i(location, value);
 }
 
 void nq::Shader::uniform_vector(const std::string& name, const glm::vec3& value) {
+    if (!is_current()) use(); // Make sure we are using this...
     GLint location {glGetUniformLocation(handle, name.c_str())};
     glUniform3fv(location, 1, glm::value_ptr(value));
 }
 
 void nq::Shader::uniform_matrix(const std::string& name, const glm::mat4& value) {
+    if (!is_current()) use(); // Make sure we are using this...
     GLint location {glGetUniformLocation(handle, name.c_str())};
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }

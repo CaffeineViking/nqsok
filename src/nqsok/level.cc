@@ -4,6 +4,7 @@
 #include <iostream>
 #include "image.hh"
 
+constexpr float nq::Level::VOXEL_SIZE;
 nq::Level::Level(const std::string& path)
                 : level_path {path} {
     std::cout << "\nLevel (parsing)..." << std::endl;

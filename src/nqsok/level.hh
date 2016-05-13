@@ -35,6 +35,7 @@ namespace nq {
         using Layer = std::vector<Color<unsigned char>>;
         using Data = std::vector<Layer>;
         Data data(const std::string&) const;
+        static constexpr float VOXEL_SIZE {2.0f};
 
     private:
         Palette palette;

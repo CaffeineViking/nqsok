@@ -28,11 +28,19 @@ namespace nq {
         bool is_current() const;
 
         Shader(Shader&& other) noexcept {
+            this->vertex_shader_file = other.vertex_shader_file;
+            this->fragment_shader_file = other.fragment_shader_file;
+            other.fragment_shader_file = "moved";
+            other.vertex_shader_file = "moved";
             this->handle = other.handle;
             other.handle = 0;
         }
 
         Shader& operator=(Shader&& other) noexcept {
+            this->vertex_shader_file = other.vertex_shader_file;
+            this->fragment_shader_file = other.fragment_shader_file;
+            other.fragment_shader_file = "moved";
+            other.vertex_shader_file = "moved";
             this->handle = other.handle;
             other.handle = 0;
             return *this;

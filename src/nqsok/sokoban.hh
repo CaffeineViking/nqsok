@@ -17,6 +17,13 @@ namespace nq {
         struct Position {
             bool operator==(const Position& p) const { return x == p.x && y == p.y && z == p.z; }
             bool operator!=(const Position& other) const { return !(*this == other); }
+            operator glm::vec3() const {
+                glm::vec3 result {static_cast<float>(x),
+                                  static_cast<float>(y),
+                                  static_cast<float>(z)};
+                return result;
+            }
+
             unsigned x, y, z;
         };
 

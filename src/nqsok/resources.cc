@@ -87,6 +87,8 @@ nq::Mesh& nq::Resource_manager::load_mesh(const std::string& mesh_file, const Le
                 for (unsigned w {0}; w < level.get_width(); ++w) {
                     nq::Color<unsigned char> voxelc {level_data[h][w+d*level.get_width()]};
                     if (voxelc == level.get_palette().empty) continue;
+                    else if (voxelc == level.get_palette().player) continue;
+                    else if (voxelc == level.get_palette().moveable) continue;
                     nq::Color<float> voxel_color = voxelc;
                     std::vector<GLfloat> mesh_color;
                     // We might want to make this more efficient...
@@ -107,9 +109,9 @@ nq::Mesh& nq::Resource_manager::load_mesh(const std::string& mesh_file, const Le
                                         std::size_t size {v.size() / 3};
                                         std::vector<GLfloat> copy {v};
                                         for (std::size_t i {0}; i < size; ++i) {
-                                            copy[i*3 + 0] += w*2.0f;
-                                            copy[i*3 + 1] += h*2.0f;
-                                            copy[i*3 + 2] += d*2.0f;
+                                            copy[i*3 + 0] += w*Level::VOXEL_SIZE;
+                                            copy[i*3 + 1] += h*Level::VOXEL_SIZE;
+                                            copy[i*3 + 2] += d*Level::VOXEL_SIZE;
                                         }
 
                                         return copy;

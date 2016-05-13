@@ -20,7 +20,7 @@ namespace nq {
         Shader& load_shader(const std::string&, const std::string&);
         Texture& load_texture(const std::string&, const Texture::Parameters&);
         Mesh& load_mesh(const std::string&, const Level&, const Level::Data&, GLenum);
-        Mesh& load_mesh(const std::string&, GLenum);
+        Mesh& load_mesh(const std::string&, GLenum); // Normal mesh model loading.
 
     private:
         // Need better way to handle these references.
