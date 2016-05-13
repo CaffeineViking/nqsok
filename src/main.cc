@@ -62,8 +62,8 @@ int main(int argc, char** argv) {
     settings.clear_color = {0x30, 0x30, 0x30};
     nq::Renderer renderer {window, settings};
 
-    nq::Level level {share + "levels/classic/01.nql"};
-    nq::Level::Data level_data {level.data(share + "levels/classic/")};
+    nq::Level level {share + "levels/core/hello.nql"};
+    nq::Level::Data level_data {level.data(share + "levels/core/")};
     // Above operation is quite expensive, only do this once...
     nq::Sokoban sokoban {level, level_data}; // Game itself.
     nq::Resource_manager rm; // Quite a shitty solution...
@@ -99,6 +99,7 @@ int main(int argc, char** argv) {
             || nq::Input::key_pressed(GLFW_KEY_ESCAPE, 0)) window.close();
         if (nq::Input::key_pressed(GLFW_KEY_F, 0)) window.toggle_fullscreen();
 
+        if (nq::Input::key_pressed(GLFW_KEY_R, 0)) sokoban.reset(); // Restart level, noob.
         if (nq::Input::key_pressed(GLFW_KEY_UP, 0)) sokoban.step(nq::Sokoban::Action::FORWARD);
         else if (nq::Input::key_pressed(GLFW_KEY_DOWN, 0)) sokoban.step(nq::Sokoban::Action::BACKWARD);
         if (nq::Input::key_pressed(GLFW_KEY_LEFT, 0)) sokoban.step(nq::Sokoban::Action::RIGHT);

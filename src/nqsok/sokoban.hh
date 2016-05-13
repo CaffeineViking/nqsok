@@ -57,27 +57,13 @@ namespace nq {
         // Helper functions for step().
         Block type(const Position&) const;
         Position top(const Position&) const;
+        bool collides(const Position&) const;
         Position bottom(const Position&) const;
         // Predict future of a certain block with an action.
-        Position future(const Position&, const Action&) const;
-        Position reverse(const Position&, const Action&) const;
-        void moveable_set(const Position&, const Position&);
-
-        std::string saction(const Action& action) const {
-            if (action == Action::FORWARD) return "forward";
-            else if (action == Action::RIGHT) return "right";
-            else if (action == Action::BACKWARD) return "backward";
-            else if (action == Action::LEFT) return "left";
-            return "what have you done?";
-        }
-
-        std::string sposition(const Position& position) const {
-            std::string result {"("};
-            result += std::to_string(position.x) + ", ";
-            result += std::to_string(position.y) + ", ";
-            result += std::to_string(position.z) + ")";
-            return result;
-        }
+        bool collides(const Position&, const Action&) const;
+        void moveable(const Position&, const Position&);
+        Position reverse(Position, const Action&) const;
+        Position future(Position, const Action&) const;
 
         const Level& level;
         const Level::Data& level_data;
