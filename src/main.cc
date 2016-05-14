@@ -45,7 +45,8 @@ void help(const char*);
 int main(int argc, char** argv) {
     std::queue<nq::Level> levels;
     Argument type {pargs(argc, argv)};
-    if (type == Argument::HELP_NEEDED) {
+    if (type == Argument::HELP_NEEDED
+        || type == Argument::NONE)  {
         help(argv[0]);
         return 0;
     } else levels = load(type, argv);
@@ -67,7 +68,7 @@ int main(int argc, char** argv) {
 
     nq::Level& level {levels.front()}; // Load first level on queue.
     nq::Level::Data level_data {level.data(level.get_path_parent())};
-    // Above operation is quite expensive, only do this once...
+    // Above operation is quite expensive, only do this once kay...
     nq::Sokoban sokoban {level, level_data}; // Game itself.
     nq::Resource_manager rm; // Quite a shitty solution...
 
@@ -90,13 +91,11 @@ int main(int argc, char** argv) {
     nq::Mesh& svoxel_mesh {rm.load_mesh(share + "models/svoxel.obj", GL_STATIC_DRAW)};
     nq::Model svoxel_model {svoxel_mesh, uphong_shader, voxel_model_material, {voxel_model_sampler}};
 
-    nq::Camera camera {glm::vec3{0.0, 0.0, 0.0},
+    nq::Camera camera {glm::vec3{0.0, 0.8,  0.0},
                        glm::vec3{0.0, 0.0, -1.0},
                        glm::vec3{0.0, 1.0, 0.0}};
-
-    std::vector<nq::Light> lights {{true, {0.58, 0.58, 0.58}, {1.0, 1.0, 1.0}},
-                                   {false, {-2.5, 0.0, -3.0}, {2.5, 0.0, 0.0}},
-                                   {false, {+2.5, 0.0, -3.0}, {0.0, 0.0, 2.5}}};
+    std::vector<nq::Light> lights {{true, {0.58, 0.58, 0.58},
+                                          {1.00, 1.00, 1.00}}};
 
     double itime {glfwGetTime()};
     double cached_time {itime};
@@ -188,7 +187,7 @@ int main(int argc, char** argv) {
         for (const nq::Sokoban::Position& objective : sokoban.get_objectives()) {
             svoxel_model.transform.reset();
             glm::vec3 objective_vector_position = glm::vec3{objective} * nq::Level::VOXEL_SIZE;
-            svoxel_model.transform.translate(objective_vector_position);
+            svoxel_model.transform.translate(objective_vector_position); // Very nice, yes?
             nq::Color<float> objective_color = level.get_palette().moveable;
             glm::vec3 objective_vcolor {objective_color.red, objective_color.green, objective_color.blue};
             uphong_shader.uniform_vector("color", objective_vcolor);
@@ -237,7 +236,8 @@ Argument pargs(int argc, char** argv) {
         return Argument::NONE;
     } else if (argc == 2) {
         if (!std::strcmp(argv[1], "help")) return Argument::HELP_NEEDED;
-        else return Argument::ROOT; // Might be a bit too confusing?
+        // else return Argument::ROOT; // Might be a bit too confusing?
+        else return Argument::HELP_NEEDED; // Replace with root later.
     } else if (argc > 2) {
         if (argc != 3) return Argument::HELP_NEEDED;
         else if (!std::strcmp(argv[1], "level")) return Argument::LEVEL;

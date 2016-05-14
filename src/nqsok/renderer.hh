@@ -41,6 +41,11 @@ namespace nq {
         void clear(); // Clears all relevant display buffers.
         void draw(Model&, const nq::Camera&, const std::vector<nq::Light>&);
         void draw(Model&); // User needs to handle stuff manually...
+        void clear_color(const nq::Color<unsigned char>& color) const {
+            glClearColor(color.red   / static_cast<GLfloat>(0xFF),
+                         color.green / static_cast<GLfloat>(0xFF),
+                         color.blue  / static_cast<GLfloat>(0xFF), 1.0f);
+        }
 
         // Ambient is applied globally for the entire game scene.
         void set_ambient(const glm::vec3& value) { ambient = value; }
