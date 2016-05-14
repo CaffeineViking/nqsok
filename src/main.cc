@@ -1,3 +1,4 @@
+#include <queue>
 #include <vector>
 #include <cstring>
 #include <iostream>
@@ -37,15 +38,17 @@ enum class Argument {
 
 static std::string share {SHARE};
 static std::string rootf {share + "packs.nqr"};
+std::queue<nq::Level> load(Argument, char**);
 Argument pargs(int, char**);
 void help(const char*);
 
 int main(int argc, char** argv) {
+    std::queue<nq::Level> levels;
     Argument type {pargs(argc, argv)};
     if (type == Argument::HELP_NEEDED) {
         help(argv[0]);
         return 0;
-    }
+    } else levels = load(type, argv);
 
     nq::Window::Context context {2, 1, false, false};
     nq::Window window {1280, 720, "NQ Sokoban", context, false, true};
@@ -210,24 +213,45 @@ int main(int argc, char** argv) {
     return 0;
 }
 
+std::queue<nq::Level> load(Argument type, char** argv) {
+    std::queue<nq::Level> level_queue;
+    if (type == Argument::LEVEL) {
+        std::string level_file {argv[2]};
+        nq::Level level {share + level_file};
+        level_queue.push(level);
+    } else if (type == Argument::PACK) {
+        std::string pack_identifier {argv[2]};
+        nq::Pack pack {share + pack_identifier};
+        for (const std::string& name : pack.get_levels()) {
+            std::string directory {pack.get_directory()};
+            nq::Level level {share + directory + name};
+            level_queue.push(level);
+        }
+    }
+
+    return level_queue;
+}
+
 Argument pargs(int argc, char** argv) {
     if (argc == 1) {
         return Argument::NONE;
     } else if (argc == 2) {
         if (!std::strcmp(argv[1], "help")) return Argument::HELP_NEEDED;
-        else return Argument::ROOT;
+        else return Argument::ROOT; // Might be a bit too confusing?
     } else if (argc > 2) {
-        if (argc != 4) return Argument::HELP_NEEDED;
+        if (argc != 3) return Argument::HELP_NEEDED;
         else if (!std::strcmp(argv[1], "level")) return Argument::LEVEL;
         else if (!std::strcmp(argv[1], "pack")) return Argument::PACK;
-        else return Argument::HELP_NEEDED;
-    } else return Argument::HELP_NEEDED;
+    }
+
+    // How did we get over here?!
+    return Argument::HELP_NEEDED;
 }
 
 void help(const char* path) {
     std::cout << "usage: " << path << " <argument>" << std::endl;
-    std::cout << "<argument> ::= help" << " 'shows this message'" << std::endl;
-    std::cout << "<argument> ::= pack <directory> <pack-file>" << " 'loads <pack-file> with relative path at <directory>'" << std::endl;
-    std::cout << "<argument> ::= level <directory> <level-file>" <<  " 'loads <level-file> with relative path at <directory>'" << std::endl;
-    std::cout << "<argument> ::= <root-file>" << " 'sets the root nq file to <root-file>'" << std::endl;
+    std::cout << "<argument> ::= help" << " 'shows this very exciting, calming and painful message'" << std::endl;
+    std::cout << "<argument> ::= pack <pack-file>" << " 'loads <pack-file> within the current relative path'" << std::endl;
+    std::cout << "<argument> ::= level <level-file>" <<  " 'loads <level-file> within the current relative path'" << std::endl;
+    std::cout << "<argument> ::= <root-file>" << " 'sets the root nq information file to <root-file>'" << std::endl;
 }

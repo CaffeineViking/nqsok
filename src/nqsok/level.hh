@@ -29,6 +29,7 @@ namespace nq {
         unsigned get_depth() const { return depth; }
         const Palette& get_palette() const { return palette; }
         const std::string& get_directory() const { return directory; }
+        const std::string& get_path_parent() const { return path_parent; }
         const std::string& get_level_path() const { return level_path; }
         const std::vector<std::string>& get_layers() const { return layers; }
 
@@ -44,6 +45,7 @@ namespace nq {
         unsigned width, height, depth;
         std::string directory;
         std::string level_path;
+        std::string path_parent;
         std::vector<std::string> layers;
         Color<unsigned char> get_color(const Json::Value&,
                                        const std::string&) const;

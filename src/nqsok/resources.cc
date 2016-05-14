@@ -4,6 +4,10 @@
 #include "color.hh"
 #include <vector>
 
+// Pssst. If you are looking at this file. Stop.
+// Only madness and major brain damage ahead.
+// Turn back while you still can, friend.
+
 nq::Shader& nq::Resource_manager::load_shader(const std::string& vertex_file,
                                               const std::string& fragment_file) {
     const std::string resource_identifier {vertex_file + fragment_file};
