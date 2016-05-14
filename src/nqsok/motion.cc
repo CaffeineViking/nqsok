@@ -33,3 +33,14 @@ float nq::Motion::quint_inout(float t) {
         return 0.5 * std::pow(f, 5) + 1.0;
     }
 }
+
+float nq::Motion::value(float now) const {
+    float time_left {future.time - now};
+    if (time_left <= 0.0) return future.value;
+    float duration {future.time - past.time};
+    float progress {(1.0f - time_left) / duration};
+    float difference {future.value - past.value};
+    float easing_progress {function(progress)};
+    float value_progress {difference * easing_progress};
+    return past.value + value_progress;
+}

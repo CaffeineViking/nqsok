@@ -126,7 +126,7 @@ int main(int argc, char** argv) {
 
         camera.direction = sokoban.get_player();
         camera.direction *= nq::Level::VOXEL_SIZE;
-        glm::vec3 camera_offset {+8.0, +8.0, -8.0};
+        glm::vec3 camera_offset {+12.0, +12.0, -12.0};
         camera.position = camera.direction + camera_offset;
 
         renderer.clear();
