@@ -11,9 +11,7 @@ namespace nq {
     public:
         // Robert Penner's Easing.
         // Refs: AHEasing, DWTFYWTPLv2.
-        static float bounce_in(float);
         static float bounce_out(float);
-        static float elastic_in(float);
         static float elastic_out(float);
         static float quint_inout(float);
 
@@ -23,6 +21,7 @@ namespace nq {
             float value {0.0};
         };
 
+        bool done(float) const;
         float value(float) const;
         void apply(const Point& current,
                    const Point& next,

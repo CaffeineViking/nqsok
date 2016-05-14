@@ -34,6 +34,12 @@ float nq::Motion::quint_inout(float t) {
     }
 }
 
+bool nq::Motion::done(float now) const {
+    float time_left {future.time - now};
+    if (time_left <= 0.0) return true;
+    else return false;
+}
+
 float nq::Motion::value(float now) const {
     float time_left {future.time - now};
     if (time_left <= 0.0) return future.value;
