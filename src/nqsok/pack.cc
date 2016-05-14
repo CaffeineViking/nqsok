@@ -8,7 +8,7 @@ nq::Pack::Pack(const std::string& path)
               : pack_path {path} {
     std::cout << "\nPack (parsing)..." << std::endl;
     std::cout << "Path is '" << path << "'" << std::endl;
-    path_parent = pack_path.substr(0, pack_path.find_last_of("/") - 1);
+    path_parent = pack_path.substr(0, pack_path.find_last_of("/") + 1);
 
     std::ifstream file {path};
     if (!file) throw Pack_error{"Pack error (#1) no such file!"};

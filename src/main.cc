@@ -65,8 +65,8 @@ int main(int argc, char** argv) {
     settings.clear_color = {0x30, 0x30, 0x30};
     nq::Renderer renderer {window, settings};
 
-    nq::Level level {share + "levels/core/hello.nql"};
-    nq::Level::Data level_data {level.data(share + "levels/core/")};
+    nq::Level& level {levels.front()}; // Load first level on queue.
+    nq::Level::Data level_data {level.data(level.get_path_parent())};
     // Above operation is quite expensive, only do this once...
     nq::Sokoban sokoban {level, level_data}; // Game itself.
     nq::Resource_manager rm; // Quite a shitty solution...

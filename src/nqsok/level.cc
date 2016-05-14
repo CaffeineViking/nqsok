@@ -9,7 +9,7 @@ nq::Level::Level(const std::string& path)
                 : level_path {path} {
     std::cout << "\nLevel (parsing)..." << std::endl;
     std::cout << "Level is '" << path << "'" << std::endl;
-    path_parent = level_path.substr(0, level_path.find_last_of("/") - 1);
+    path_parent = level_path.substr(0, level_path.find_last_of("/") + 1);
 
     std::ifstream file {path};
     if (!file) throw Level_error{"Level error (#1) no such file!"};
