@@ -1,6 +1,8 @@
 #ifndef NQSOK_COLOR_HH
 #define NQSOK_COLOR_HH
 
+#include <glm/glm.hpp>
+
 namespace nq {
     template<typename T>
     struct Color final {};
@@ -15,6 +17,12 @@ namespace nq {
     template<>
     struct Color<unsigned char> final {
         operator Color<float>() const {
+            return {red / 255.0f,
+                    green / 255.0f,
+                    blue / 255.0f};
+        }
+
+        operator glm::vec3() const {
             return {red / 255.0f,
                     green / 255.0f,
                     blue / 255.0f};
