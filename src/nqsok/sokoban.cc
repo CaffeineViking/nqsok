@@ -38,7 +38,9 @@ bool nq::Sokoban::step(const Action& action) {
         Position future_position {future(player_position, action)};
         Block future_block_type {type(future_position)};
         if (future_block_type == Block::IMMOVABLE) {
+            Position position_above {top(player_position)};
             Position position_behind {reverse(player_position, action)};
+            if (position_above.y - player_position.y > 1) return false;
             if (collides(position_behind)) return false; // Stuck, eh?
             Position roof_position {top(future_position)};
             if (roof_position.y - future_position.y > 1 ||
@@ -210,7 +212,8 @@ bool nq::Sokoban::collides(const Position& of, const Action& action) const {
 bool nq::Sokoban::collides(const Position& position) const {
     Block block_type {type(position)};
     if (block_type == Block::IMMOVABLE
-        || block_type == Block::MOVEABLE) return true;
+        || block_type == Block::MOVEABLE
+        || block_type == Block::PLAYER) return true;
     else return false;
 }
 
