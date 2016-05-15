@@ -20,6 +20,7 @@ bool nq::Sokoban::undo() {
     }
 
     store_past_positions();
+    actions.pop();
     return true;
 }
 
