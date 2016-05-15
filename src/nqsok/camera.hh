@@ -16,6 +16,7 @@ namespace nq {
                                direction, up);
         }
 
+        static constexpr float OFFSET {12.0};
         Camera(const glm::vec3& position,
                const glm::vec3& direction,
                const glm::vec3& up_vector)

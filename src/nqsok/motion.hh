@@ -21,7 +21,20 @@ namespace nq {
             float value {0.0};
         };
 
-        bool done(float) const; float value(float) const;
+        bool done(float) const;
+        float value(float) const;
+        void apply(const Point& current,
+                   const Point& next,
+                   Motionf mfunction) {
+            if (current.time >= next.time)
+                throw Motion_error{"wat"};
+            past.value = current.value;
+            future.value = next.value;
+            past.time = current.time;
+            future.time = next.time;
+            function = mfunction;
+        }
+
         Motion(const Point& current, const Point& future, Motionf f)
               : function{f}, past{current}, future{future} {}
 
