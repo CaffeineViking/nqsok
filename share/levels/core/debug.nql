@@ -1,7 +1,7 @@
 {
-    "title": "01",
-    "author": "Hiroyuki Imabayashi",
-    "width": 19, "depth": 11, "height": 2,
+    "title": "Hello World!",
+    "author": "Erik S. Vasconcelos Jansson",
+    "width": 32, "depth": 32, "height": 4,
     "palette": {
         "empty": [0, 0, 0],
         "player": [0, 0, 255],
@@ -10,9 +10,11 @@
         "background": [48, 48, 48]
     },
 
-    "directory": "01/",
+    "directory": "debug/",
     "layers": [
         "01.png",
-        "02.png"
+        "02.png",
+        "03.png",
+        "04.png"
     ]
 }

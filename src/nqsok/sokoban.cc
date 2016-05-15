@@ -10,7 +10,7 @@ bool nq::Sokoban::success() const {
 
 bool nq::Sokoban::undo() {
     if (past.size() == 0) return false;
-    std::size_t size {objective_positions.size() + 1};
+    std::size_t size {moveable_positions.size() + 1};
     if (past.size() <= size) { reset(); return true; }
     for (std::size_t i {0}; i < size; ++i) past.pop();
     player_position = past.top(); past.pop();
