@@ -24,6 +24,7 @@
 #include "nqsok/root.hh"
 #include "nqsok/pack.hh"
 #include "nqsok/level.hh"
+#include "nqsok/score.hh"
 #include "nqsok/sokoban.hh"
 #include <GLFW/glfw3.h>
 
