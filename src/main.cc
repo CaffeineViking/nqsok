@@ -52,6 +52,7 @@ int main(int argc, char** argv) {
         help(argv[0]);
         return 0;
     } else levels = load(type, argv);
+    nq::Score score {"sokoban.nqh"};
 
     nq::Window::Context context {2, 1, false, false};
     nq::Window window {1280, 720, "NQ Sokoban", context, false, true};
