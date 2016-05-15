@@ -65,10 +65,12 @@ namespace nq {
         void moveable(const Position&, const Position&);
         Position reverse(Position, const Action&) const;
         Position future(Position, const Action&) const;
+        void store_past_positions(); // Optimize later?
 
         const Level& level;
         const Level::Data& level_data;
         std::stack<Action> actions;
+        std::stack<Position> past;
         Position player_position;
         Positions moveable_positions;
         Positions objective_positions;

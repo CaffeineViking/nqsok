@@ -9,8 +9,18 @@ bool nq::Sokoban::success() const {
 }
 
 bool nq::Sokoban::undo() {
-    // TODO:  complicated?
-    return false;
+    if (past.size() == 0) return false;
+    std::size_t size {objective_positions.size() + 1};
+    if (past.size() <= size) { reset(); return true; }
+    for (std::size_t i {0}; i < size; ++i) past.pop();
+    player_position = past.top(); past.pop();
+    for (Position& moveable_position : moveable_positions) {
+        moveable_position = past.top();
+        past.pop();
+    }
+
+    store_past_positions();
+    return true;
 }
 
 bool nq::Sokoban::step(const Action& action) {
@@ -20,6 +30,7 @@ bool nq::Sokoban::step(const Action& action) {
         if (player_position == ground_position) return false;
         else if (ground_position.y == 0) return false;
         player_position = ground_position;
+        store_past_positions();
         actions.push(action);
         return true;
     } else {
@@ -33,6 +44,7 @@ bool nq::Sokoban::step(const Action& action) {
                 roof_position.y == level.get_height()) return false;
             if (player_position == roof_position) return false;
             player_position = roof_position;
+            store_past_positions();
             actions.push(action);
             return true;
         } else if (future_block_type == Block::MOVEABLE) {
@@ -45,6 +57,7 @@ bool nq::Sokoban::step(const Action& action) {
                     roof_position.y == level.get_height()) return false;
                 if (player_position == roof_position) return false;
                 player_position = roof_position;
+                store_past_positions();
                 actions.push(action);
                 return true;
             }
@@ -54,6 +67,7 @@ bool nq::Sokoban::step(const Action& action) {
             else if (ground_position.y == 0) return false;
             moveable(future_position, ground_position);
             player_position = future_position;
+            store_past_positions();
             actions.push(action);
             return true;
         }
@@ -95,6 +109,7 @@ void nq::Sokoban::reset() {
     moveable_positions.clear();
     objective_positions.clear();
     actions = std::stack<Action>{};
+    past = std::stack<Position>{};
     for (unsigned y {0}; y < level.get_height(); ++y) {
         for (unsigned z {0}; z < level.get_depth(); ++z) {
             for (unsigned x {0}; x < level.get_width(); ++x) {
@@ -196,4 +211,13 @@ bool nq::Sokoban::collides(const Position& position) const {
     if (block_type == Block::IMMOVABLE
         || block_type == Block::MOVEABLE) return true;
     else return false;
+}
+
+// Stack can grow quite big, might want to
+// find a better solution later? Assuming,
+// 128 bytes per move & 128 moves ~1KiB?!?
+void nq::Sokoban::store_past_positions() {
+    for (const Position& moveable_position : moveable_positions)
+        past.push(moveable_position);
+    past.push(player_position);
 }

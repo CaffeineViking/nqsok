@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
     std::queue<nq::Level> levels;
     Argument type {pargs(argc, argv)};
     if (type == Argument::HELP_NEEDED
-        || type == Argument::NONE)  {
+        || type == Argument::NONE) {
         help(argv[0]);
         return 0;
     } else levels = load(type, argv);
@@ -107,6 +107,9 @@ int main(int argc, char** argv) {
 
         if (nq::Input::key_pressed(GLFW_KEY_R, 0))
             sokoban.reset(); // Restart the level.
+        if (nq::Input::key_pressed(GLFW_KEY_U, 0))
+            sokoban.undo(); // Undo a last action.
+
         if (nq::Input::key_pressed(GLFW_KEY_UP, 0)
             || nq::Input::key_pressed(GLFW_KEY_K, 0))
             sokoban.step(nq::Sokoban::Action::FORWARD);
