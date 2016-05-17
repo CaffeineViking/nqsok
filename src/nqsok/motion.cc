@@ -1,5 +1,6 @@
 #include "motion.hh"
 #include<glm/gtc/constants.hpp>
+#include <iostream>
 #include <cmath>
 
 float nq::Motion::bounce_out(float t) {
@@ -22,7 +23,7 @@ float nq::Motion::bounce_out(float t) {
 
 float nq::Motion::elastic_out(float t) {
     return std::sin(-13.0 * glm::half_pi<float>() * (t + 1.0))
-           * std::pow(2.0, -10.0 * t) + 1.0;
+           * std::pow(2.0, -15.0 * t) + 1.0;
 }
 
 float nq::Motion::quint_inout(float t) {
@@ -44,7 +45,7 @@ float nq::Motion::value(float now) const {
     float time_left {future.time - now};
     if (time_left <= 0.0) return future.value;
     float duration {future.time - past.time};
-    float progress {(1.0f - time_left) / duration};
+    float progress {(duration - time_left) / duration};
     float difference {future.value - past.value};
     float easing_progress {function(progress)};
     float value_progress {difference * easing_progress};
