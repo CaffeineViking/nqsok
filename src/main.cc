@@ -43,6 +43,8 @@ static std::string share {SHARE};
 static std::string version {"1.0D"};
 static std::string rootf {share + "packs.nqr"};
 std::queue<nq::Level> load(Argument, char**);
+void delayed_exit(float, nq::Window&);
+static float exit_time {0.0};
 Argument pargs(int, char**);
 void help(const char*);
 
@@ -110,28 +112,31 @@ int main(int argc, char** argv) {
             || nq::Input::key_pressed(GLFW_KEY_ESCAPE, 0)) window.close();
         if (nq::Input::key_pressed(GLFW_KEY_F, 0)) window.toggle_fullscreen();
 
-        if (nq::Input::key_pressed(GLFW_KEY_R, 0))
-            sokoban.reset(); // Restart the level.
-        if (nq::Input::key_pressed(GLFW_KEY_U, 0))
-            sokoban.undo(); // Undo a last action.
+        if (!sokoban.success()) {
+            if (nq::Input::key_pressed(GLFW_KEY_R, 0))
+                sokoban.reset(); // Restart the level.
+            if (nq::Input::key_pressed(GLFW_KEY_U, 0))
+                sokoban.undo(); // Undo a last action.
 
-        if (nq::Input::key_pressed(GLFW_KEY_UP, 0)
-            || nq::Input::key_pressed(GLFW_KEY_K, 0))
-            sokoban.step(nq::Sokoban::Action::FORWARD,
-                         camera_wrapper.get_look());
-        else if (nq::Input::key_pressed(GLFW_KEY_DOWN, 0)
-                 || nq::Input::key_pressed(GLFW_KEY_J, 0))
-            sokoban.step(nq::Sokoban::Action::BACKWARD,
-                         camera_wrapper.get_look());
-        if (nq::Input::key_pressed(GLFW_KEY_LEFT, 0)
-            || nq::Input::key_pressed(GLFW_KEY_H, 0))
-            sokoban.step(nq::Sokoban::Action::RIGHT,
-                         camera_wrapper.get_look());
-        else if (nq::Input::key_pressed(GLFW_KEY_RIGHT, 0)
-                 || nq::Input::key_pressed(GLFW_KEY_L, 0))
-            sokoban.step(nq::Sokoban::Action::LEFT,
-                         camera_wrapper.get_look());
+            if (nq::Input::key_pressed(GLFW_KEY_UP, 0)
+                || nq::Input::key_pressed(GLFW_KEY_K, 0))
+                sokoban.step(nq::Sokoban::Action::FORWARD,
+                            camera_wrapper.get_look());
+            else if (nq::Input::key_pressed(GLFW_KEY_DOWN, 0)
+                    || nq::Input::key_pressed(GLFW_KEY_J, 0))
+                sokoban.step(nq::Sokoban::Action::BACKWARD,
+                            camera_wrapper.get_look());
 
+            if (nq::Input::key_pressed(GLFW_KEY_LEFT, 0)
+                || nq::Input::key_pressed(GLFW_KEY_H, 0))
+                sokoban.step(nq::Sokoban::Action::RIGHT,
+                            camera_wrapper.get_look());
+            else if (nq::Input::key_pressed(GLFW_KEY_RIGHT, 0)
+                    || nq::Input::key_pressed(GLFW_KEY_L, 0))
+                sokoban.step(nq::Sokoban::Action::LEFT,
+                            camera_wrapper.get_look());
+            exit_time = glfwGetTime(); // A ugly hack.
+        } else delayed_exit(glfwGetTime(), window);
 
         double current_time {glfwGetTime()};
         double delta_time {current_time - cached_time};
@@ -144,6 +149,7 @@ int main(int argc, char** argv) {
         else if (nq::Input::key_pressed(GLFW_KEY_DOWN, GLFW_MOD_SHIFT)
                  || nq::Input::key_pressed(GLFW_KEY_J, GLFW_MOD_SHIFT))
             camera_wrapper.rotate_reset(current_float_time);
+
         if (nq::Input::key_pressed(GLFW_KEY_LEFT, GLFW_MOD_SHIFT)
             || nq::Input::key_pressed(GLFW_KEY_H, GLFW_MOD_SHIFT))
             camera_wrapper.rotate_left(current_float_time);
@@ -181,6 +187,11 @@ int main(int argc, char** argv) {
         window.display();
     }
 
+    if (!sokoban.success()) return 0;
+    score.apply(level.get_level_path(),
+                sokoban.steps());
+    score.write(); // Everything!
+
     // Say goodbye to the user!
     // (only if everything went ok)
     std::cout << "\nHave a nice day!"
@@ -205,6 +216,10 @@ std::queue<nq::Level> load(Argument type, char** argv) {
     }
 
     return level_queue;
+}
+
+void delayed_exit(float t, nq::Window& window) {
+    if (t - exit_time > 2.0) window.close();
 }
 
 Argument pargs(int argc, char** argv) {

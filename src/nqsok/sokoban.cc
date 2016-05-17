@@ -2,10 +2,10 @@
 #include <iostream>
 #include "color.hh"
 
-bool nq::Sokoban::success() const {
+void nq::Sokoban::cache_success_state() {
     for (const Position& objective_position : objective_positions)
-        if (type(objective_position) != Block::MOVEABLE) return false;
-    return true;
+        if (type(objective_position) != Block::MOVEABLE) return;
+    has_won_level = true; // Only set this once, can't unwin!
 }
 
 bool nq::Sokoban::undo() {
@@ -58,6 +58,7 @@ bool nq::Sokoban::step(const Action& action) {
         else if (ground_position.y == 0) return false;
         player_position = ground_position;
         store_past_positions();
+        cache_success_state();
         actions.push(action);
         return true;
     } else {
@@ -72,6 +73,7 @@ bool nq::Sokoban::step(const Action& action) {
             if (player_position == roof_position) return false;
             player_position = roof_position;
             store_past_positions();
+            cache_success_state();
             actions.push(action);
             return true;
         } else if (future_block_type == Block::MOVEABLE) {
@@ -85,6 +87,7 @@ bool nq::Sokoban::step(const Action& action) {
                 if (player_position == roof_position) return false;
                 player_position = roof_position;
                 store_past_positions();
+                cache_success_state();
                 actions.push(action);
                 return true;
             }
@@ -95,6 +98,7 @@ bool nq::Sokoban::step(const Action& action) {
             moveable(future_position, ground_position);
             player_position = future_position;
             store_past_positions();
+            cache_success_state();
             actions.push(action);
             return true;
         }

@@ -36,8 +36,8 @@ namespace nq {
         Sokoban(const Level& level, const Level::Data& data)
                : level {level}, level_data {data} { reset(); check(); }
 
-        bool success() const; // Check if: winning! Winning! WINNING!
         bool undo(); // Latest action on stack is undone. Fails if empty.
+        bool success() const { return has_won_level; } // Cached for speed.
         void step(const Action&, int); // Also steps, relative to a position.
         bool step(const Action&); // Does step, fails if not valid with rule.
         bool objective(const Position&) const; // See if position is objective.
@@ -67,8 +67,10 @@ namespace nq {
         Position reverse(Position, const Action&) const;
         Position future(Position, const Action&) const;
         void store_past_positions(); // Optimize later?
+        void cache_success_state(); // For fast access.
 
         const Level& level;
+        bool has_won_level {false};
         const Level::Data& level_data;
         std::stack<Action> actions;
         std::stack<Position> past;
