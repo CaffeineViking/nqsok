@@ -1,4 +1,4 @@
-#include "resources.hh"
+#include "resource.hh"
 #include "../extern/tinyobj.hh"
 #include <initializer_list>
 #include "color.hh"

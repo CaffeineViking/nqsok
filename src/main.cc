@@ -14,7 +14,7 @@
 #include "nqsok/buffer.hh"
 #include "nqsok/mesh.hh"
 #include "nqsok/texture.hh"
-#include "nqsok/resources.hh"
+#include "nqsok/resource.hh"
 
 #include "nqsok/model.hh"
 #include "nqsok/camera.hh"
