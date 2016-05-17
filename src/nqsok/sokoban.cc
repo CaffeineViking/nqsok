@@ -24,6 +24,32 @@ bool nq::Sokoban::undo() {
     return true;
 }
 
+void nq::Sokoban::step(const Action& action, int direction) {
+    if (direction == 0) step(action);
+    else if (direction == 1) {
+        switch (action) {
+        case Action::FORWARD: step(Action::RIGHT); break;
+        case Action::RIGHT: step(Action::BACKWARD); break;
+        case Action::BACKWARD: step(Action::LEFT); break;
+        case Action::LEFT: step(Action::FORWARD); break;
+        }
+    } else if (direction == 2) {
+        switch (action) {
+        case Action::FORWARD: step(Action::BACKWARD); break;
+        case Action::RIGHT: step(Action::LEFT); break;
+        case Action::BACKWARD: step(Action::FORWARD); break;
+        case Action::LEFT: step(Action::RIGHT); break;
+        }
+    } else if (direction == 3) {
+        switch (action) {
+        case Action::FORWARD: step(Action::LEFT); break;
+        case Action::LEFT: step(Action::BACKWARD); break;
+        case Action::BACKWARD: step(Action::RIGHT); break;
+        case Action::RIGHT: step(Action::FORWARD); break;
+        }
+    }
+}
+
 bool nq::Sokoban::step(const Action& action) {
     if (!collides(player_position, action)) {
         Position future_position {future(player_position, action)};

@@ -9,7 +9,7 @@
 namespace nq {
     class Camera_wrapper final {
     public:
-        int get_direction() const { return direction; }
+        int get_look() const { return direction; }
         void rotate_overview(float); void rotate_reset(float);
         void rotate_left(float); void rotate_right(float);
         void update(const glm::vec3&, float);

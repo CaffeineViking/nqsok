@@ -117,16 +117,20 @@ int main(int argc, char** argv) {
 
         if (nq::Input::key_pressed(GLFW_KEY_UP, 0)
             || nq::Input::key_pressed(GLFW_KEY_K, 0))
-            sokoban.step(nq::Sokoban::Action::FORWARD);
+            sokoban.step(nq::Sokoban::Action::FORWARD,
+                         camera_wrapper.get_look());
         else if (nq::Input::key_pressed(GLFW_KEY_DOWN, 0)
                  || nq::Input::key_pressed(GLFW_KEY_J, 0))
-            sokoban.step(nq::Sokoban::Action::BACKWARD);
+            sokoban.step(nq::Sokoban::Action::BACKWARD,
+                         camera_wrapper.get_look());
         if (nq::Input::key_pressed(GLFW_KEY_LEFT, 0)
             || nq::Input::key_pressed(GLFW_KEY_H, 0))
-            sokoban.step(nq::Sokoban::Action::RIGHT);
+            sokoban.step(nq::Sokoban::Action::RIGHT,
+                         camera_wrapper.get_look());
         else if (nq::Input::key_pressed(GLFW_KEY_RIGHT, 0)
                  || nq::Input::key_pressed(GLFW_KEY_L, 0))
-            sokoban.step(nq::Sokoban::Action::LEFT);
+            sokoban.step(nq::Sokoban::Action::LEFT,
+                         camera_wrapper.get_look());
 
 
         double current_time {glfwGetTime()};
