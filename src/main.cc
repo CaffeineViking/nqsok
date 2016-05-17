@@ -39,6 +39,7 @@ enum class Argument {
 };
 
 static std::string share {SHARE};
+static std::string version {"1.0D"};
 static std::string rootf {share + "packs.nqr"};
 std::queue<nq::Level> load(Argument, char**);
 Argument pargs(int, char**);
@@ -144,7 +145,7 @@ int main(int argc, char** argv) {
 
         camera.direction = sokoban.get_player();
         camera.direction *= nq::Level::VOXEL_SIZE;
-        glm::vec3 camera_offset {nq::Camera::OFFSET,
+        glm::vec3 camera_offset {+nq::Camera::OFFSET,
                                  +nq::Camera::OFFSET,
                                  -nq::Camera::OFFSET};
         camera.position = camera.direction + camera_offset;
@@ -220,8 +221,9 @@ Argument pargs(int argc, char** argv) {
 }
 
 void help(const char* path) {
+    std::cout << "Not Quite Sokoban " << version << std::endl;
     std::cout << "usage: " << path << " <argument>" << std::endl;
-    std::cout << "<argument> ::= help" << " 'shows this very exciting, calming and painful message'" << std::endl;
+    std::cout << "<argument> ::= help" << " 'shows this very exciting, calming and useless message'" << std::endl;
     std::cout << "<argument> ::= pack <pack-file>" << " 'loads <pack-file> within the current relative path'" << std::endl;
     std::cout << "<argument> ::= level <level-file>" <<  " 'loads <level-file> within the current relative path'" << std::endl;
     std::cout << "<argument> ::= <root-file>" << " 'sets the root nq information file to <root-file>'" << std::endl;
