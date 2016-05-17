@@ -142,7 +142,12 @@ int main(int argc, char** argv) {
 
         double current_time {glfwGetTime()};
         double delta_time {current_time - cached_time};
+        float current_float_time = current_time;
         cached_time = current_time;
+
+        glm::vec3 player_position {glm::vec3{sokoban.get_player()}
+                                   * nq::Level::VOXEL_SIZE};
+        camera_wrapper.update(player_position, current_float_time);
 
         renderer.clear();
         level_model.transform.reset();
