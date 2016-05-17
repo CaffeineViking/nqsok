@@ -18,7 +18,7 @@ namespace nq {
     private:
         const int WRAPPING {3};
         const float OFFSET {16.0};
-        const float DURATION {1.0};
+        const float DURATION {1.2};
         void hmotion(float); void vmotion(float);
         Motion horizontal {{0.0, glm::quarter_pi<float>()},
                            {0.0, glm::quarter_pi<float>()}, Motion::elastic_out},
