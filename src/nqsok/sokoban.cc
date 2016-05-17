@@ -24,30 +24,33 @@ bool nq::Sokoban::undo() {
     return true;
 }
 
-void nq::Sokoban::step(const Action& action, int direction) {
-    if (direction == 0) step(action);
+bool nq::Sokoban::step(const Action& action, int direction) {
+    if (direction == 0) return step(action);
     else if (direction == 1) {
         switch (action) {
-        case Action::FORWARD: step(Action::RIGHT); break;
-        case Action::RIGHT: step(Action::BACKWARD); break;
-        case Action::BACKWARD: step(Action::LEFT); break;
-        case Action::LEFT: step(Action::FORWARD); break;
+        case Action::FORWARD: return step(Action::RIGHT);
+        case Action::RIGHT: return step(Action::BACKWARD);
+        case Action::BACKWARD: return step(Action::LEFT);
+        case Action::LEFT: return step(Action::FORWARD);
         }
     } else if (direction == 2) {
         switch (action) {
-        case Action::FORWARD: step(Action::BACKWARD); break;
-        case Action::RIGHT: step(Action::LEFT); break;
-        case Action::BACKWARD: step(Action::FORWARD); break;
-        case Action::LEFT: step(Action::RIGHT); break;
+        case Action::FORWARD: return step(Action::BACKWARD);
+        case Action::RIGHT: return step(Action::LEFT);
+        case Action::BACKWARD: return step(Action::FORWARD);
+        case Action::LEFT: return step(Action::RIGHT);
         }
     } else if (direction == 3) {
         switch (action) {
-        case Action::FORWARD: step(Action::LEFT); break;
-        case Action::LEFT: step(Action::BACKWARD); break;
-        case Action::BACKWARD: step(Action::RIGHT); break;
-        case Action::RIGHT: step(Action::FORWARD); break;
+        case Action::FORWARD: return step(Action::LEFT);
+        case Action::LEFT: return step(Action::BACKWARD);
+        case Action::BACKWARD: return step(Action::RIGHT);
+        case Action::RIGHT: return step(Action::FORWARD);
         }
     }
+
+    // But how!?!
+    return false;
 }
 
 bool nq::Sokoban::step(const Action& action) {

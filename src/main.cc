@@ -126,6 +126,14 @@ int main(int argc, char** argv) {
                     || nq::Input::key_pressed(GLFW_KEY_J, 0))
                 sokoban.step(nq::Sokoban::Action::BACKWARD,
                             camera_wrapper.get_look());
+            if (nq::Input::key_pressed(GLFW_KEY_UP, GLFW_MOD_SHIFT)
+                || nq::Input::key_pressed(GLFW_KEY_K, GLFW_MOD_SHIFT))
+                while (sokoban.step(nq::Sokoban::Action::FORWARD,
+                            camera_wrapper.get_look()) == true);
+            else if (nq::Input::key_pressed(GLFW_KEY_DOWN, GLFW_MOD_SHIFT)
+                    || nq::Input::key_pressed(GLFW_KEY_J, GLFW_MOD_SHIFT))
+                while (sokoban.step(nq::Sokoban::Action::BACKWARD,
+                            camera_wrapper.get_look() == true));
 
             if (nq::Input::key_pressed(GLFW_KEY_LEFT, 0)
                 || nq::Input::key_pressed(GLFW_KEY_H, 0))
@@ -135,6 +143,14 @@ int main(int argc, char** argv) {
                     || nq::Input::key_pressed(GLFW_KEY_L, 0))
                 sokoban.step(nq::Sokoban::Action::LEFT,
                             camera_wrapper.get_look());
+            if (nq::Input::key_pressed(GLFW_KEY_LEFT, GLFW_MOD_SHIFT)
+                || nq::Input::key_pressed(GLFW_KEY_H, GLFW_MOD_SHIFT))
+                while (sokoban.step(nq::Sokoban::Action::RIGHT,
+                            camera_wrapper.get_look() == true));
+            else if (nq::Input::key_pressed(GLFW_KEY_RIGHT, GLFW_MOD_SHIFT)
+                    || nq::Input::key_pressed(GLFW_KEY_L, GLFW_MOD_SHIFT))
+                while (sokoban.step(nq::Sokoban::Action::LEFT,
+                            camera_wrapper.get_look() == true));
             exit_time = glfwGetTime(); // A ugly hack.
         } else delayed_exit(glfwGetTime(), window);
 
@@ -143,18 +159,18 @@ int main(int argc, char** argv) {
         float current_float_time = current_time;
         cached_time = current_time;
 
-        if (nq::Input::key_pressed(GLFW_KEY_UP, GLFW_MOD_SHIFT)
-            || nq::Input::key_pressed(GLFW_KEY_K, GLFW_MOD_SHIFT))
+        if (nq::Input::key_pressed(GLFW_KEY_UP, GLFW_MOD_CONTROL)
+            || nq::Input::key_pressed(GLFW_KEY_K, GLFW_MOD_CONTROL))
             camera_wrapper.rotate_overview(current_float_time);
-        else if (nq::Input::key_pressed(GLFW_KEY_DOWN, GLFW_MOD_SHIFT)
-                 || nq::Input::key_pressed(GLFW_KEY_J, GLFW_MOD_SHIFT))
+        else if (nq::Input::key_pressed(GLFW_KEY_DOWN, GLFW_MOD_CONTROL)
+                 || nq::Input::key_pressed(GLFW_KEY_J, GLFW_MOD_CONTROL))
             camera_wrapper.rotate_reset(current_float_time);
 
-        if (nq::Input::key_pressed(GLFW_KEY_LEFT, GLFW_MOD_SHIFT)
-            || nq::Input::key_pressed(GLFW_KEY_H, GLFW_MOD_SHIFT))
+        if (nq::Input::key_pressed(GLFW_KEY_LEFT, GLFW_MOD_CONTROL)
+            || nq::Input::key_pressed(GLFW_KEY_H, GLFW_MOD_CONTROL))
             camera_wrapper.rotate_left(current_float_time);
-        else if (nq::Input::key_pressed(GLFW_KEY_RIGHT, GLFW_MOD_SHIFT)
-                 || nq::Input::key_pressed(GLFW_KEY_L, GLFW_MOD_SHIFT))
+        else if (nq::Input::key_pressed(GLFW_KEY_RIGHT, GLFW_MOD_CONTROL)
+                 || nq::Input::key_pressed(GLFW_KEY_L, GLFW_MOD_CONTROL))
             camera_wrapper.rotate_right(current_float_time);
         glm::vec3 player_position {glm::vec3{sokoban.get_player()}
                                    * nq::Level::VOXEL_SIZE};

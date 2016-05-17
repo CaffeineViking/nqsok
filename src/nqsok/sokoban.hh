@@ -38,7 +38,7 @@ namespace nq {
 
         bool undo(); // Latest action on stack is undone. Fails if empty.
         bool success() const { return has_won_level; } // Cached for speed.
-        void step(const Action&, int); // Also steps, relative to a position.
+        bool step(const Action&, int); // Also steps, relative to a position.
         bool step(const Action&); // Does step, fails if not valid with rule.
         bool objective(const Position&) const; // See if position is objective.
         void reset(); // Copies state of initial level, which is level_data.
