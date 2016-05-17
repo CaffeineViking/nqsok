@@ -23,7 +23,7 @@ float nq::Motion::bounce_out(float t) {
 
 float nq::Motion::elastic_out(float t) {
     return std::sin(-13.0 * glm::half_pi<float>() * (t + 1.0))
-           * std::pow(2.0, -15.0 * t) + 1.0;
+           * std::pow(2.0, -18.0 * t) + 1.0;
 }
 
 float nq::Motion::quint_inout(float t) {
