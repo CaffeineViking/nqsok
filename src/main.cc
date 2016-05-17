@@ -15,6 +15,7 @@
 #include "nqsok/mesh.hh"
 #include "nqsok/texture.hh"
 #include "nqsok/resource.hh"
+#include "nqsok/wrapper.hh"
 
 #include "nqsok/model.hh"
 #include "nqsok/camera.hh"
@@ -97,6 +98,7 @@ int main(int argc, char** argv) {
     nq::Camera camera {glm::vec3{+0.0, +0.0, +0.0},
                        glm::vec3{+0.0, +0.0, +0.0},
                        glm::vec3{+0.0, +1.0, +0.0}};
+    nq::Camera_wrapper camera_wrapper {camera}; // Motions...
     std::vector<nq::Light> lights {{true, {0.58, 0.58, 0.58},
                                           {1.00, 1.00, 1.00}}};
 
@@ -127,27 +129,20 @@ int main(int argc, char** argv) {
 
         if (nq::Input::key_pressed(GLFW_KEY_UP, GLFW_MOD_SHIFT)
             || nq::Input::key_pressed(GLFW_KEY_K, GLFW_MOD_SHIFT))
-            std::cout << "Turning camera up" << std::endl;
+            camera_wrapper.get_overview(); // Overview over level.
         else if (nq::Input::key_pressed(GLFW_KEY_DOWN, GLFW_MOD_SHIFT)
                  || nq::Input::key_pressed(GLFW_KEY_J, GLFW_MOD_SHIFT))
-            std::cout << "Turning camera down" << std::endl;
+            camera_wrapper.reset(); // Reset to previous camera state.
         if (nq::Input::key_pressed(GLFW_KEY_LEFT, GLFW_MOD_SHIFT)
             || nq::Input::key_pressed(GLFW_KEY_H, GLFW_MOD_SHIFT))
-            std::cout << "Turning camera left" << std::endl;
+            camera_wrapper.turn_left(); // Turn left horizontally.
         else if (nq::Input::key_pressed(GLFW_KEY_RIGHT, GLFW_MOD_SHIFT)
                  || nq::Input::key_pressed(GLFW_KEY_L, GLFW_MOD_SHIFT))
-            std::cout << "Turning camera right" << std::endl;
+            camera_wrapper.turn_right(); // Turn right horizontally.
 
         double current_time {glfwGetTime()};
         double delta_time {current_time - cached_time};
         cached_time = current_time;
-
-        camera.direction = sokoban.get_player();
-        camera.direction *= nq::Level::VOXEL_SIZE;
-        glm::vec3 camera_offset {nq::Camera::OFFSET,
-                                 +nq::Camera::OFFSET,
-                                 -nq::Camera::OFFSET};
-        camera.position = camera.direction + camera_offset;
 
         renderer.clear();
         level_model.transform.reset();
