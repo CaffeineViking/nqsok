@@ -11,19 +11,17 @@ void nq::Camera_wrapper::update(const glm::vec3& player_position,
     handle.position  = player_position + hoffset;
 }
 
-void nq::Camera_wrapper::vmotion(float t) {
+void nq::Camera_wrapper::vmotion(float) {  }
+void nq::Camera_wrapper::rotate_reset(float) {
+    // int temporary  {direction};
+    // direction = past_direction;
+    // past_direction = temporary;
 }
 
-void nq::Camera_wrapper::rotate_reset(float t) {
-    int temporary  {direction};
-    direction = past_direction;
-    past_direction = temporary;
-}
-
-void nq::Camera_wrapper::rotate_overview(float t) {
-    if (direction != (WRAPPING + 1))
-        past_direction = direction;
-    direction = (WRAPPING + 1);
+void nq::Camera_wrapper::rotate_overview(float) {
+    // if (direction != (WRAPPING + 1))
+    //     past_direction = direction;
+    // direction = (WRAPPING + 1);
 }
 
 void nq::Camera_wrapper::rotate_left(float t) {
