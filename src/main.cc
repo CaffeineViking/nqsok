@@ -125,17 +125,17 @@ int main(int argc, char** argv) {
                  || nq::Input::key_pressed(GLFW_KEY_L, 0))
             sokoban.step(nq::Sokoban::Action::LEFT);
 
-        if (nq::Input::key_down(GLFW_KEY_UP, GLFW_MOD_SHIFT)
-            || nq::Input::key_down(GLFW_KEY_K, GLFW_MOD_SHIFT))
+        if (nq::Input::key_pressed(GLFW_KEY_UP, GLFW_MOD_SHIFT)
+            || nq::Input::key_pressed(GLFW_KEY_K, GLFW_MOD_SHIFT))
             std::cout << "Turning camera up" << std::endl;
-        else if (nq::Input::key_down(GLFW_KEY_DOWN, GLFW_MOD_SHIFT)
-                 || nq::Input::key_down(GLFW_KEY_J, GLFW_MOD_SHIFT))
+        else if (nq::Input::key_pressed(GLFW_KEY_DOWN, GLFW_MOD_SHIFT)
+                 || nq::Input::key_pressed(GLFW_KEY_J, GLFW_MOD_SHIFT))
             std::cout << "Turning camera down" << std::endl;
-        if (nq::Input::key_down(GLFW_KEY_LEFT, GLFW_MOD_SHIFT)
-            || nq::Input::key_down(GLFW_KEY_H, GLFW_MOD_SHIFT))
+        if (nq::Input::key_pressed(GLFW_KEY_LEFT, GLFW_MOD_SHIFT)
+            || nq::Input::key_pressed(GLFW_KEY_H, GLFW_MOD_SHIFT))
             std::cout << "Turning camera left" << std::endl;
-        else if (nq::Input::key_down(GLFW_KEY_RIGHT, GLFW_MOD_SHIFT)
-                 || nq::Input::key_down(GLFW_KEY_L, GLFW_MOD_SHIFT))
+        else if (nq::Input::key_pressed(GLFW_KEY_RIGHT, GLFW_MOD_SHIFT)
+                 || nq::Input::key_pressed(GLFW_KEY_L, GLFW_MOD_SHIFT))
             std::cout << "Turning camera right" << std::endl;
 
         double current_time {glfwGetTime()};

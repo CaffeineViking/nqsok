@@ -7,7 +7,6 @@ bool nq::Input::key_pressed(int key, int modifier) {
         return true;
     }
 
-    keyboard_state[key].pressed = false;
     return false;
 }
 
