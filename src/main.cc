@@ -41,6 +41,8 @@ enum class Argument {
 
 static std::string share {SHARE};
 static std::string version {"1.0D"};
+static std::string packsp {share + "packs/"};
+static std::string levelsp {share + "levels/"};
 static std::string rootf {share + "packs.nqr"};
 std::queue<nq::Level> load(Argument, char**);
 void delayed_exit(float, nq::Window&);
@@ -219,11 +221,11 @@ std::queue<nq::Level> load(Argument type, char** argv) {
     std::queue<nq::Level> level_queue;
     if (type == Argument::LEVEL) {
         std::string level_file {argv[2]};
-        nq::Level level {share + "levels/" + level_file};
+        nq::Level level {levelsp + level_file};
         level_queue.push(level);
     } else if (type == Argument::PACK) {
         std::string pack_identifier {argv[2]};
-        nq::Pack pack {share + "packs/" + pack_identifier};
+        nq::Pack pack {packsp + pack_identifier};
         for (const std::string& name : pack.get_levels()) {
             std::string directory {pack.get_directory()};
             nq::Level level {share + directory + name};
