@@ -90,10 +90,17 @@ nq::Mesh& nq::Resource_manager::load_mesh(const std::string& mesh_file, const Le
             for (unsigned d {0}; d < level.get_depth(); ++d) {
                 for (unsigned w {0}; w < level.get_width(); ++w) {
                     nq::Color<unsigned char> voxelc {level_data[h][w+d*level.get_width()]};
+                    nq::Color<unsigned char> pblend {voxelc - level.get_palette().player};
+                    nq::Color<unsigned char> mblend {voxelc - level.get_palette().moveable};
+                    nq::Color<unsigned char> oblend {voxelc - level.get_palette().objective};
                     if (voxelc == level.get_palette().empty) continue;
-                    else if (voxelc == level.get_palette().player) continue;
-                    else if (voxelc == level.get_palette().moveable) continue;
-                    else if (voxelc == level.get_palette().objective) continue;
+                    else if (voxelc == level.get_palette().player
+                             || oblend == level.get_palette().player) continue;
+                    else if (voxelc == level.get_palette().moveable
+                             || oblend == level.get_palette().moveable) continue;
+                    else if (voxelc == level.get_palette().objective
+                             || mblend == level.get_palette().objective
+                             || pblend == level.get_palette().objective) continue;
                     nq::Color<float> voxel_color = voxelc;
                     std::vector<GLfloat> mesh_color;
                     // We might want to make this more efficient...

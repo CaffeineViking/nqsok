@@ -219,11 +219,11 @@ std::queue<nq::Level> load(Argument type, char** argv) {
     std::queue<nq::Level> level_queue;
     if (type == Argument::LEVEL) {
         std::string level_file {argv[2]};
-        nq::Level level {share + level_file};
+        nq::Level level {share + "levels/" + level_file};
         level_queue.push(level);
     } else if (type == Argument::PACK) {
         std::string pack_identifier {argv[2]};
-        nq::Pack pack {share + pack_identifier};
+        nq::Pack pack {share + "packs/" + pack_identifier};
         for (const std::string& name : pack.get_levels()) {
             std::string directory {pack.get_directory()};
             nq::Level level {share + directory + name};

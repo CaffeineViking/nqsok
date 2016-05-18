@@ -28,6 +28,18 @@ namespace nq {
                     blue / 255.0f};
         }
 
+        Color<unsigned char> operator+(const Color<unsigned char>& other) {
+            return {static_cast<unsigned char>((*this).red + other.red),
+                    static_cast<unsigned char>((*this).green + other.green),
+                    static_cast<unsigned char>((*this).blue + other.blue)};
+        }
+
+        Color<unsigned char> operator-(const Color<unsigned char>& other) {
+            return {static_cast<unsigned char>((*this).red - other.red),
+                    static_cast<unsigned char>((*this).green - other.green),
+                    static_cast<unsigned char>((*this).blue - other.blue)};
+        }
+
         bool operator!=(const Color<unsigned char>& other) { return !(*this == other); }
         bool operator==(const Color<unsigned char>& other) {
             return (red == other.red

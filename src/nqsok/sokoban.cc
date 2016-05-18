@@ -134,6 +134,7 @@ void nq::Sokoban::check() {
         throw Sokoban_error{"Sokoban error (#6) solid not under player, player is very kill!"};
     }
 
+    cache_success_state(); // In case level is already solved?
     if (moveable_positions.size() < objective_positions.size())
         throw Sokoban_error{"Sokoban error (#8) impossible level"};
 }
@@ -149,11 +150,20 @@ void nq::Sokoban::reset() {
             for (unsigned x {0}; x < level.get_width(); ++x) {
                 unsigned i {z * level.get_width() + x};
                 nq::Color<unsigned char> color {level_data[y][i]};
-                if (color == level.get_palette().player)
+                nq::Color<unsigned char> pblend {color - level.get_palette().player};
+                nq::Color<unsigned char> mblend {color - level.get_palette().moveable};
+                nq::Color<unsigned char> oblend {color - level.get_palette().objective};
+                // Blends of the color palette, need to remove special colors. Hacky...
+
+                if (color == level.get_palette().player
+                    || oblend == level.get_palette().player)
                     { player_position = {x, y, z}; ++players; }
-                else if (color == level.get_palette().moveable)
+                if (color == level.get_palette().moveable
+                    || oblend == level.get_palette().moveable)
                     moveable_positions.push_back({x, y, z});
-                else if (color == level.get_palette().objective)
+                if (color == level.get_palette().objective
+                    || pblend == level.get_palette().objective
+                    || mblend == level.get_palette().objective)
                     objective_positions.push_back({x, y, z});
             }
         }
@@ -179,11 +189,19 @@ nq::Sokoban::Block nq::Sokoban::type(const Position& position) const {
     unsigned i {position.z * level.get_width() + position.x};
     if (position.y >= level.get_height()) return Block::EMPTY;
     nq::Color<unsigned char> color {level_data[position.y][i]};
+    nq::Color<unsigned char> pblend {color - level.get_palette().player};
+    nq::Color<unsigned char> mblend {color - level.get_palette().moveable};
+    nq::Color<unsigned char> oblend {color - level.get_palette().objective};
+    // Jesus... I need to remove this shit later, worst code I've written...
     const nq::Level::Palette& palette {level.get_palette()};
     if (color == palette.empty
         || color == palette.player
+        || oblend == palette.player
         || color == palette.moveable
-        || color == palette.objective) return Block::EMPTY;
+        || oblend == palette.moveable
+        || color == palette.objective
+        || mblend == palette.objective
+        || pblend == palette.objective) return Block::EMPTY;
     else return Block::IMMOVABLE; // Aww yea, dem colors!!!
 }
 
