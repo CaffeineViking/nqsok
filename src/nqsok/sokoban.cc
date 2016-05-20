@@ -68,7 +68,7 @@ bool nq::Sokoban::step(const Action& action) {
         Position future_position {future(player_position, action)};
         Block future_block_type {type(future_position)};
         if (future_block_type == Block::IMMOVABLE) {
-            Position position_above {top(player_position)}; // Above.
+            Position position_above {top(player_position)};
             if (position_above.y - player_position.y > 1) return false;
             Position roof_position {top(future_position)};
             if (roof_position.y - future_position.y > 1 ||
@@ -80,9 +80,10 @@ bool nq::Sokoban::step(const Action& action) {
             actions.push(action);
             return true;
         } else if (future_block_type == Block::MOVEABLE) {
-            Position position_above {top(player_position)}; // Above.
+            Position position_above {top(player_position)};
             Position affected_position {future(future_position, action)};
-            if (collides(affected_position)) { // To infinity, and beyond!
+            unsigned int affected_height_drop {bottom(affected_position).y};
+            if (collides(affected_position) || affected_height_drop == 0) {
                 if (position_above.y - player_position.y > 1) return false;
                 Position roof_position {top(future_position)};
                 if (roof_position.y - future_position.y > 1 ||
