@@ -2,12 +2,12 @@
 
 local name = "nqsok"
 solution(name)
-    configurations({"debug", "release"})
     location("build/")
     targetdir("bin/")
-
     language("C++")
+
     flags("ExtraWarnings")
+    configurations({"debug", "release"})
     configuration("debug") flags("Symbols")
     configuration("release") flags("Optimize")
     configuration("gmake") buildoptions("-std=c++14 -Wextra -Wpedantic")
