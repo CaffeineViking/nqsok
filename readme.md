@@ -2,7 +2,7 @@ Not Quite Sokoban
 =================
 
 <p align="center">
-    <img width=100% src="/share/images/nqsok.gif" alt="Not Quite Sokoban"/>
+    <img width=100% src="/share/screenshots/nqsok.gif" alt="Not Quite Sokoban"/>
 </p>
 
 Rather than being a straight up 3-D Sokoban clone (there are already quite a lot of those around), this project: *Not Quite Sokoban*, tries to innovate somewhat by adding a few novel gameplay twists and mechanics. It has an easy-to-parse JSON and PNG level format, that is backwards-compatible with the classic Sokoban game. It's written from scratch in C++ and OpenGL. There is a thin OpenGL wrapper there too, but I wouldn't recommend using it for anything else. This was written back in 2015 when I was relatively young and stupid, so expect a lot of inefficient solutions and smelly/bad code.
