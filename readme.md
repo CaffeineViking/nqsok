@@ -1,6 +1,10 @@
 Not Quite Sokoban
 =================
 
+<p align="center">
+    <img width=100% src="/share/images/nqsok.gif" alt="Not Quite Sokoban"/>
+</p>
+
 Rather than being a straight up 3-D Sokoban clone (there are already quite a lot of those around), this project: *Not Quite Sokoban*, tries to innovate somewhat by adding a few novel gameplay twists and mechanics. It has an easy-to-parse JSON and PNG level format, that is backwards-compatible with the classic Sokoban game. It's written from scratch in C++ and OpenGL. There is a thin OpenGL wrapper there too, but I wouldn't recommend using it for anything else. This was written back in 2015 when I was relatively young and stupid, so expect a lot of inefficient solutions and smelly/bad code.
 
 Besides the original rules of Sokoban, additional *layers* (an actual extra dimension) is added to the world. These create interesting new rules, especially once we start disallowing *blocks* to be pushed up a layer but still allowing them to fall down several layers. The player needs to be careful when pushing blocks around! An additional mechanic is to disallow traversal through a path that has an abyss (meaning there are no blocks to fall down), *but* if a *goal area* is there, the player is allowed to build a *"bridge"* by pushing a movable block (gaining access to new areas). It's a mix between the original Sokoban rules and the game EDGE (originally released on the iOS).
