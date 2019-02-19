@@ -34,7 +34,7 @@ The build system used here is the old Premake 4. You can get it over [here](http
 
 This project has external dependencies on *libPNG*, *GLFW* and *GLEW*. You can install these via your favourite package manager or just manually. Additionally, the *TinyObjLoader* library is used, however, that is already included in this repository and should therefore already work fine.
 
-Currently, the only development system this has been tested on is by using the tools GNU Make and GCC 5. However, since the project is using Premake 4 everything should work more or less smoothly on any other development systems (with some minor changes I assume). I've tested this on Arch Linux and on the MINGW64 MSYS2 Windows toolchain, and it should at least work OK on those (again, after installing dependencies).
+Currently, the only development system this has been tested on is with GNU Make and GCC 5. However, since the project is using Premake 4 everything should work more or less smoothly on any other development systems (with some minor changes I assume). I've tested this on Arch Linux and on the MINGW64 MSYS2 Windows toolchain, and it should at least work OK on those (again, after installing dependencies).
 
 1. Clone this repository: `git clone https://github.com/CaffeineViking/nqsok.git`
 2. Generate the build files with Premake (within project directory): `premake4 gmake`
