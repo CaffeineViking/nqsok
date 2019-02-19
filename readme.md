@@ -48,7 +48,7 @@ You'll have to install these libraries yourself (e.g. `pacman` or `apt-get`):
 * GLFW: [zlib/libPNG License](http://www.glfw.org/license.html)
 * GLEW: [Modified BSD License](https://github.com/nigels-com/glew/blob/master/LICENSE.txt)
 
-The libraries below are provided for you (as they are header only anyway):
+The libraries below are provided for you (as they are header-only anyway):
 
 * TinyObjLoader: [BSDv2 License](https://github.com/syoyo/tinyobjloader)
 
