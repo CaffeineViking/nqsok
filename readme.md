@@ -1,5 +1,5 @@
-NQ Sokoban
-==========
+Not Quite Sokoban
+=================
 
 Rather than being a straight up 3-D Sokoban clone (there are already quite a lot of those around), this project: *Not Quite Sokoban*, tries to innovate somewhat by adding a few novel gameplay twists and mechanics.
 
