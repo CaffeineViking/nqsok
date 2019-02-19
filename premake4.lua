@@ -11,9 +11,14 @@ solution(name)
     configuration("debug") flags("Symbols")
     configuration("release") flags("Optimize")
     configuration("gmake") buildoptions("-std=c++14 -Wextra -Wpedantic")
-    links({"png", "glfw", "GLEW", "GL"})
-    links({"vorbis", "ogg", "openal"})
-    links({"freetype", "jsoncpp"})
+
+    configuration { "windows" }
+        links({"png", "glfw3", "glew32", "OpenGL32"})
+        links({"jsoncpp"})
+
+    configuration { "linux or bsd or solaris" }
+        links({"png", "GLFW", "GLEW", "GL"})
+        links({"jsoncpp"})
 
     project(name)
         kind("WindowedApp")
