@@ -1,13 +1,13 @@
 Not Quite Sokoban
 =================
 
-Rather than being a straight up 3-D Sokoban clone (there are already quite a lot of those around), this project: *Not Quite Sokoban*, tries to innovate somewhat by adding a few novel gameplay twists and mechanics.
+Rather than being a straight up 3-D Sokoban clone (there are already quite a lot of those around), this project: *Not Quite Sokoban*, tries to innovate somewhat by adding a few novel gameplay twists and mechanics. It has an easy-to-parse JSON and PNG level format, that is backwards-compatible with the classic Sokoban game. It's written from scratch in C++ and OpenGL. There is a thin OpenGL wrapper there too, but I wouldn't recommend using it for anything else. This was written back in 2015 when I was relatively young and stupid, so expect a lot of inefficient solutions and smelly/bad code.
 
 Besides the original rules of Sokoban, additional *layers* (an actual extra dimension) is added to the world. These create interesting new rules, especially once we start disallowing *blocks* to be pushed up a layer but still allowing them to fall down several layers. The player needs to be careful when pushing blocks around! An additional mechanic is to disallow traversal through a path that has an abyss (meaning there are no blocks to fall down), *but* if a *goal area* is there, the player is allowed to build a *"bridge"* by pushing a movable block (gaining access to new areas). It's a mix between the original Sokoban rules and the game EDGE (originally released on the iOS).
 
 The above changes to the gameplay mechanics do not affect normal Sokoban levels, so *NQ Sokoban* is essentially "backwards compatible" with the original Sokoban levels given that these only use compatible mechanics (2 layers). Additional mechanics could be added later, but additional complexity would make the game inelegant and difficult to learn. Right now only a couple of levels have been implemented, but I'm planning on getting back to this once I have more time.
 
-There is a short report on the game, and also a presentation on the architecture and the easing equations used for the animations:
+There is a short report on the game, and also a presentation on the architecture and the easing equations used for animation:
 
 * [Project Report for Not Quite Sokoban](https://eriksvjansson.net/papers/rnqsok.pdf)
 * [Not Quite Sokoban](https://eriksvjansson.net/papers/pnqsok.pdf) (the presentation)
@@ -55,4 +55,4 @@ The libraries below are provided for you (as they are header-only anyway):
 NQL Format
 ----------
 
-For the levels and packs, a few file types have been introduced. They are all specified in an easy-to-parse JSON format that uses layers of PNG files to specify the files themselves (i.e. a poor man's level editor by using GIMP or Paint.NET). It was so many years since I wrote that, so I'm not 100% sure anymore how it works, but you can take a look at `share/` for how to build new levels. If you want a JSON schema for it, forget it :-). Maybe in a remake of it, but I was young and stupid back then, so we'll just have to live with the JSON / PNG file format combination. I also planned to write a original Sokoban level parser for it, so the entire classic Sokoban could be played, but I just didn't get around to doing it. If anyone wants to implement that (or have general improvments to the project), feel free to open a PR.
+For the levels and packs, a few file types have been introduced. They are all specified in an easy-to-parse JSON format that uses layers of PNG files to specify the files themselves (i.e. a poor man's level editor by using GIMP or Paint.NET). It was so many years since I wrote that, so I'm not 100% sure anymore how it works, but you can take a look at `share/` for how to build new levels. If you want a JSON schema for it, forget it :-). Maybe in a remake of it, but I was young and stupid back then, so we'll just have to live with the JSON / PNG file format combination. I also planned to write a original Sokoban level parser for it, so the entire classic Sokoban could be played, but I just didn't get around to doing it. If anyone wants to implement that (or have general improvments to the project), feel free to open a PR and I'll merge it in here.
