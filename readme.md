@@ -16,7 +16,7 @@ There is a short report on the game, and also a presentation on the architecture
 * [Project Report for Not Quite Sokoban](https://eriksvjansson.net/papers/rnqsok.pdf)
 * [Not Quite Sokoban](https://eriksvjansson.net/papers/pnqsok.pdf) (the presentation)
 
-This project was made for the course [TSBK07 (Computer Graphics) at Linköping University](http://computer-graphics.se/TSBK07/) led by Ingemar Ragnemalm.
+This project was made for the course [TSBK07 (Computer Graphics) at Linköping University](http://computer-graphics.se/TSBK07/) (2015) led by Ingemar Ragnemalm.
 
 Requirements
 ------------
