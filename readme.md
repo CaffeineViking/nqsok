@@ -18,6 +18,14 @@ There is a short report on the game, and also a presentation on the architecture
 
 This project was made for the course [TSBK07 (Computer Graphics) at Linköping University](http://computer-graphics.se/TSBK07/) (2015) led by Ingemar Ragnemalm.
 
+Controls
+--------
+
+* Exit the game with ESC or Q.
+* Use the arrow keys or HJKL to move around.
+* Undo the previous move with U.
+* Restart the level with R.
+
 Requirements
 ------------
 
