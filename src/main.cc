@@ -68,6 +68,7 @@ int main(int argc, char** argv) {
     // a context initialized to GL 2.1 (not core and not forward compat),
     // will not open in fullscreen mode and will use vertical sync (60 Hz).
     nq::Input::listen(window); // Listen to all input from this window.
+    window.change_icon(share + "textures/crate.png");
 
     window.current_context();
     nq::Renderer::Settings settings;

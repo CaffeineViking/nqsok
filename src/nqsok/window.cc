@@ -1,6 +1,8 @@
 #include "window.hh"
 #include <iostream>
 
+#include "image.hh"
+
 nq::Window::Window(int width, int height, const std::string& title,
                    const Context& context, bool fullscreen = false, bool vsync = true)
                    : cached_width {width}, cached_height {height}, title {title} {
@@ -101,6 +103,18 @@ void nq::Window::display() {
         elapsed = current;
         frames = 0;
     }
+}
+
+void nq::Window::change_icon(const std::string& path) {
+    nq::Image image { path, false };
+
+    GLFWimage image_icon {
+        image.get_width(),
+        image.get_height(),
+        image.pixel_data()
+    };
+
+    glfwSetWindowIcon(handle, 1, &image_icon);
 }
 
 void nq::Window::error(int code, const char* cmessage) {

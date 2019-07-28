@@ -6,7 +6,7 @@
 #include <cstring>
 #include <png.h>
 
-nq::Image::Image(const std::string& file)
+nq::Image::Image(const std::string& file, bool flip_vertically)
                 : file {file} {
     std::cout << "\nImage (reading into memory)..." << std::endl;
     std::cout << "Loading '" << file << "'...";
@@ -40,8 +40,7 @@ nq::Image::Image(const std::string& file)
     png_set_sig_bytes(png_ptr, HEADER_SIZE);
     png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_STRIP_16
                                     | PNG_TRANSFORM_PACKING
-                                    | PNG_TRANSFORM_EXPAND
-                                    | PNG_TRANSFORM_STRIP_ALPHA, nullptr);
+                                    | PNG_TRANSFORM_EXPAND, nullptr);
     std::cout << "done" << std::endl;
 
     png_uint_32 pwidth, pheight;
@@ -49,6 +48,11 @@ nq::Image::Image(const std::string& file)
     png_get_IHDR(png_ptr, info_ptr, &pwidth, &pheight, &pbit_depth,
                  &color_type, &interlace_type, nullptr, nullptr);
     width = pwidth; height = pheight, bit_depth = pbit_depth;
+
+    if (color_type == PNG_COLOR_TYPE_RGB_ALPHA)
+        alpha_channel = true;
+    else if (color_type == PNG_COLOR_TYPE_RGB)
+        alpha_channel = false;
 
     std::cout << "Image loaded of size " << width << "x" << height << " in pixels\n";
     std::cout << "Bit depth of " << bit_depth << " bits on every channel found\n";
@@ -58,9 +62,17 @@ nq::Image::Image(const std::string& file)
     std::size_t row_bytes {png_get_rowbytes(png_ptr, info_ptr)};
     data = static_cast<GLubyte*>(std::malloc(row_bytes * pheight));
     png_bytepp row_pointers {png_get_rows(png_ptr, info_ptr)};
-    for (std::size_t y {0}; y < pheight; ++y) {
-        std::memcpy(&data[row_bytes * (pheight - 1 - y)],
-                    row_pointers[y], row_bytes);
+
+    if (flip_vertically) {
+        for (std::size_t y {0}; y < pheight; ++y) {
+            std::memcpy(&data[row_bytes * (pheight - 1 - y)],
+                        row_pointers[y], row_bytes);
+        }
+    } else {
+        for (std::size_t y {0}; y < pheight; ++y) {
+            std::memcpy(&data[row_bytes * y],
+                        row_pointers[y], row_bytes);
+        }
     }
 
     png_destroy_read_struct(&png_ptr, &info_ptr, NULL);

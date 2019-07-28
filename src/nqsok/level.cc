@@ -76,11 +76,12 @@ nq::Level::Data nq::Level::data(const std::string& ldir) const {
     for (unsigned h {0}; h < height; ++h) {
         unsigned size {width*depth};
         nq::Image layer_image {ldir + directory + layers[h]};
+        int channels = layer_image.has_alpha() ? 4 : 3;
         Layer layer_data; layer_data.reserve(size);
         for (unsigned i {0}; i < size; ++i) {
-            layer_data.push_back({layer_image[0 + i*3],
-                                  layer_image[1 + i*3],
-                                  layer_image[2 + i*3]});
+            layer_data.push_back({layer_image[0 + i*channels],
+                                  layer_image[1 + i*channels],
+                                  layer_image[2 + i*channels]});
         }
 
         level_data.push_back(layer_data);

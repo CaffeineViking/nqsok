@@ -12,7 +12,8 @@ namespace nq {
     class Image final {
     public:
         ~Image() { std::free(data); }
-        Image(const std::string&);
+        Image(const std::string&, bool flip_vertically = true);
+
         GLubyte& operator[](int i) { return data[i]; }
         GLubyte operator[](int i) const { return data[i]; }
 
@@ -21,6 +22,7 @@ namespace nq {
         GLsizei get_height() const { return height; }
         GLsizei size() const { return width*height; }
         int get_bit_depth() const { return bit_depth; }
+        bool has_alpha() const { return alpha_channel; }
 
         Image(Image&& other) noexcept {
             this->bit_depth = other.bit_depth;
@@ -47,6 +49,7 @@ namespace nq {
         std::string file;
         GLsizei width, height;
         GLubyte* data {nullptr};
+        bool alpha_channel;
     };
 }
 

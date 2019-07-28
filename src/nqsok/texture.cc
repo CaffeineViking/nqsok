@@ -10,9 +10,10 @@ nq::Texture::Texture(Image& image, const Parameters& params) {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glBindTexture(GL_TEXTURE_2D, handle);
     std::cout << "Uploading texture...";
-    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE); // Since GL 1.4.
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.get_width(), image.get_height(),
-                 0, GL_RGB, GL_UNSIGNED_BYTE, image.pixel_data());
+    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE); // Supported GL >=1.4.
+    GLint image_format { image.has_alpha() ? GL_RGBA : GL_RGB };
+    glTexImage2D(GL_TEXTURE_2D, 0, image_format, image.get_width(), image.get_height(),
+                 0, image_format, GL_UNSIGNED_BYTE, image.pixel_data());
     std::cout << "done" << std::endl;
 
     std::cout << "Magnifying filter " << params.magnifying_filter << std::endl;

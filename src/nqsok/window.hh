@@ -46,6 +46,8 @@ namespace nq {
         void resize(int, int);
         void display();
 
+        void change_icon(const std::string& path);
+
     private:
         // Error handler for window errors.
         static void error(int, const char*);
